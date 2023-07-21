@@ -22,7 +22,7 @@ app.get('/getKanjiDetails/:queryString', async (req, res) => {
     };
     try{
         const response = await axios.request(options);
-        console.log(response.data);
+        console.log(response.data.examples[0].meaning);
         res.send(response.data);
     } catch {
         console.log('error')
