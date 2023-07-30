@@ -1,0 +1,39 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User{
+  id Int @id @default(autoincrement())
+  name String
+  email String @unique
+  password String
+  wins Int @default(0)
+  losses Int @default(0)
+  draws Int @default(0)
+  rank String @default("novice")
+}
+
+model Rank{
+  id Int @id @default(autoincrement())
+  name String @unique
+
+}
+
+model Deck{
+  id Int @id @default(autoincrement())
+  name String
+}
+
+model Card{
+  id Int @id @default(autoincrement())
+  user_id Int 
+  
+}
