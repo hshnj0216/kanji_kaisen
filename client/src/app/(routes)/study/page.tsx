@@ -7,6 +7,7 @@ import KanjiMedia from "@/app/_components/(study)/KanjiMedia";
 import RadicalInfo from "@/app/_components/(study)/RadicalInfo";
 import Image from "next/image";
 import Examples from "@/app/_components/(study)/Examples";
+import StrokeImages from "@/app/_components/(study)/StrokeImages";
 
 const Study: FC = (props) => {
 	const [kanji, setKanji] = useState(null);
@@ -25,10 +26,8 @@ const Study: FC = (props) => {
 				<div className="grid lg:grid-cols-12 lg:gap-4">
 					<KanjiMedia kanji={kanji}></KanjiMedia>
 					<KanjiInfo kanji={kanji}></KanjiInfo>
-					<div className="grid grid-cols-12 col-span-12 bg-green-500 h-60 gap-3 p-3">
-						<RadicalInfo radical={kanji?.radical}></RadicalInfo>
-						<Examples examples={kanji?.examples}></Examples>
-					</div>
+					<Examples examples={kanji?.examples}></Examples>
+					<StrokeImages images={kanji?.kanji?.strokes.images}></StrokeImages>
 				</div>
 			)}
 		</div>

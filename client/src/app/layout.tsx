@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google';
 import Link from 'next/link';
 import Image from 'next/image';
 import logo from './app-logo.png';
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,6 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+      </Head>
       <body className="{inter.className} bg-slate-700 h-screen shadow-inner">
         <nav className="bg-slate-300">
           <Link href="/">

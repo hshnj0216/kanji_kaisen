@@ -1,6 +1,6 @@
-"use client";
+import { FC, useRef } from "react";
+import { FaPlay } from "react-icons/fa6";
 
-import { FC } from "react";
 interface IExample{
     japanese: string,
 }
@@ -8,14 +8,33 @@ interface IExample{
 interface IExamples {
     examples: [],
 }
+
 const Examples: FC<IExamples> = ({ examples }) => {
-    const limitedExamples = examples.slice(0, 6);
+    const limitedExamples = examples.slice(0, 5);
+    const audioRefs = useRef([]);
+
+    const handlePlay = (index) => {
+        if (audioRefs.current[index]) {
+            audioRefs.current[index].play();
+        }
+    }
+
     return (
-        <div className="col-span-6 bg-violet-500 p-4">
+        <div className="col-span-3 bg-slate-300 p-4">
+            <h6 className="mb-3 font-bold">Examples</h6>
             {limitedExamples.map((example, index) => (
-                <div key={index} className="flex items-center mb-2">
-                    <p className="text-l mr-2">日本語: {example.japanese}</p>
-                    <p className="text-md">English: {example.meaning.english}</p>
+                <div key={index} className="flex flex-col mb-2">
+                    <div className="grid grid-cols-12 w-full m-0">
+                        <p className="text-lg col-span-11">{example.japanese}</p>
+                        <audio ref={el => audioRefs.current[index] = el}>
+                            <source src={example?.audio?.opus}/>
+                            <source src={example?.audio?.aac}/>
+                            <source src={example?.audio?.ogg}/>
+                            <source src={example?.audio?.mp3}/>
+                        </audio>
+                        <button className="col-span-1" type="button" title="play audio" onClick={() => handlePlay(index)}><FaPlay/></button>
+                    </div>
+                    <p className="text-md">{example.meaning.english}</p>
                 </div>
             ))}
         </div>

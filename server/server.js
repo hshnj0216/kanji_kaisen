@@ -10,7 +10,6 @@ app.get('/', (req, res) => {
 
 //Retrieve kanji details
 app.get('/getKanjiDetails/:queryString', async (req, res) => {
-    console.log('This was called');
     res.setHeader("Access-Control-Allow-Origin", "*");
     const options = {
         method: 'GET',
@@ -22,7 +21,8 @@ app.get('/getKanjiDetails/:queryString', async (req, res) => {
     };
     try{
         const response = await axios.request(options);
-        console.log(response.data.examples[0].meaning);
+        console.log(response.data);
+        console.log(JSON.stringify(response.data.kanji.strokes, null, 4));
         res.send(response.data);
     } catch {
         console.log('error')
@@ -54,7 +54,7 @@ app.get('/getKanjiList/:level', async (req, res) => {
     const options = {
         method: 'GET',
         url: `https://kanjialive-api.p.rapidapi.com/api/public/search/advanced/`,
-        params: {jlpt: req.params.level},
+        params: {grade: req.params.level},
         headers: {
             'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com',
             'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
@@ -62,8 +62,17 @@ app.get('/getKanjiList/:level', async (req, res) => {
     };
     
     const response = await axios.request(options);
-    const data = response.data.slice(0, 30);
-    const kanjiDetails = await Promise.all(data.map(async (item) => {
+    const data = response.data;
+    
+    // Pick 30 random items from the data
+    const randomItems = [];
+    for (let i = 0; i < 30; i++) {
+        const randomIndex = Math.floor(Math.random() * data.length);
+        randomItems.push(data[randomIndex]);
+        data.splice(randomIndex, 1);
+    }
+    
+    const kanjiDetails = await Promise.all(randomItems.map(async (item) => {
         const options = {
             method: 'GET',
             url: `https://kanjialive-api.p.rapidapi.com/api/public/kanji/${item.kanji.character}`,
@@ -75,7 +84,6 @@ app.get('/getKanjiList/:level', async (req, res) => {
         const detailsResponse = await axios.request(options);
         return detailsResponse.data.kanji;
     }));
-    console.log(kanjiDetails[0]);
     res.send(kanjiDetails);
 });
 

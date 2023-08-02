@@ -9,7 +9,7 @@ interface IModeCardProp{
 const ModeCard: FC<IModeCardProp> = ({title, description, onClick}) => {
     return (
         <div 
-            className={`border rounded p-3 w-80 h-80 flex items-center justify-center m-10 hover:scale-110 
+            className={`border rounded cursor-pointer p-3 w-80 h-80 flex items-center justify-center m-10 hover:scale-110 
                         transition-transform ${styles.card}`}  
             onClick={onClick}
         >

@@ -87,21 +87,22 @@ const KanjiRecognition: FC = () => {
                 <>
                     <h3 className="text-slate-50 text-4xl text-center my-3">Select a JLPT level:</h3>
                     <div className="flex">
-                        <ModeCard title="N5" description="Basic" onClick={() => handleLevelSelect(5)}></ModeCard>
-                        <ModeCard title="N4" description="Elementary" onClick={() => handleLevelSelect(4)}></ModeCard>
-                        <ModeCard title="N3" description="Intermediate" onClick={() => handleLevelSelect(3)}></ModeCard>
-                        <ModeCard title="N2" description="Advanced" onClick={() => handleLevelSelect(2)}></ModeCard>
-                        <ModeCard title="N1" description="Expert" onClick={() => handleLevelSelect(1)}></ModeCard>
-                    </div>
+                        <ModeCard title="Grade 1" description="" onClick={() => handleLevelSelect(1)}></ModeCard>
+                        <ModeCard title="Grade 2" description="" onClick={() => handleLevelSelect(2)}></ModeCard>
+                        <ModeCard title="Grade 3" description="" onClick={() => handleLevelSelect(3)}></ModeCard>
+                        <ModeCard title="Grade 4" description="" onClick={() => handleLevelSelect(4)}></ModeCard>
+                        <ModeCard title="Grade 5" description="" onClick={() => handleLevelSelect(5)}></ModeCard>
+                        <ModeCard title="Grade 6" description="" onClick={() => handleLevelSelect(6)}></ModeCard>
 
+                    </div>
                 </>
             ) : (
                 // Render board
                 <div className="flex justify-center items-center h-90">
-                    <div className="w-1/2 border rounded p-3 border-slate-50 flex-col items-center">
+                    <div className="w-1/2 border rounded p-3 border-slate-50 flex-col items-center mt-8">
                         <h2 className="text-slate-50 text-5xl">Score: {score}</h2>
-                        <div className="">
-                            <p className="text-slate-50 text-15xl text-center">{quizItem?.character}</p>
+                        <div className="w-1/2 mx-auto p-3 border rounded border-slate-50 mb-5">
+                            <p className="text-slate-50 md:text-9xl lg:text-15xl text-center">{quizItem?.character}</p>
                         </div>
                         <ul className="flex flex-col items-center">
                             {options.map(option =>
