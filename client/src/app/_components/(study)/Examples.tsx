@@ -1,18 +1,19 @@
-import { FC, useRef } from "react";
+import { FC, useEffect, useRef } from "react";
 import { FaPlay } from "react-icons/fa6";
 
 interface IExample{
-    japanese: string,
+    japanese: string;
+    english: string;
 }
 
 interface IExamples {
-    examples: [],
+    examples: IExample[],
 }
 
 const Examples: FC<IExamples> = ({ examples }) => {
     const limitedExamples = examples.slice(0, 5);
-    const audioRefs = useRef([]);
-
+    const audioRefs = useRef<HTMLAudioElement[]>([]);
+    
     const handlePlay = (index) => {
         if (audioRefs.current[index]) {
             audioRefs.current[index].play();
@@ -26,7 +27,7 @@ const Examples: FC<IExamples> = ({ examples }) => {
                 <div key={index} className="flex flex-col mb-2">
                     <div className="grid grid-cols-12 w-full m-0">
                         <p className="text-lg col-span-11">{example.japanese}</p>
-                        <audio ref={el => audioRefs.current[index] = el}>
+                        <audio key={example.audio.mp3} ref={el => audioRefs.current[index] = el}>
                             <source src={example?.audio?.opus}/>
                             <source src={example?.audio?.aac}/>
                             <source src={example?.audio?.ogg}/>

@@ -1,6 +1,7 @@
 "use client";
 import axios from "axios";
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import { FaMagnifyingGlass } from "react-icons/fa6";
 
 interface ISearchBarProps {
     setKanji: Dispatch<SetStateAction<any>>,
@@ -25,7 +26,7 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
     }
 
     //Suggestive search 
-    const [queryResultList, setQueryResultList] = useState<string[]>([]);
+    const [queryResultList, setQueryResultList] = useState<object[]>([]);
 
     async function performSearch(queryString: string) {
         if (queryString) {
@@ -51,10 +52,10 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
         performSearch(searchTerm);
     }, [searchTerm]);
 
-    function handleSuggestionClick(item: string) {
-        setSearchTerm(item);
-        setSelectedValue(item);
-        getKanjiDetails(item);
+    function handleSuggestionClick(str: string) {
+        setSearchTerm(str);
+        setSelectedValue(str);
+        getKanjiDetails(str);
     }
 
     return (
@@ -75,10 +76,12 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
                     value={selectedValue !== "" ? selectedValue : searchTerm}
                 />
                 <button
-                    className="bg-blue-500 text-white p-2 rounded-r-md col-span-3"
+                    type="button"
+                    className="bg-slate-300 text-slate-500 p-2 rounded-r-md col-span-2"
                     onClick={handleSearch}
+                    title="search"
                 >
-                    Search
+                    <FaMagnifyingGlass className="mx-auto"></FaMagnifyingGlass>
                 </button>
             </div>
             {isInputFocused && queryResultList.length > 0 && (
@@ -86,13 +89,16 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
                     className="w-9/12 border rounded absolute z-10 bg-white grid grid-cols-12 top-full"
                     onBlur={() => setIsInputFocused(false)}
                 >
-                    {queryResultList.map((item) => (
+                    {queryResultList.map((kanji) => (
                         <li
-                            key={item}
+                            key={kanji?.character}
                             className="bg-slate-50 hover:bg-slate-300 cursor-pointer p-2 col-span-12"
-                            onClick={() => handleSuggestionClick(item)}
+                            onClick={() => handleSuggestionClick(kanji?.character)}
                         >
-                            {item}
+                           <p className="truncate"> 
+                                <span className="me-2">{kanji?.character}</span>
+                                <span className="text-slate-400 ">{kanji?.meaning.english}</span>
+                            </p>
                         </li>
                     ))}
                 </ul>

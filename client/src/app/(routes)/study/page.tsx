@@ -24,8 +24,26 @@ const Study: FC = (props) => {
 			</div>
 			{kanji && (
 				<div className="grid lg:grid-cols-12 lg:gap-4">
-					<KanjiMedia kanji={kanji}></KanjiMedia>
-					<KanjiInfo kanji={kanji}></KanjiInfo>
+					<KanjiMedia 
+						kanjiImageSrcs={kanji.kanji.strokes.images} 
+						kanjiVideoSrcs={kanji.kanji.video}
+						imageArrayLength={kanji.kanji.strokes.count}
+						timings={kanji.kanji.strokes.timings}
+					>
+
+					</KanjiMedia>
+					<KanjiInfo
+						meaning={kanji.meaning}
+						onyomiKatakana={kanji.kanji.onyomi.katakana}
+						kunyomiHiragana={kanji.kanji.kunyomi.hiragana}
+						strokeCount={kanji.kstroke}
+						grade={kanji.grade}
+						radicalImageSrc={kanji.radical.image}
+						radicalNameHiragana={kanji.radical.name.hiragana}
+						radicalMeaningEnglish={kanji.radical.meaning.english}
+						meaningHint={kanji.mn_hint}
+					>
+					</KanjiInfo>
 					<Examples examples={kanji?.examples}></Examples>
 					<StrokeImages images={kanji?.kanji?.strokes.images}></StrokeImages>
 				</div>

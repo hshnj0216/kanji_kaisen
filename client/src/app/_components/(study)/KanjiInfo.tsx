@@ -1,50 +1,75 @@
 "use client";
 import { FC } from "react";
 import Image from "next/image";
+import sanitizeHtml from 'sanitize-html';
 
 interface IKanjiInfoProps {
-    kanji: any,
+    meaning: string;
+    onyomiKatakana: string;
+    kunyomiHiragana: string;
+    strokeCount: number;
+    grade: number;
+    radicalImageSrc: string;
+    radicalNameHiragana: string;
+    radicalMeaningEnglish: string;
+    meaningHint: string;
 }
-const KanjiInfo:FC<IKanjiInfoProps> = ({kanji}) => {
+const KanjiInfo:FC<IKanjiInfoProps> = ({
+    meaning, 
+    onyomiKatakana, 
+    kunyomiHiragana, 
+    strokeCount, 
+    grade,
+    radicalImageSrc,
+    radicalNameHiragana,
+    radicalMeaningEnglish,
+    meaningHint,
+}) => {
+
+    const sanitizedMeaningHint = sanitizeHtml(meaningHint, {
+        allowedTags: [],
+        allowedAttributes: {}
+      });
+      
     return(
         <div className="col-span-6 grid grid-cols-12 grid-row-12 bg-slate-300 p-3">
             <div className="col-span-6 row-span-8">
                 <div className="mb-2">
                     <p className="text-lg font-bold">Meaning</p>
-                    <p className="ms-2">{kanji?.kanji?.meaning?.english}</p>
+                    <p className="ms-2">{meaning}</p>
                 </div>
                 <div className="mb-2">
                     <p className="text-lg font-bold">Onyomi</p>
-                    <p className="ms-2">{kanji?.kanji?.onyomi?.katakana}</p>
+                    <p className="ms-2">{onyomiKatakana}</p>
                 </div>
                 <div className="mb-2">
                     <p className="text-lg font-bold">Kunyomi</p>
-                    <p className="ms-2">{kanji?.kanji?.kunyomi?.hiragana}</p>
+                    <p className="ms-2">{kunyomiHiragana}</p>
                 </div>
             </div>
             <div className="col-span-6 row-span-8">
                 <div className="mb-2">
                     <p className="text-lg font-bold">Strokes</p>
-                    <p>{kanji?.kstroke}</p>
+                    <p>{strokeCount}</p>
                 </div>
                 <div className="mb-2">
                     <p className="text-lg font-bold">Grade</p>
-                    <p>{kanji?.grade}</p>
+                    <p>{grade ? grade : "n/a"}</p>
                 </div>
                 <div className="mb-2">
                     <p className="text-lg font-bold">Radical</p>
                     <div className="grid grid-cols-12">
-                        <Image className="col-span-3 max-h-12" src={kanji?.radical.image} width={100} height={50} objectFit="contain" alt="radical_img"></Image>
+                        <Image className="col-span-3 max-h-12" src={radicalImageSrc} width={100} height={50} objectFit="contain" alt="radical_img"></Image>
                         <div className="col-span-9">
-                            <p>{kanji?.radical?.name?.hiragana}</p>
-                            <p>{kanji?.radical?.meaning?.english}</p>
+                            <p>{radicalNameHiragana}</p>
+                            <p>{radicalMeaningEnglish}</p>
                         </div>
                     </div>
                 </div>
             </div>
             <div className="col-span-12 row-span-4">
                 <p className="text-lg font-bold">Meaning Hint</p>
-                <p className="ms-2">{kanji?.mn_hint}</p>
+                <p className="ms-2">{sanitizedMeaningHint}</p>
             </div>
         </div>
     )

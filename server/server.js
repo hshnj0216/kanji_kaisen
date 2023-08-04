@@ -21,8 +21,6 @@ app.get('/getKanjiDetails/:queryString', async (req, res) => {
     };
     try{
         const response = await axios.request(options);
-        console.log(response.data);
-        console.log(JSON.stringify(response.data.kanji.strokes, null, 4));
         res.send(response.data);
     } catch {
         console.log('error')
@@ -41,26 +39,36 @@ app.get('/search/:queryString', async (req, res) => {
         }
     };
     const response = await axios.request(options);
-    console.log(`key: ${req.params.queryString}, results: ${response.data}`);
     if(response.data.length > 0) {
-        const results = response.data.map(item => item['kanji']['character']);
+        const results = await Promise.all(response.data.map(async (item) => {
+            console.log(item);
+            const options = {
+                method: 'GET',
+                url: `https://kanjialive-api.p.rapidapi.com/api/public/kanji/${item['kanji']['character']}`,
+                headers: {
+                    'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com',
+                    'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
+                }
+            };
+            const detailsResponse = await axios.request(options);
+            return detailsResponse.data.kanji;
+        }));
         res.send(results);
-    } else {
     }
+    
 });
 
-app.get('/getKanjiList/:level', async (req, res) => {
+app.get('/getKanjiList/:grade', async (req, res) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     const options = {
         method: 'GET',
         url: `https://kanjialive-api.p.rapidapi.com/api/public/search/advanced/`,
-        params: {grade: req.params.level},
+        params: {grade: req.params.grade},
         headers: {
             'X-RapidAPI-Host': 'kanjialive-api.p.rapidapi.com',
             'X-RapidAPI-Key': process.env.RAPIDAPI_KEY,
         }
     };
-    
     const response = await axios.request(options);
     const data = response.data;
     
@@ -82,7 +90,7 @@ app.get('/getKanjiList/:level', async (req, res) => {
             }
         };
         const detailsResponse = await axios.request(options);
-        return detailsResponse.data.kanji;
+        return detailsResponse.data;
     }));
     res.send(kanjiDetails);
 });
