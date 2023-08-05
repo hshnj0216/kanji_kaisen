@@ -74,7 +74,7 @@ app.get('/getKanjiList/:grade', async (req, res) => {
     
     // Pick 30 random items from the data
     const randomItems = [];
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 5; i++) {
         const randomIndex = Math.floor(Math.random() * data.length);
         randomItems.push(data[randomIndex]);
         data.splice(randomIndex, 1);
