@@ -21,7 +21,7 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
         props.setKanji(response.data);
     }
 
-    function handleSearch() {
+    function onSearch() {
         getKanjiDetails(searchTerm);
     }
 
@@ -52,7 +52,7 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
         performSearch(searchTerm);
     }, [searchTerm]);
 
-    function handleSuggestionClick(str: string) {
+    function onSuggestionClick(str: string) {
         setSearchTerm(str);
         setSelectedValue(str);
         getKanjiDetails(str);
@@ -78,7 +78,7 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
                 <button
                     type="button"
                     className="bg-slate-300 text-slate-500 p-2 rounded-r-md col-span-2"
-                    onClick={handleSearch}
+                    onClick={onSearch}
                     title="search"
                 >
                     <FaMagnifyingGlass className="mx-auto"></FaMagnifyingGlass>
@@ -91,13 +91,13 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
                 >
                     {queryResultList.map((kanji) => (
                         <li
-                            key={kanji?.character}
+                            key={kanji.character}
                             className="bg-slate-50 hover:bg-slate-300 cursor-pointer p-2 col-span-12"
-                            onClick={() => handleSuggestionClick(kanji?.character)}
+                            onClick={() => onSuggestionClick(kanji.character)}
                         >
                            <p className="truncate"> 
-                                <span className="me-2">{kanji?.character}</span>
-                                <span className="text-slate-400 ">{kanji?.meaning.english}</span>
+                                <span className="me-2">{kanji.kanji}</span>
+                                <span className="text-slate-400 ">{kanji.meaning}</span>
                             </p>
                         </li>
                     ))}
