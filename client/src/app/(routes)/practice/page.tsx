@@ -8,10 +8,10 @@ const Practice:FC = () => {
     return(
         <div className="w-screen border">
             <ul className="flex justify-center items-center mb-10">
-                <Link href={"practice/flashcards"}>
+                <Link href={"practice/kanji_matching"}>
                     <ModeCard 
-                        title={"Flashcards"} 
-                        description={"Review the cards on your deck"}
+                        title={"Kanji matching"} 
+                        description={"Match kanjis and their meaning"}
                     >
                     </ModeCard>
                 </Link>

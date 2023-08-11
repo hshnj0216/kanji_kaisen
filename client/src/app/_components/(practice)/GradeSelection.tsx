@@ -1,10 +1,9 @@
 "use client";
-import ModeCard from "../ModeCard";
-import {FC} from 'react';
+import ModeCard from "./ModeCard";
+import {FC} from "react";
 
 interface IGradeSelectionProps{
     onGradeSelection: (grade: number) => void;
-
 }
 
 const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection}) => {

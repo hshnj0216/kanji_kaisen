@@ -30,7 +30,7 @@ export default function RootLayout({
             <Image src={logo} width={"100"} height={"25"} alt='app-logo'></Image>
           </Link>
         </nav>
-        <div id='main'>
+        <div id='main' className="">
         {children}
         </div>
       </body>

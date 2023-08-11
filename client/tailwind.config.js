@@ -1,4 +1,3 @@
-/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -14,6 +13,10 @@ module.exports = {
       },
       fontSize: {
         '15xl': '15rem',
+      },
+      height: {
+        '9/10': '90vh',
+        '1/10': '10vh',
       }
     }
    
