@@ -23,51 +23,56 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
         if (matchedTiles.length === 30) {
             console.log(elapsedTime);
             setIsGameOver(true);
+        } else {
+            setSelectedTiles([]);
         }
     }, [matchedTiles]);
 
     const addMismatchedKanji = (kanji: IKanjiObject) => {
         setMismatchedKanjis((prevCounts) => {
             const newCounts = new Map(prevCounts);
-            newCounts.set(kanji?.kanji, (newCounts.get(kanji.kanji) || 0) + 1);
+            newCounts.set(kanji?.kanji, (newCounts.get(kanji?.kanji) || 0) + 1);
             return newCounts;
         });
     }
 
     const onTileSelect = (tile: IKanjiObject | string) => {
-        //Check if the argument type is not the same as the existing element in the selectedTiles
-        if (typeof (tile) === "object" && typeof (selectedTiles[0]) !== "object") {
-            setSelectedTiles([...selectedTiles, tile]);
-            //Compare the elements of the selectedTiles array
-            //If the meaning and the string match, remove the tiles from the remainingTiles
-            if (tile?.meaning === selectedTiles[0]) {
-                setMatchedTiles([...matchedTiles, tile, selectedTiles[0]]);
-                setSelectedTiles([]);
+        setSelectedTiles([tile]);
+        if (selectedTiles.length > 0) {
+            //Check if the argument type is not the same as the existing element in the selectedTiles
+            if (typeof (tile) === "object" && typeof (selectedTiles[0]) !== "object") {
+                setSelectedTiles([...selectedTiles, tile]);
+                //Compare the elements of the selectedTiles array
+                //If the meaning and the string match, remove the tiles from the remainingTiles
+                if (tile?.meaning === selectedTiles[0]) {
+                    setMatchedTiles([...matchedTiles, tile, selectedTiles[0]]);
+                    console.log(`Tile is: ${tile.meaning}`);
+                } else {
+                    //Add the kanji to the mismatched tiles
+                    addMismatchedKanji(tile);
+                    console.log('misMatchedKanji added');
+                }
+            } else if (typeof (tile) === "string" && typeof (selectedTiles[0]) !== "string") {
+                //Likewise, but when the tile is a meaning string
+                setSelectedTiles([...selectedTiles, tile]);
+                if (tile === selectedTiles[0]?.meaning) {
+                    setMatchedTiles([...matchedTiles, tile, selectedTiles[0]]);
+                    console.log(JSON.stringify(selectedTiles, null, 4))
+                } else {
+                    //Add the kanji to the mismatched tiles
+                    addMismatchedKanji(selectedTiles[0]);
+                    console.log('misMatchedKanji added');
+
+                }
             } else {
-                //Add the kanji to the mismatched tiles
-                addMismatchedKanji(tile);
-            }
-        } else if (typeof (tile) === "string" && typeof (selectedTiles[0]) !== "string") {
-            //Likewise, but when the tile is a meaning string
-            setSelectedTiles([...selectedTiles, tile]);
-            if (tile === selectedTiles[0]?.meaning) {
-                setMatchedTiles([...matchedTiles, tile, selectedTiles[0]]);
+                //Clear the selectedTiles array
                 setSelectedTiles([]);
-            } else {
-                //Add the kanji to the mismatched tiles
-                addMismatchedKanji(selectedTiles[0]);
             }
-        } else {
-            //Clear the selectedTiles array
-            setSelectedTiles([]);
         }
     }
 
     let minutes = Math.floor(elapsedTime / 60);
     let seconds = elapsedTime % 60;
-
-    let sortedArray = Array.from(mismatchedKanjis.entries()).sort((a, b) => b[1] - a[1]);
-    let top5 = sortedArray.slice(0, 5);
 
     return (
         <div>
@@ -85,7 +90,7 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                     <div>
                         <p className="text-slate-50 text-7xl">Most mismatched kanjis:</p>
                         <div className="flex">
-                            {top5.map(([kanji, count]) => (
+                            {Array.from(mismatchedKanjis.entries()).map(([kanji, count]) => (
                                 <div key={kanji} className="border rounded p-3 bg-slate-50">
                                     <span className="text-3xl">{kanji}</span>: <span>{count}</span>
                                 </div>

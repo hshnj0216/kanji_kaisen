@@ -29,12 +29,8 @@ async function loadAllKanjiData() {
   }
 
   populateKanjiByGrade();
-  // Get the end time of the code
-  let endTime = performance.now();
 
-  // Calculate and log the execution time of the code
-  let executionTime = endTime - startTime;
-  console.log(`The code took ${executionTime} milliseconds to execute`);
+  console.log('Kanji data loaded');
 }
 
 function populateKanjiByGrade() {
