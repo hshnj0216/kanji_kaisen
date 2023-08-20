@@ -2,6 +2,7 @@
 import { FC, useEffect, useState } from "react";
 import MatchTile from "./MatchTile";
 import Timer from "../../Timer";
+import Results from "./Results";
 
 interface IKanjiObject {
     kanji: string;
@@ -18,15 +19,33 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     const [selectedTiles, setSelectedTiles] = useState<(IKanjiObject | string)[]>([]);
     const [matchedTiles, setMatchedTiles] = useState<(IKanjiObject | string)[]>([]);
     const [mismatchedKanjis, setMismatchedKanjis] = useState(new Map());
+    const [areSelectedTilesCorrectState, setAreSelectedTilesCorrectState] = useState(true);
 
     useEffect(() => {
         if (matchedTiles.length === 30) {
-            console.log(elapsedTime);
             setIsGameOver(true);
         } else {
+            //Clean up the selectedTiles
             setSelectedTiles([]);
         }
-    }, [matchedTiles]);
+    }, [matchedTiles, mismatchedKanjis]);
+
+    //Checks if the selected tiles are correct
+    const areSelectedTilesCorrect = (tile: IKanjiObject | string) => {
+        if (typeof (tile) === "object" && typeof (selectedTiles[0]) !== "object") {
+            //Compare the elements of the selectedTiles array
+            if (tile?.meaning === selectedTiles[0]) {
+                return true;
+            }
+            return false;
+        } else if (typeof (tile) === "string" && typeof (selectedTiles[0]) !== "string") {
+            //Likewise, but when the tile is a meaning string
+            if (tile === selectedTiles[0]?.meaning) {
+                return true;
+            }
+            return false;
+        }
+    }
 
     const addMismatchedKanji = (kanji: IKanjiObject) => {
         setMismatchedKanjis((prevCounts) => {
@@ -37,84 +56,39 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     }
 
     const onTileSelect = (tile: IKanjiObject | string) => {
-        setSelectedTiles([tile]);
-        if (selectedTiles.length > 0) {
-            //Check if the argument type is not the same as the existing element in the selectedTiles
-            if (typeof (tile) === "object" && typeof (selectedTiles[0]) !== "object") {
-                setSelectedTiles([...selectedTiles, tile]);
-                //Compare the elements of the selectedTiles array
-                //If the meaning and the string match, remove the tiles from the remainingTiles
-                if (tile?.meaning === selectedTiles[0]) {
-                    setMatchedTiles([...matchedTiles, tile, selectedTiles[0]]);
-                    console.log(`Tile is: ${tile.meaning}`);
-                } else {
-                    //Add the kanji to the mismatched tiles
-                    addMismatchedKanji(tile);
-                    console.log('misMatchedKanji added');
-                }
-            } else if (typeof (tile) === "string" && typeof (selectedTiles[0]) !== "string") {
-                //Likewise, but when the tile is a meaning string
-                setSelectedTiles([...selectedTiles, tile]);
-                if (tile === selectedTiles[0]?.meaning) {
-                    setMatchedTiles([...matchedTiles, tile, selectedTiles[0]]);
-                    console.log(JSON.stringify(selectedTiles, null, 4))
-                } else {
-                    //Add the kanji to the mismatched tiles
-                    addMismatchedKanji(selectedTiles[0]);
-                    console.log('misMatchedKanji added');
+        setSelectedTiles(prevSelectedTiles => [...prevSelectedTiles, tile]);
+    };
 
-                }
+    useEffect(() => {
+        if (selectedTiles.length === 2) {
+            const [firstTile, secondTile] = selectedTiles;
+    
+            if (areSelectedTilesCorrect(secondTile)) {
+                setAreSelectedTilesCorrectState(true);
+                setMatchedTiles(prevMatchedTiles => [...prevMatchedTiles, firstTile, secondTile]);
             } else {
-                //Clear the selectedTiles array
-                setSelectedTiles([]);
+                setAreSelectedTilesCorrectState(false);
+                if (typeof(secondTile) === 'object') {
+                    addMismatchedKanji(secondTile);
+                } else if (typeof(firstTile) === 'object') {
+                    addMismatchedKanji(firstTile);
+                }
             }
+    
+            // Clear selected tiles after processing
+            setSelectedTiles([]);
         }
-    }
-
-    let minutes = Math.floor(elapsedTime / 60);
-    let seconds = elapsedTime % 60;
-
+    }, [selectedTiles]);    
+    
     return (
-        <div>
+        <div className="flex items-center justify-center">
             {isGameOver ? (
-                <div className="border rounded border-slate-50 p-4 flex flex-col justify-center items-center h-screen">
-                    <div className="">
-                        <p className="text-slate-50 text-center text-3xl">Elapsed time:</p>
-                        <p className="">
-                            <span className="text-slate-50 text-7xl">{minutes < 10 ? `0${minutes}` : minutes}</span>
-                            <span className="text-slate-50">mins</span>
-                            <span className="text-slate-50 text-7xl">{seconds < 10 ? `0${seconds}` : seconds}</span>
-                            <span className="text-slate-50">secs</span>
-                        </p>
-                    </div>
-                    <div>
-                        <p className="text-slate-50 text-7xl">Most mismatched kanjis:</p>
-                        <div className="flex">
-                            {Array.from(mismatchedKanjis.entries()).map(([kanji, count]) => (
-                                <div key={kanji} className="border rounded p-3 bg-slate-50">
-                                    <span className="text-3xl">{kanji}</span>: <span>{count}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    <div>
-                        <button type="button" title="play another match"
-                            className="bg-slate-300 p-3 border rounded text-slate-800 m-3"
-                        >
-                            Play another match
-                        </button>
-                        <button type="button" title="return to practice menu"
-                            className="bg-slate-300 p-3 border rounded text-slate-800 m-3"
-                        >
-                            Return to practice menu
-                        </button>
-                    </div>
-                </div>
+                <Results mismatchedKanjis={mismatchedKanjis} elapsedTime={elapsedTime} />
             ) : (
 
                 <div>
                     <Timer onTimeUpdate={setElapsedTime} />
-                    <div className="border rounded w-2/3 mx-auto my-auto grid grid-cols-6 grid-rows-5 gap-10 p-5">
+                    <div className="border rounded w-3/4 mx-auto my-auto grid grid-cols-6 grid-rows-5 gap-10 p-5">
                         {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
                             <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
                                 onTileSelect={() => onTileSelect(item)} isSelected={selectedTiles.includes(item)} /> :

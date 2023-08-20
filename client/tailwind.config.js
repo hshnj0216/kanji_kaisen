@@ -17,6 +17,9 @@ module.exports = {
       height: {
         '9/10': '90vh',
         '1/10': '10vh',
+      },
+      textWrap: {
+        'balance': 'balance',
       }
     }
    
