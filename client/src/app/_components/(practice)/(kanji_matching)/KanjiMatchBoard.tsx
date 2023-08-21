@@ -1,5 +1,5 @@
 "use client";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import MatchTile from "./MatchTile";
 import Timer from "../../Timer";
 import Results from "./Results";
@@ -19,28 +19,21 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     const [selectedTiles, setSelectedTiles] = useState<(IKanjiObject | string)[]>([]);
     const [matchedTiles, setMatchedTiles] = useState<(IKanjiObject | string)[]>([]);
     const [mismatchedKanjis, setMismatchedKanjis] = useState(new Map());
-    const [areSelectedTilesCorrectState, setAreSelectedTilesCorrectState] = useState(true);
+    const [isMatchChecked, setIsMatchChecked] = useState(false);
+    const [isCorrectMatch, setIsCorrectMatch] = useState(false);
+    const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    useEffect(() => {
-        if (matchedTiles.length === 30) {
-            setIsGameOver(true);
-        } else {
-            //Clean up the selectedTiles
-            setSelectedTiles([]);
-        }
-    }, [matchedTiles, mismatchedKanjis]);
-
-    //Checks if the selected tiles are correct
-    const areSelectedTilesCorrect = (tile: IKanjiObject | string) => {
-        if (typeof (tile) === "object" && typeof (selectedTiles[0]) !== "object") {
+    //Checks if the selected tiles of type string and IKanjiObject are correct
+    const areSelectedTilesCorrect = (tile1: IKanjiObject | string, tile2: IKanjiObject | string) => {
+        if (typeof (tile1) === "object" && typeof (tile2 !== "object")) {
             //Compare the elements of the selectedTiles array
-            if (tile?.meaning === selectedTiles[0]) {
+            if (tile1?.meaning === tile2) {
                 return true;
             }
             return false;
-        } else if (typeof (tile) === "string" && typeof (selectedTiles[0]) !== "string") {
+        } else if (typeof (tile1) === "string" && typeof (tile2) !== "string") {
             //Likewise, but when the tile is a meaning string
-            if (tile === selectedTiles[0]?.meaning) {
+            if (tile1 === tile2?.meaning) {
                 return true;
             }
             return false;
@@ -55,31 +48,53 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
         });
     }
 
-    const onTileSelect = (tile: IKanjiObject | string) => {
-        setSelectedTiles(prevSelectedTiles => [...prevSelectedTiles, tile]);
+    const onTileSelect = () => {
+        console.log(selectedTiles.length);
+        if (selectedTiles.length === 2) {
+            if (areSelectedTilesCorrect(selectedTiles[0], selectedTiles[1])) {
+                setMatchedTiles([...matchedTiles, ...selectedTiles]);
+                setIsCorrectMatch(true);
+            } else {
+                if (typeof (selectedTiles[0]) === "object") {
+                    addMismatchedKanji(selectedTiles[0]);
+                } else {
+                    addMismatchedKanji(selectedTiles[1] as IKanjiObject);
+                }
+                setIsCorrectMatch(false);
+            }
+            setIsMatchChecked(true);
+        } else if(selectedTiles.length > 2) {
+            setIsMatchChecked(false);
+            setSelectedTiles([]);
+            clearTimeout(timeoutIdRef.current);
+        }
     };
 
+    //Invokes onTileSelect each time the selectedTiles changes
+    //Sets the isMatchChecked to false
     useEffect(() => {
-        if (selectedTiles.length === 2) {
-            const [firstTile, secondTile] = selectedTiles;
-    
-            if (areSelectedTilesCorrect(secondTile)) {
-                setAreSelectedTilesCorrectState(true);
-                setMatchedTiles(prevMatchedTiles => [...prevMatchedTiles, firstTile, secondTile]);
-            } else {
-                setAreSelectedTilesCorrectState(false);
-                if (typeof(secondTile) === 'object') {
-                    addMismatchedKanji(secondTile);
-                } else if (typeof(firstTile) === 'object') {
-                    addMismatchedKanji(firstTile);
-                }
-            }
-    
-            // Clear selected tiles after processing
+        onTileSelect();
+        if (selectedTiles.length >= 2) {
+            timeoutIdRef.current = setTimeout(() => {
+                setIsMatchChecked(false);
+            }, 300);
+
+            return () => clearTimeout(timeoutIdRef.current);
+        }
+    }, [selectedTiles]);
+
+    useEffect(() => {
+        if (matchedTiles.length === 30) {
+            setIsGameOver(true);
+        } else if (!isMatchChecked) {
+            // Only reset selectedTiles if isMatchChecked is false
             setSelectedTiles([]);
         }
-    }, [selectedTiles]);    
-    
+    }, [matchedTiles, mismatchedKanjis, isMatchChecked]);
+
+
+
+
     return (
         <div className="flex items-center justify-center">
             {isGameOver ? (
@@ -91,9 +106,14 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                     <div className="border rounded w-3/4 mx-auto my-auto grid grid-cols-6 grid-rows-5 gap-10 p-5">
                         {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
                             <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
-                                onTileSelect={() => onTileSelect(item)} isSelected={selectedTiles.includes(item)} /> :
+                                setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
+                                isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
+                                isCorrectMatch={isCorrectMatch}
+                            /> :
                             <MatchTile key={index} title={item} isMatched={matchedTiles.includes(item)}
-                                onTileSelect={() => onTileSelect(item)} isSelected={selectedTiles.includes(item)}
+                                setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
+                                isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
+                                isCorrectMatch={isCorrectMatch}
                             />)
                         }
                     </div>

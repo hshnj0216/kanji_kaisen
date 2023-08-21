@@ -3,6 +3,7 @@ import { FC } from "react";
 import ModeCard from "@/app/_components/(practice)/ModeCard";
 import Link from "next/link";
 import styles from '@/app/practice.module.scss';
+import Canvas from "@/app/_components/Canvas";
 
 const Practice:FC = () => {
     return(
@@ -29,6 +30,7 @@ const Practice:FC = () => {
                     >
                     </ModeCard>      
                 </Link>
+                <Canvas></Canvas>
             </ul>
         </div>
     )
