@@ -6,6 +6,11 @@ dotenv.config();
 import Tesseract from "tesseract.js";
 
 app.use(express.json());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
 
 const allKanjiData = new Map();
 const kanjiByGrade = Array.from({ length: 6 }, () => []);
@@ -13,7 +18,7 @@ const kanjiByGrade = Array.from({ length: 6 }, () => []);
 //Makes a call to the Kanji Alive API
 //Gets all the 1300 kanji from the API and their details
 async function loadAllKanjiData() {
-  let startTime = performance.now();
+  console.log('loading kanji data...');
   const options = {
     method: "GET",
     url: `https://kanjialive-api.p.rapidapi.com/api/public/kanji/all/`,
@@ -25,6 +30,7 @@ async function loadAllKanjiData() {
 
   const response = await axios.request(options);
 
+  console.log(`response received, response length is: ${response.data.length}`);
   //Add each item to the map
   //Use the kanji character as the key
   for (let kanji of response.data) {
@@ -163,8 +169,22 @@ app.get("/getKanjiMatchData/:grade", async (req, res) => {
 
 //Recognize
 app.post('/recognize', (req, res) => {
-  
-})
+  console.log('call made to recognize');
+  // get the data URL from the request body
+  const { dataURL } = req.body;
+
+  console.log(`dataURL: ${dataURL}`);
+
+  // recognize the drawn Kanji characters
+  Tesseract.recognize(
+    dataURL, // pass the data URL as the first argument
+    'jpn', // the language of the text in the image
+    { logger: m => console.log(m) } // log progress updates
+  ).then(({ data: { text } }) => {
+    console.log(text); // log the recognized text
+  });
+});
+
 
 app.listen(5000, () => {
   console.log("app listening on port 5000");

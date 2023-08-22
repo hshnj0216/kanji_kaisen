@@ -20,7 +20,6 @@ const Study: FC = (props) => {
 		<div className="w-4/5 mx-auto">
 			<div className="flex justify-between items-center">
 				<SearchBar setKanji={handleSetKanji}></SearchBar>
-				{kanji && (<button className="bg-slate-300 text-slate-700 rounded h-10 px-4" type="button">Add to deck</button>)}
 			</div>
 			{kanji && (
 				<div className="grid lg:grid-cols-12 lg:gap-4">

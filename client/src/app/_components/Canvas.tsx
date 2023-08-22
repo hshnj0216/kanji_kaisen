@@ -1,20 +1,33 @@
-"use client";
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
+/* eslint-disable react/display-name */
 
-const Canvas = (props) => {
+const Canvas = forwardRef((props, ref) => {
   const canvasRef = useRef(null);
   const isDrawingRef = useRef(false);
   const lastPosRef = useRef({ x: 0, y: 0 });
 
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      const ctx = canvasRef.current.getContext('2d');
+      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+    },
+    toDataURL: () => {
+      console.log(canvasRef.current);
+      return canvasRef.current.toDataURL();
+    }
+  }));
+
   const isInsideCanvas = (e) => {
     const pos = getMousePos(e);
     return pos.x >= 0 && pos.x <= canvasRef.current.width &&
-           pos.y >= 0 && pos.y <= canvasRef.current.height;
+      pos.y >= 0 && pos.y <= canvasRef.current.height;
   };
 
   const handleMouseDown = (e) => {
-    isDrawingRef.current = true;
-    lastPosRef.current = getMousePos(e);
+    if (isInsideCanvas(e)) {
+      isDrawingRef.current = true;
+      lastPosRef.current = getMousePos(e);
+    }
   };
 
   const handleMouseUp = () => {
@@ -22,7 +35,7 @@ const Canvas = (props) => {
   };
 
   const handleMouseMove = (e) => {
-    if (isDrawingRef.current) {
+    if (isDrawingRef.current && isInsideCanvas(e)) {
       const pos = getMousePos(e);
       drawLine(lastPosRef.current, pos);
       lastPosRef.current = pos;
@@ -39,7 +52,7 @@ const Canvas = (props) => {
 
   const drawLine = (start, end) => {
     const ctx = canvasRef.current.getContext('2d');
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 8;
     ctx.lineCap = 'round';
     //Set stroke color to Tailwind's slate-800
     ctx.strokeStyle = '#0F172A';
@@ -63,6 +76,6 @@ const Canvas = (props) => {
   }, []);
 
   return <canvas className="border border-red-600 bg-slate-50" ref={canvasRef} {...props} />;
-};
+});
 
 export default Canvas;
