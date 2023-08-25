@@ -2,7 +2,6 @@
 import { FC } from "react";
 import ModeCard from "@/app/_components/(practice)/ModeCard";
 import Link from "next/link";
-import DrawBoard from "@/app/_components/DrawBoard";
 
 const Practice:FC = () => {
     return(
@@ -12,6 +11,7 @@ const Practice:FC = () => {
                     <ModeCard 
                         title={"Kanji matching"} 
                         description={"Match kanjis and their meaning"}
+                        isDisabled={false}
                     >
                     </ModeCard>
                 </Link>
@@ -19,17 +19,18 @@ const Practice:FC = () => {
                     <ModeCard 
                         title={"Kanji recognition"} 
                         description={"Test yourself by recognizing random kanjis"}
+                        isDisabled={false}
                     >
                     </ModeCard>
                 </Link>
                 <Link href={"practice/draw_the_kanji"}>
                     <ModeCard 
                         title={"Write the kanji"} 
-                        description={"Given the English meaning, write the kanji"}
+                        description={"Given the meaning, write the kanji"}
+                        isDisabled={true}
                     >
                     </ModeCard>      
                 </Link>
-                <DrawBoard></DrawBoard>
             </ul>
         </div>
     )

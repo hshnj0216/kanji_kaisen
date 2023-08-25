@@ -1,0 +1,3 @@
+const loadingStatus = {
+    loaded: 'loading'
+}

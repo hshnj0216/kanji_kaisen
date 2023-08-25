@@ -8,6 +8,7 @@ import RadicalInfo from "@/app/_components/(study)/RadicalInfo";
 import Image from "next/image";
 import Examples from "@/app/_components/(study)/Examples";
 import StrokeImages from "@/app/_components/(study)/StrokeImages";
+import Introduction from "@/app/_components/(study)/Introduction";
 
 const Study: FC = (props) => {
 	const [kanji, setKanji] = useState(null);
@@ -21,7 +22,7 @@ const Study: FC = (props) => {
 			<div className="flex justify-between items-center">
 				<SearchBar setKanji={handleSetKanji}></SearchBar>
 			</div>
-			{kanji && (
+			{kanji ? (
 				<div className="grid lg:grid-cols-12 lg:gap-4">
 					<KanjiMedia 
 						kanjiImageSrcs={kanji.kanji?.strokes.images} 
@@ -45,6 +46,8 @@ const Study: FC = (props) => {
 					<Examples examples={kanji?.examples}></Examples>
 					<StrokeImages images={kanji?.kanji?.strokes.images}></StrokeImages>
 				</div>
+			) : (
+				<Introduction></Introduction>
 			)}
 		</div>
 	);

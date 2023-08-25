@@ -16,7 +16,7 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
     //Search handling code
     async function getKanjiDetails(kanji: string) {
         const response = await axios.get(
-            `http://localhost:5000/getKanjiDetails/${kanji}`
+            `http://localhost:5000/studyData/kanjiDetails/${kanji}`
         );
         props.setKanji(response.data);
     }
@@ -32,7 +32,7 @@ const SearchBar: FC<ISearchBarProps> = (props) => {
         if (queryString) {
             try {
                 const response = await axios.get(
-                    `http://localhost:5000/search/${queryString}`
+                    `http://localhost:5000/studyData/kanjis/${queryString}`
                 );
                 setQueryResultList(response.data);
             } catch (error) {

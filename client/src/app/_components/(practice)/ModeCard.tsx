@@ -4,13 +4,14 @@ import styles from '@/app/practice.module.scss';
 interface IModeCardProp{
     title: string;
     description?: string;
+    isDisabled: boolean;
     onClick?: () => void;
 }
-const ModeCard: FC<IModeCardProp> = ({title, description, onClick}) => {
+const ModeCard: FC<IModeCardProp> = ({title, description,isDisabled, onClick}) => {
     return (
         <div 
             className={`border rounded cursor-pointer p-3 w-80 h-80 flex items-center justify-center m-10 hover:scale-110 
-                        transition-transform ${styles.card}`}  
+                        transition-transform ${styles.card} ${isDisabled ? "opacity-50 pointer-events-none" : ""}`}  
             onClick={onClick}
         >
             <div>

@@ -9,7 +9,7 @@ interface IGradeSelectionProps{
 const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection}) => {
     return (
         <>
-            <h3 className="text-slate-50 text-4xl text-center my-3">Select a JLPT level:</h3>
+            <h3 className="text-slate-50 text-4xl text-center my-3">Select a grade level:</h3>
             <div className="flex">
                 <ModeCard title="Grade 1" description="" onClick={() => onGradeSelection(1)}></ModeCard>
                 <ModeCard title="Grade 2" description="" onClick={() => onGradeSelection(2)}></ModeCard>

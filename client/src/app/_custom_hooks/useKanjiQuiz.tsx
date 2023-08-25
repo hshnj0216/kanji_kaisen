@@ -7,7 +7,7 @@ const useKanjiQuiz = () => {
 
     const onGradeSelection = async (grade: number) => {
         try {
-            const response = await axios.get(`http://localhost:5000/getKanjiList/${grade}`);
+            const response = await axios.get(`http://localhost:5000/practiceData/kanjiRecognitionData/${grade}`);
             setFullQuizItems(response.data);
             setIsPlayMode(true);
         } catch (error) {

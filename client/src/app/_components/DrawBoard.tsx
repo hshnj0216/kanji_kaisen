@@ -1,32 +1,43 @@
-import { useRef } from "react";
-import axios from "axios";
+import { useRef, useState, useEffect } from "react";
 import Canvas from "./Canvas";
+import * as iink from 'iink-js';
 
 const DrawBoard = () => {
     const canvasRef = useRef(null);
+    const [editor, setEditor] = useState(null);
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        // initialize iink with your application key and HMAC key
+        const editor = iink.register({
+            applicationKey: 'YOUR_APPLICATION_KEY',
+            hmacKey: 'YOUR_HMAC_KEY'
+        });
+        setEditor(editor);
+    }, []);
+
+    useEffect(() => {
+        if (editor && canvasRef.current) {
+            // get the canvas element and its context
+            const canvas = canvasRef.current;
+            const ctx = canvas.getContext('2d');
+
+            // get the image data from the canvas
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+            // recognize handwritten text in the canvas image
+            editor
+                .addImage(imageData)
+                .then(() => editor.waitForIdle())
+                .then(() => editor.export_(iink.ExportFormat.TEXT))
+                .then(result => {
+                    setText(result);
+                });
+        }
+    }, [editor, canvasRef]);
+
     const handleClearClick = () => {
         canvasRef.current.clear();
-    };
-
-    const handleSubmitClick = () => {
-        const dataURL = canvasRef.current?.toDataURL();
-        console.log(dataURL);
-        
-        const options = {
-            url: 'http://localhost:5000/recognize/',
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: JSON.stringify({ dataURL })
-        }
-
-        axios.request(options)
-            .then(response => response.json())
-            .then(data => {
-                // handle the response data
-                console.log(data);
-            });
     };
 
     return (
@@ -34,12 +45,11 @@ const DrawBoard = () => {
             <Canvas ref={canvasRef} />
             <div>
                 <ul>
-
+                    <li>{text}</li>
                 </ul>
             </div>
             <div className="flex justify-center">
                 <button type="button" title="clear" onClick={handleClearClick} className="border rounded bg-slate-300 m-3">Clear</button>
-                <button type="button" title="submit" onClick={handleSubmitClick} className="border rounded bg-slate-300 m-3">Submit</button>
             </div>
         </div>
     );
