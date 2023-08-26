@@ -1,29 +1,16 @@
 "use client";
 import axios from "axios";
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react";
+import {  FC, useEffect, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 
 interface ISearchBarProps {
-    setKanji: Dispatch<SetStateAction<any>>,
+    onKanjiSelect: () => void;
 }
 
-const SearchBar: FC<ISearchBarProps> = (props) => {
+const SearchBar: FC<ISearchBarProps> = ({onKanjiSelect}) => {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState<string>("");
-
-
-    //Search handling code
-    async function getKanjiDetails(kanji: string) {
-        const response = await axios.get(
-            `http://localhost:5000/studyData/kanjiDetails/${kanji}`
-        );
-        props.setKanji(response.data);
-    }
-
-    function onSearch() {
-        getKanjiDetails(searchTerm);
-    }
 
     //Suggestive search 
     const [queryResultList, setQueryResultList] = useState<object[]>([]);
