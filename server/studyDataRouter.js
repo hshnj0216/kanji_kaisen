@@ -4,10 +4,11 @@ import { allKanjiData } from "./server.js";
 
 //Retrieve kanji details
 router.get("/kanjiDetails/:kanji_char", async (req, res) => {
-  console.log('request made to kanji');
+  console.log(`Request made to kanji, looked for ${req.params.kanji_char}`);
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     const kanji = allKanjiData.get(req.params.kanji_char);
+    console.log(`Kanji found. Returned kanji: ${kanji.ka_utf}`);
     res.json(kanji);
   } catch {
     console.log("error");
@@ -23,7 +24,6 @@ router.get("/kanjis/:queryString", async (req, res) => {
     let matches = [];
 
     let query = req.params.queryString;
-    console.log(query);
 
     //Traverse the map and find the substrings
     for (let [key, kanji] of allKanjiData.entries()) {

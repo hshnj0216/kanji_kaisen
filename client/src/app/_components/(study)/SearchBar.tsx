@@ -1,49 +1,22 @@
 "use client";
-import axios from "axios";
-import {  FC, useEffect, useState } from "react";
+import {  FC } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
+import useSearch from "@/app/_custom_hooks/useSearch";
 
-interface ISearchBarProps {
-    onKanjiSelect: () => void;
+interface ISearchBarProps{
+    onKanjiSelection: (kanji: string) => void;
 }
 
-const SearchBar: FC<ISearchBarProps> = ({onKanjiSelect}) => {
-    const [searchTerm, setSearchTerm] = useState<string>("");
-    const [isInputFocused, setIsInputFocused] = useState<boolean>(false);
-    const [selectedValue, setSelectedValue] = useState<string>("");
-
-    //Suggestive search 
-    const [queryResultList, setQueryResultList] = useState<object[]>([]);
-
-    async function performSearch(queryString: string) {
-        if (queryString) {
-            try {
-                const response = await axios.get(
-                    `http://localhost:5000/studyData/kanjis/${queryString}`
-                );
-                setQueryResultList(response.data);
-            } catch (error) {
-                if (error.response && error.response.status === 404) {
-                    // Handle the absence of data here
-                    setQueryResultList([]);
-                } else {
-
-                }
-            }
-        } else {
-            setQueryResultList([]);
-        }
-    }
-
-    useEffect(() => {
-        performSearch(searchTerm);
-    }, [searchTerm]);
-
-    function onSuggestionClick(str: string) {
-        setSearchTerm(str);
-        setSelectedValue(str);
-        getKanjiDetails(str);
-    }
+const SearchBar: FC<ISearchBarProps> = ({onKanjiSelection}) => {
+    const {
+        queryString, 
+        setQueryString,
+        selectedValue,
+        setSelectedValue,
+        searchSuggestions, 
+        isInputFocused, 
+        setIsInputFocused, 
+    } = useSearch();
 
     return (
         <div className="my-3 grid grid-cols-12 relative w-3/12">
@@ -53,34 +26,33 @@ const SearchBar: FC<ISearchBarProps> = ({onKanjiSelect}) => {
                     type="text"
                     placeholder="Search kanjis using the kanji character or the english word"
                     onChange={(e) => {
-                        setSearchTerm(e.target.value);
+                        setQueryString(e.target.value);
                         setSelectedValue("");
                     }}
                     onBlur={() => {
                         setTimeout(() => setIsInputFocused(false), 100); // Delay to allow the click event to trigger on the ul
                     }}
                     onFocus={() => setIsInputFocused(true)}
-                    value={selectedValue !== "" ? selectedValue : searchTerm}
+                    value={selectedValue !== "" ? selectedValue : queryString}
                 />
                 <button
                     type="button"
                     className="bg-slate-300 text-slate-500 p-2 rounded-r-md col-span-2"
-                    onClick={onSearch}
                     title="search"
                 >
                     <FaMagnifyingGlass className="mx-auto"></FaMagnifyingGlass>
                 </button>
             </div>
-            {isInputFocused && queryResultList.length > 0 && (
+            {isInputFocused && searchSuggestions.length > 0 && (
                 <ul
                     className="w-9/12 border rounded absolute z-10 bg-white grid grid-cols-12 top-full"
                     onBlur={() => setIsInputFocused(false)}
                 >
-                    {queryResultList.map((kanji) => (
+                    {searchSuggestions.map((kanji) => (
                         <li
                             key={kanji.kanji}
                             className="bg-slate-50 hover:bg-slate-300 cursor-pointer p-2 col-span-12"
-                            onClick={() => onSuggestionClick(kanji.kanji)}
+                            onClick={() => onKanjiSelection(kanji.kanji)}
                         >
                            <p className="truncate"> 
                                 <span className="me-2">{kanji.kanji}</span>

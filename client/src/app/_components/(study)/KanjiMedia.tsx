@@ -10,7 +10,7 @@ interface IKanjiMedia {
     kanji: any,
 }
 
-const KanjiMedia: FC<IKanjiMedia> = ({ kanjiImageSrcs, kanjiVideoSrcs, imageArrayLength, timings }) => {
+const KanjiMedia: FC<IKanjiMedia> = ({ kanji, kanjiImageSrcs, kanjiVideoSrcs, imageArrayLength, timings }) => {
     const [isImage, setIsImage] = useState(true);
     const [isPlay, setIsPlay] = useState(true);
     const [imageIndex, setImageIndex] = useState(imageArrayLength - 1);
@@ -51,6 +51,10 @@ const KanjiMedia: FC<IKanjiMedia> = ({ kanjiImageSrcs, kanjiVideoSrcs, imageArra
         //Alternative: search the timings array since the size will always be small
         setImageIndex(closestTimeIndex);
     }
+
+    useEffect(() => {
+        setImageIndex(imageArrayLength - 1);
+    },);
 
     return ( 
         <div className="col-span-3 bg-slate-50 flex flex-col items-center justify-center relative">
