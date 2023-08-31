@@ -5,64 +5,40 @@ import Image from "next/image";
 interface IKanjiMedia {
     kanjiVideoSrcs: string[];
     kanjiImageSrcs: string[];
+    imageIndex: number;
+    isImage: boolean;
+    isPlay: boolean;
+    videoRef: any,
+    onPlayBtnClick: () => void;
+    onPrevBtnClick: () => void;
+    onNextBtnClick: () => void;
+    onTimeUpdate: () => void;
     imageArrayLength: number;
     timings: number[];
-    kanji: any,
 }
 
-const KanjiMedia: FC<IKanjiMedia> = ({ kanji, kanjiImageSrcs, kanjiVideoSrcs, imageArrayLength, timings }) => {
-    const [isImage, setIsImage] = useState(true);
-    const [isPlay, setIsPlay] = useState(true);
-    const [imageIndex, setImageIndex] = useState(imageArrayLength - 1);
-    const videoRef = useRef(null);
-
-    const handlePrevBtnClick = () => {
-        setIsImage(true);
-        setIsPlay(true);
-        if(imageIndex > 0) {
-            setImageIndex(imageIndex - 1);
-            videoRef.current.currentTime = timings[imageIndex];
-        }
-    }
-
-    const handlePlayBtnClick = () => {
-        setIsImage(false);
-        setIsPlay(!isPlay);
-        if(isPlay) {
-            videoRef.current?.play();
-        } else {
-            videoRef.current?.pause();
-        }
-    }
-
-    const handleNextBtnClick = () => {
-        setIsImage(true);
-        setIsPlay(true);
-        if(imageIndex < imageArrayLength - 1) {
-            setImageIndex(imageIndex + 1);
-            videoRef.current.currentTime = timings[imageIndex];
-        }
-    }
-
-    const handleTimeUpdate = () => {
-        console.log(videoRef.current.currentTime);
-        const currentTime = videoRef?.current?.currentTime;
-        const closestTimeIndex = timings.reduce((prev, curr, index) => Math.abs(curr - currentTime) < Math.abs(timings[prev] - currentTime) ? index : prev, 0);
-        //Alternative: search the timings array since the size will always be small
-        setImageIndex(closestTimeIndex);
-    }
-
-    useEffect(() => {
-        setImageIndex(imageArrayLength - 1);
-    },);
+const KanjiMedia: FC<IKanjiMedia> = ({ 
+    kanjiImageSrcs, 
+    kanjiVideoSrcs, 
+    imageIndex,
+    isImage,
+    isPlay,
+    videoRef,
+    onPlayBtnClick,
+    onPrevBtnClick,
+    onNextBtnClick,
+    onTimeUpdate,
+    imageArrayLength, 
+    timings 
+}) => {
 
     return ( 
         <div className="col-span-3 bg-slate-50 flex flex-col items-center justify-center relative">
             {isImage && (
                 <Image 
                     className="h-5/6"
-                    key={kanjiImageSrcs[imageIndex]} 
-                    src={kanjiImageSrcs[imageIndex]} 
+                    key={kanjiImageSrcs?.[imageIndex]} 
+                    src={kanjiImageSrcs?.[imageIndex]} 
                     width={300} 
                     height={325}
                     alt="kanji_img"
@@ -75,24 +51,24 @@ const KanjiMedia: FC<IKanjiMedia> = ({ kanji, kanjiImageSrcs, kanjiVideoSrcs, im
                     className="w-full object-contain h-5/6"
                     autoPlay
                     ref={videoRef}
-                    onTimeUpdate={handleTimeUpdate}
+                    onTimeUpdate={onTimeUpdate}
                 >
-                    {kanjiVideoSrcs.mp4 && (
+                    {kanjiVideoSrcs?.mp4 && (
                         <source src={kanjiVideoSrcs.mp4} type="video/mp4" />
                     )}
-                    {kanjiVideoSrcs.webm && (
+                    {kanjiVideoSrcs?.webm && (
                         <source src={kanjiVideoSrcs.webm} type="video/webm" />
                     )}
                 </video>
             )}
             <div className="flex justify-between w-full h-1/6 px-10">
-                <button type="button" title="Previous" onClick={handlePrevBtnClick}>
+                <button type="button" title="Previous" onClick={onPrevBtnClick}>
                     <FaBackwardStep className="w-6 h-6" />
                 </button>
-                <button  type="button" title="Play" onClick={handlePlayBtnClick}>
+                <button  type="button" title="Play" onClick={onPlayBtnClick}>
                     {isPlay ? <FaPlay className="w-6 h-6"/> : <FaPause className="w-6 h-6"/>}
                 </button>
-                <button type="button" title="Next" onClick={handleNextBtnClick}>
+                <button type="button" title="Next" onClick={onNextBtnClick}>
                     <FaForwardStep className="w-6 h-6"/>
                 </button>
             </div>

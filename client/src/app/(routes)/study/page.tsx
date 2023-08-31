@@ -10,7 +10,12 @@ import Introduction from "@/app/_components/(study)/Introduction";
 
 
 const Study: FC = () => {
-	const {kanji, onKanjiSelection} = useKanji();
+	const {
+		kanji, 
+		onKanjiSelection,
+		kanjiInfoProps,
+		kanjiMediaProps,
+	} = useKanji();
 	return (
 		<div className="w-4/5 mx-auto">
 			<div className="flex justify-between items-center">
@@ -18,25 +23,8 @@ const Study: FC = () => {
 			</div>
 			{kanji ? (
 				<div className="grid lg:grid-cols-12 lg:gap-4">
-					<KanjiMedia
-						kanjiImageSrcs={kanji.kanji?.strokes.images}
-						kanjiVideoSrcs={kanji.kanji?.video}
-						imageArrayLength={kanji.kanji?.strokes.count}
-						timings={kanji.kanji?.strokes.timings}
-					>
-					</KanjiMedia>
-					<KanjiInfo
-						meaning={kanji.meaning}
-						onyomiKatakana={kanji.kanji?.onyomi.katakana}
-						kunyomiHiragana={kanji.kanji?.kunyomi.hiragana}
-						strokeCount={kanji?.kstroke}
-						grade={kanji?.grade}
-						radicalImageSrc={kanji.radical?.image}
-						radicalNameHiragana={kanji.radical?.name.hiragana}
-						radicalMeaningEnglish={kanji.radical?.meaning?.english}
-						meaningHint={kanji.mn_hint}
-					>
-					</KanjiInfo>
+					<KanjiMedia	{...kanjiMediaProps}/>
+					<KanjiInfo {...kanjiInfoProps} /> 
 					<Examples examples={kanji?.examples}></Examples>
 					<StrokeImages images={kanji?.kanji?.strokes.images}></StrokeImages>
 				</div>
