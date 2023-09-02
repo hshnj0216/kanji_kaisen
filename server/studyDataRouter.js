@@ -1,14 +1,23 @@
-import express, { query } from "express";
+import express from "express";
 const router = express.Router();
-import { allKanjiData } from "./server.js";
+
+//Redis connection
+import { createClient } from 'redis';
+
+const client = createClient({
+    password: process.env.REDISDB_PASSWORD,
+    socket: {
+        host: process.env.REDISDB_HOST,
+        port: 12652
+    }
+});
 
 //Retrieve kanji details
 router.get("/kanjiDetails/:kanji_char", async (req, res) => {
   console.log(`Request made to kanji, looked for ${req.params.kanji_char}`);
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
-    const kanji = allKanjiData.get(req.params.kanji_char);
-    console.log(`Kanji found. Returned kanji: ${kanji.ka_utf}`);
+    const kanji = await client.hGet("allKanjiData", req.params.kanji_char);
     res.json(kanji);
   } catch {
     console.log("error");

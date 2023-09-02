@@ -4,6 +4,18 @@ import dotenv from "dotenv";
 const app = express();
 const router = express.Router();
 dotenv.config();
+
+//Redis connection
+import { createClient } from 'redis';
+
+const client = createClient({
+    password: process.env.REDISDB_PASSWORD,
+    socket: {
+        host: process.env.REDISDB_HOST,
+        port: 12652
+    }
+});
+
 import practiceDataRouter from "./practiceDataRouter.js";
 import studyDataRouter from "./studyDataRouter.js";
 
@@ -19,18 +31,15 @@ app.use((req, res, next) => {
 app.use("/studyData", studyDataRouter);
 app.use("/practiceData", practiceDataRouter);
 
-const allKanjiData = new Map();
-const kanjiByGrade = Array.from({ length: 6 }, () => []);
+client.on("connect", () => {
+  console.log("Connected to Redis");
+});
 
-function populateKanjiByGrade() {
-  //Loop through the allKanjiData map
-  //Push the item to the respective array
-  for (let [key, kanji] of allKanjiData.entries()) {
-    if (kanji.grade !== null) {
-      kanjiByGrade[kanji.grade - 1].push(kanji);
-    }
-  }
-}
+client.on('error', (err) => {
+  console.error('Redis error:', err);
+});
+
+
 
 //Makes a call to the Kanji Alive API
 //Gets all the 1300 kanji from the API and their details
@@ -46,16 +55,17 @@ async function loadAllKanjiData() {
   };
 
   const response = await axios.request(options);
+  const kanjis = response.data;
+  console.log(`Retrieved all ${kanjis.length} kanjis`);
 
-  //Add each item to the map
-  //Use the kanji character as the key
-  for (let kanji of response.data) {
-    allKanjiData.set(kanji.ka_utf, kanji);
+  client.connect();
+
+  for (let kanji of kanjis) {
+    client.hSet("allKanjiData", kanji.ka_utf, JSON.stringify(kanji));
   }
 
-  populateKanjiByGrade();
-
-  console.log('All kanji data loaded');
+  console.log("All kanji data loaded");
+  
 }
 
 app.get("/", (req, res) => {
@@ -68,4 +78,3 @@ app.listen(5000, () => {
   loadAllKanjiData();
 });
 
-export { allKanjiData, kanjiByGrade };
