@@ -1,5 +1,5 @@
 "use client";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect } from "react";
 import { FaPlay, FaPause, FaForwardStep, FaBackwardStep } from "react-icons/fa6";
 import Image from "next/image";
 interface IKanjiMedia {
@@ -32,6 +32,10 @@ const KanjiMedia: FC<IKanjiMedia> = ({
     timings 
 }) => {
 
+    useEffect(() => {
+        console.log(`imageIndex: ${imageIndex}`);
+    }, [])
+
     return ( 
         <div className="col-span-3 bg-slate-50 flex flex-col items-center justify-center relative">
             {isImage && (
@@ -47,17 +51,17 @@ const KanjiMedia: FC<IKanjiMedia> = ({
             )}
             {!isImage && (
                 <video
-                    key={kanjiVideoSrcs.mp4}
+                    key={kanjiVideoSrcs?.mp4}
                     className="w-full object-contain h-5/6"
                     autoPlay
                     ref={videoRef}
                     onTimeUpdate={onTimeUpdate}
                 >
-                    {kanjiVideoSrcs?.mp4 && (
-                        <source src={kanjiVideoSrcs.mp4} type="video/mp4" />
+                    {kanjiVideoSrcs.mp4 && (
+                        <source src={kanjiVideoSrcs?.mp4} type="video/mp4" />
                     )}
-                    {kanjiVideoSrcs?.webm && (
-                        <source src={kanjiVideoSrcs.webm} type="video/webm" />
+                    {kanjiVideoSrcs.webm && (
+                        <source src={kanjiVideoSrcs?.webm} type="video/webm" />
                     )}
                 </video>
             )}

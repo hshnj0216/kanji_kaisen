@@ -18,16 +18,14 @@ const useKanji = () => {
     const [isImage, setIsImage] = useState(true); 
     //State that determines if a play or pause button is rendered
     const [isPlay, setIsPlay] = useState(true); 
-    console.log(`images length: ${JSON.stringify(kanji?.kanji?.strokes?.images?.length, null, 4)}`);
-    const [imageIndex, setImageIndex] = useState(kanji?.kanji?.strokes?.images?.length !== undefined ? kanji?.kanji?.strokes?.images?.length - 1 : 0);
-    console.log(`imageIndex is: ${imageIndex}`);
+    const [imageIndex, setImageIndex] = useState();
     const videoRef = useRef(null);
 
 
     const onPrevBtnClick = () => {
         setIsImage(true);
         setIsPlay(true);
-        if (videoRef.current && imageIndex > 0 && videoRef.current.currentTime) {
+        if (imageIndex && videoRef.current && imageIndex > 0 && videoRef.current.currentTime) {
             setImageIndex(imageIndex - 1);
             console.log(`Image index: ${imageIndex}`);
             videoRef.current.currentTime = timings[imageIndex];
@@ -61,8 +59,12 @@ const useKanji = () => {
         setImageIndex(closestTimeIndex);
     }
 
-    //Functionalities for the KanjiInfo component
-
+    useEffect(() => {
+        if(kanji) {
+            setImageIndex(kanji?.kanji?.strokes?.images.length - 1);
+            console.log(`imageIndex set: ${imageIndex}`);
+        }
+    }, [kanji]);
     
     return {
         kanji, 
