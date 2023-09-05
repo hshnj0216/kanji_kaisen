@@ -4,9 +4,9 @@ import axios from 'axios';
 const useKanji = () => {
     const [kanji, setKanji] = useState();
     
-    const onKanjiSelection = useCallback(async (kanjiChar: string) => {
+    const onKanjiSelection = useCallback(async (kanjiId: string) => {
         try {
-            const response = await axios.get(`http://localhost:5000/studyData/kanjiDetails/${kanjiChar}`);
+            const response = await axios.get(`http://localhost:5000/studyData/kanjiDetails/${kanjiId}`);
             setKanji(response.data);
         } catch (error) {
             console.log(error);

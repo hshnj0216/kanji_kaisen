@@ -1,17 +1,6 @@
 import express from "express";
 const router = express.Router();
-import redis from "redis";
-
-//Redis connection
-import { createClient } from 'redis';
-
-const client = createClient({
-    password: process.env.REDISDB_PASSWORD,
-    socket: {
-        host: process.env.REDISDB_HOST,
-        port: 12652
-    }
-});
+import {client} from "./server.js";
 
 //Endpoint that provides data for the kanji recognition
 router.get("/kanjiRecognitionData/:grade", async (req, res) => {

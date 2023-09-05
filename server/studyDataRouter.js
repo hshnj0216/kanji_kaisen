@@ -1,31 +1,20 @@
 import express from "express";
 const router = express.Router();
-
-//Redis connection
-import { createClient } from 'redis';
-
-const client = createClient({
-    password: process.env.REDISDB_PASSWORD,
-    socket: {
-        host: process.env.REDISDB_HOST,
-        port: 12652
-    }
-});
+import { client } from "./server.js";
 
 //Retrieve kanji details
-router.get("/kanjiDetails/:kanji_char", async (req, res) => {
-  console.log(`Request made to kanji, looked for ${req.params.kanji_char}`);
+router.get("/kanjiDetails/:kanji_id", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
-    const kanji = await client.hGet("allKanjiData", req.params.kanji_char);
+    const kanji = await client.json.get(req.params.kanji_id);
     res.json(kanji);
-  } catch {
-    console.log("error");
+  } catch(error) {
+    console.log(error);
   }
 });
 
-//Perform basic search by matching substrings
-//Returns and array of 10 kanji objects
+//Performs full string search on the Redis cloud db
+//Sends kanji object array containing the character and meaning
 router.get("/kanjis/:queryString", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
@@ -34,27 +23,24 @@ router.get("/kanjis/:queryString", async (req, res) => {
 
     let query = req.params.queryString;
 
-    //Traverse the map and find the substrings
-    for (let [key, kanji] of allKanjiData.entries()) {
-      let onyomi_search = kanji.onyomi_search;
-      let kunyomi_search = kanji.kunyomi_search;
-      let meaning_search = kanji.meaning_search;
+    // Remove spaces and punctuation marks from query string
+    query = query.replace(/[\s\.,;:!?]/g, "");
 
-      if (
-        (onyomi_search.includes(query) ||
-          kunyomi_search.includes(query) ||
-          meaning_search.includes(query)) &&
-        matches.length != 10
-      ) {
-        // If yes, push the kanji object to the matches array
-        matches.push({
-          kanji: kanji.kanji.character,
-          meaning: kanji.kanji.meaning.english,
-        });
-      }
+    const result = await client.ft.search(
+      "idx:kanjis",
+      `(@meaning_search:{${query}}) | (@onyomi_search:{${query}}) | (@kunyomi_search:{${query}})`
+    );
+
+    const kanjis = result.documents;
+    for (let kanji of kanjis) {
+      matches.push({
+        id: kanji.id,
+        kanji: kanji.value.ka_utf,
+        meaning: kanji.value.meaning,
+      });
     }
     res.send(matches);
-  } catch (error) {
+  } catch(error) {
     console.log(error.message);
   }
 });

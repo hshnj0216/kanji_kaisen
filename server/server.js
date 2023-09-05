@@ -12,7 +12,7 @@ const client = createClient({
   password: process.env.REDISDB_PASSWORD,
   socket: {
     host: process.env.REDISDB_HOST,
-    port: 14727,
+    port: process.env.REDISDB_PORT,
   },
 });
 
@@ -37,7 +37,7 @@ client.on("connect", () => {
 
 client.on("end", () => {
   console.log("Connection closed");
-})
+});
 
 client.on("error", (err) => {
   console.error("Redis error:", err);
@@ -51,9 +51,9 @@ async function loadAllKanjiData() {
   client.connect();
 
   //Check if there's data in the Redis cloud database
-  let dataExists = await client.exists('kanji:54317b05791eba5146ee4bf6');
+  let dataExists = await client.exists("kanji:54317b05791eba5146ee4bf6");
 
-  if(!dataExists) {
+  if (!dataExists) {
     //Fetch the data from the API
     console.log("Loading kanji data...");
     const options = {
@@ -68,7 +68,7 @@ async function loadAllKanjiData() {
     const kanjis = response.data;
     console.log(`Retrieved all ${kanjis.length} kanjis`);
   } else {
-    console.log('Data already exists');
+    console.log("Data already exists");
   }
 
   if (!dataExists) {
@@ -96,13 +96,16 @@ async function loadAllKanjiData() {
             type: SchemaFieldTypes.TAG,
             SEPARATOR: ",",
             AS: "onyomi_search",
+          },  
+          "$.grade": {
+            type: SchemaFieldTypes.NUMERIC,
+            AS: "grade",
           },
         },
         {
           ON: "JSON",
           PREFIX: "kanji",
         }
-       
       );
       console.log("Indexing finished");
     } catch (e) {
@@ -115,16 +118,34 @@ async function loadAllKanjiData() {
       }
     }
 
+    
+
     console.log("Adding data to Redis cloud db");
     // Add data to the database
     for (let kanji of kanjis) {
       // Add kanji to the database...
-      await client.json.set(`kanji:${kanji._id}`, '.', kanji)
+      await client.json.set(`kanji:${kanji._id}`, ".", kanji);
     }
     console.log("All kanji data added to Redis cloud");
-    
   }
-  client.quit();
+
+  const result = await client.ft.alter(
+    "idx:kanjis",
+    "SCHEMA",
+    "ADD",
+    "$.grade",
+    SchemaFieldTypes.NUMERIC,
+    "AS",
+    "grade"
+  );
+  
+  if (result === 'OK') {
+    console.log('The operation was successful');
+  } else {
+    console.log('The operation failed');
+  }
+  
+  
 }
 
 app.get("/", (req, res) => {
@@ -132,14 +153,15 @@ app.get("/", (req, res) => {
 });
 
 app.get("/test", async (req, res) => {
-  client.connect();
-  let result = await client.ft.search("idx:kanjis", "swim");
+  let result = await client.ft.search("idx:kanjis", "@meaning_search:{a}");
   console.log(result);
+  res.send(result);
 });
-
 
 app.listen(5000, () => {
   console.log("app listening on port 5000");
   //Load all the data as soon as the server starts
   loadAllKanjiData();
 });
+
+export { client };
