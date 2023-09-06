@@ -67,6 +67,12 @@ async function loadAllKanjiData() {
     const response = await axios.request(options);
     const kanjis = response.data;
     console.log(`Retrieved all ${kanjis.length} kanjis`);
+    console.log("Adding data to Redis cloud db");
+    // Add data to the database
+    for (let kanji of kanjis) {
+      // Add kanji to the database...
+      await client.json.set(`kanji:${kanji._id}`, ".", kanji);
+    }
   } else {
     console.log("Data already exists");
   }
@@ -120,31 +126,11 @@ async function loadAllKanjiData() {
 
     
 
-    console.log("Adding data to Redis cloud db");
-    // Add data to the database
-    for (let kanji of kanjis) {
-      // Add kanji to the database...
-      await client.json.set(`kanji:${kanji._id}`, ".", kanji);
-    }
+    
+
     console.log("All kanji data added to Redis cloud");
   }
 
-  const result = await client.ft.alter(
-    "idx:kanjis",
-    "SCHEMA",
-    "ADD",
-    "$.grade",
-    SchemaFieldTypes.NUMERIC,
-    "AS",
-    "grade"
-  );
-  
-  if (result === 'OK') {
-    console.log('The operation was successful');
-  } else {
-    console.log('The operation failed');
-  }
-  
   
 }
 
