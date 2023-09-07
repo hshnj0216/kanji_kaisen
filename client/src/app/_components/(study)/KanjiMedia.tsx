@@ -3,8 +3,8 @@ import { FC, useEffect } from "react";
 import { FaPlay, FaPause, FaForwardStep, FaBackwardStep } from "react-icons/fa6";
 import Image from "next/image";
 interface IKanjiMedia {
-    kanjiVideoSrcs: string[];
-    kanjiImageSrcs: string[];
+    kanjiVideoSrcs: string[] | undefined;
+    kanjiImageSrcs: string[] | undefined;
     imageIndex: number;
     isImage: boolean;
     isPlay: boolean;
@@ -13,7 +13,6 @@ interface IKanjiMedia {
     onPrevBtnClick: () => void;
     onNextBtnClick: () => void;
     onTimeUpdate: () => void;
-    imageArrayLength: number;
     timings: number[];
 }
 
@@ -28,7 +27,6 @@ const KanjiMedia: FC<IKanjiMedia> = ({
     onPrevBtnClick,
     onNextBtnClick,
     onTimeUpdate,
-    imageArrayLength, 
     timings 
 }) => {
 
@@ -46,8 +44,7 @@ const KanjiMedia: FC<IKanjiMedia> = ({
                     width={300} 
                     height={325}
                     alt="kanji_img"
-                >
-                </Image>
+                />
             )}
             {!isImage && (
                 <video
@@ -58,10 +55,10 @@ const KanjiMedia: FC<IKanjiMedia> = ({
                     onTimeUpdate={onTimeUpdate}
                 >
                     {kanjiVideoSrcs.mp4 && (
-                        <source src={kanjiVideoSrcs?.mp4} type="video/mp4" />
+                        <source src={kanjiVideoSrcs.mp4} type="video/mp4" />
                     )}
                     {kanjiVideoSrcs.webm && (
-                        <source src={kanjiVideoSrcs?.webm} type="video/webm" />
+                        <source src={kanjiVideoSrcs.webm} type="video/webm" />
                     )}
                 </video>
             )}

@@ -52,7 +52,10 @@ const SearchBar: FC<ISearchBarProps> = ({onKanjiSelection}) => {
                         <li
                             key={kanji?.kanji}
                             className="bg-slate-50 hover:bg-slate-300 cursor-pointer p-2 col-span-12"
-                            onClick={() => onKanjiSelection(kanji?.id)}
+                            onClick={() => { 
+                                onKanjiSelection(kanji?.id);
+                                setSelectedValue(kanji?.ka_utf);
+                            }}
                         >
                            <p className="truncate"> 
                                 <span className="me-2">{kanji?.kanji}</span>
