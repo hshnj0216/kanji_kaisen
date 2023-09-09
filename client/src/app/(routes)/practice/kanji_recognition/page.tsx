@@ -8,7 +8,7 @@ const KanjiRecognition: FC = () => {
     const { fullQuizItems, isPlayMode, onGradeSelection, setIsPlayMode } = useKanjiQuiz();
 
     return (
-        <div>
+        <>
             {isPlayMode ? (
                 <KanjiRecognitionQuiz
                     fullQuizItems={fullQuizItems}  
@@ -18,7 +18,7 @@ const KanjiRecognition: FC = () => {
             ) : (
                 <GradeSelection onGradeSelection={onGradeSelection}></GradeSelection>
             )}
-        </div>
+        </>
     )
 }
 

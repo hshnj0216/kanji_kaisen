@@ -41,9 +41,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
 
     const onQuizItemComplete = () => {
         if (quizItems.length > 0) {
-            console.log(quizItems.length);
             const nextItem = quizItems.pop();
-            console.log(`quizItems after pop: ${quizItems}`);
             // Store nextItem in a local variable
             const updatedQuizItem = nextItem;
             // Use updatedQuizItem when generating options

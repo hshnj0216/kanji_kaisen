@@ -3,18 +3,30 @@ import { FC } from "react";
 import GradeSelection from "@/app/_components/(practice)/GradeSelection";
 import KanjiMatchBoard from "@/app/_components/(practice)/(kanji_matching)/KanjiMatchBoard";
 import useKanjiMatch from "@/app/_custom_hooks/useKanjiMatch";
+import LoadingIndicator from "@/app/_components/LoadingIndicator";
+
 
 const KanjiMatching: FC = () => {
-    const {kanjiMeaningPairs, isPlayMode, onGradeSelection, setIsPlayMode} = useKanjiMatch();
+    const {
+        kanjiMeaningPairs,
+        isPlayMode,
+        onGradeSelection,
+        setIsPlayMode,
+        isLoading,
+    } = useKanjiMatch();
 
     return (
-        <div>
+        <>
             {isPlayMode ? (
-                <KanjiMatchBoard kanjiMeaningPairs={kanjiMeaningPairs}></KanjiMatchBoard>
+                isLoading ? (
+                    <LoadingIndicator />
+                ) : (
+                    <KanjiMatchBoard kanjiMeaningPairs={kanjiMeaningPairs} />
+                )
             ) : (
                 <GradeSelection onGradeSelection={onGradeSelection}></GradeSelection>
             )}
-        </div>
+        </>
     )
 
 }

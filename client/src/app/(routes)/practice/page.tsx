@@ -5,7 +5,7 @@ import Link from "next/link";
 
 const Practice:FC = () => {
     return(
-        <div className="w-screen border">
+        <div className="w-screen h-full flex items-center justify-center border">
             <ul className="flex justify-center items-center mb-10">
                 <Link href={"practice/kanji_matching"}>
                     <ModeCard 

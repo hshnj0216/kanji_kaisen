@@ -8,8 +8,8 @@ interface IGradeSelectionProps{
 
 const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection}) => {
     return (
-        <>
-            <h3 className="text-slate-50 text-4xl text-center my-3">Select a grade level:</h3>
+        <div className="flex flex-col w-full h-full justify-center ">
+            <h3 className="text-slate-50 text-4xl text-center my-3">Select a grade level</h3>
             <div className="flex">
                 <ModeCard title="Grade 1" description="" onClick={() => onGradeSelection(1)}></ModeCard>
                 <ModeCard title="Grade 2" description="" onClick={() => onGradeSelection(2)}></ModeCard>
@@ -18,7 +18,7 @@ const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection}) => {
                 <ModeCard title="Grade 5" description="" onClick={() => onGradeSelection(5)}></ModeCard>
                 <ModeCard title="Grade 6" description="" onClick={() => onGradeSelection(6)}></ModeCard>
             </div>
-        </>
+        </div>
     )
 
 }

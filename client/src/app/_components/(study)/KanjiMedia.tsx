@@ -16,9 +16,9 @@ interface IKanjiMedia {
     timings: number[];
 }
 
-const KanjiMedia: FC<IKanjiMedia> = ({ 
-    kanjiImageSrcs, 
-    kanjiVideoSrcs, 
+const KanjiMedia: FC<IKanjiMedia> = ({
+    kanjiImageSrcs,
+    kanjiVideoSrcs,
     imageIndex,
     isImage,
     isPlay,
@@ -27,21 +27,18 @@ const KanjiMedia: FC<IKanjiMedia> = ({
     onPrevBtnClick,
     onNextBtnClick,
     onTimeUpdate,
-    timings 
+    timings
 }) => {
 
-    useEffect(() => {
-        console.log(`imageIndex: ${imageIndex}`);
-    }, [])
 
-    return ( 
+    return (
         <div className="col-span-3 bg-slate-50 flex flex-col items-center justify-center relative">
             {isImage && (
-                <Image 
+                <Image
                     className="h-5/6"
-                    key={kanjiImageSrcs?.[imageIndex]} 
-                    src={kanjiImageSrcs?.[imageIndex]} 
-                    width={300} 
+                    key={kanjiImageSrcs[imageIndex]}
+                    src={kanjiImageSrcs[imageIndex]}
+                    width={300}
                     height={325}
                     alt="kanji_img"
                 />
@@ -66,11 +63,11 @@ const KanjiMedia: FC<IKanjiMedia> = ({
                 <button type="button" title="Previous" onClick={onPrevBtnClick}>
                     <FaBackwardStep className="w-6 h-6" />
                 </button>
-                <button  type="button" title="Play" onClick={onPlayBtnClick}>
-                    {isPlay ? <FaPlay className="w-6 h-6"/> : <FaPause className="w-6 h-6"/>}
+                <button type="button" title="Play" onClick={onPlayBtnClick}>
+                    {isPlay ? <FaPlay className="w-6 h-6" /> : <FaPause className="w-6 h-6" />}
                 </button>
                 <button type="button" title="Next" onClick={onNextBtnClick}>
-                    <FaForwardStep className="w-6 h-6"/>
+                    <FaForwardStep className="w-6 h-6" />
                 </button>
             </div>
         </div>

@@ -3,6 +3,9 @@ import { FC, useEffect, useRef, useState } from "react";
 import MatchTile from "./MatchTile";
 import Timer from "../../Timer";
 import Results from "./Results";
+import CountDownTimer from "../../CountDownTimer";
+import Ready from "../Ready";
+import useLoading from "@/app/_custom_hooks/useLoading";
 
 interface IKanjiObject {
     kanji: string;
@@ -21,6 +24,10 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     const [mismatchedKanjis, setMismatchedKanjis] = useState(new Map());
     const [isMatchChecked, setIsMatchChecked] = useState(false);
     const [isCorrectMatch, setIsCorrectMatch] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+    const [startCountdown, setStartCountdown] = useState(false);
+    const {isLoading, setIsLoading} = useLoading();
+
     const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     //Checks if the selected tiles of type string and IKanjiObject are correct
@@ -51,9 +58,13 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     const onTileSelect = () => {
         console.log(selectedTiles.length);
         if (selectedTiles.length === 2) {
+            //If tiles are correctly matched, add to matched tiles
             if (areSelectedTilesCorrect(selectedTiles[0], selectedTiles[1])) {
-                setMatchedTiles([...matchedTiles, ...selectedTiles]);
                 setIsCorrectMatch(true);
+                setTimeout(() => {
+                    setMatchedTiles([...matchedTiles, ...selectedTiles]);
+                }, 300);
+                
             } else {
                 if (typeof (selectedTiles[0]) === "object") {
                     addMismatchedKanji(selectedTiles[0]);
@@ -63,7 +74,7 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                 setIsCorrectMatch(false);
             }
             setIsMatchChecked(true);
-        } else if(selectedTiles.length > 2) {
+        } else if (selectedTiles.length > 2) {
             setIsMatchChecked(false);
             setSelectedTiles([]);
             clearTimeout(timeoutIdRef.current);
@@ -96,29 +107,33 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
 
 
     return (
-        <div className="flex items-center justify-center">
-            {isGameOver ? (
-                <Results mismatchedKanjis={mismatchedKanjis} elapsedTime={elapsedTime} />
-            ) : (
-
-                <div>
-                    <Timer onTimeUpdate={setElapsedTime} />
-                    <div className="border rounded w-3/4 mx-auto my-auto grid grid-cols-6 grid-rows-5 gap-10 p-5">
-                        {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
-                            <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
-                                setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
-                                isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
-                                isCorrectMatch={isCorrectMatch}
-                            /> :
-                            <MatchTile key={index} title={item} isMatched={matchedTiles.includes(item)}
-                                setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
-                                isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
-                                isCorrectMatch={isCorrectMatch}
-                            />)
-                        }
+        <div className="flex items-center justify-center w-full h-full">
+            {isReady ?
+                (isGameOver ? (
+                    <Results mismatchedKanjis={mismatchedKanjis} elapsedTime={elapsedTime} />
+                ) : (
+                    <div>
+                        <Timer onTimeUpdate={setElapsedTime} />
+                        <div className="border rounded w-3/4 mx-auto my-auto grid grid-cols-6 grid-rows-5 gap-10 p-5">
+                            {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
+                                <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
+                                    setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
+                                    isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
+                                    isCorrectMatch={isCorrectMatch}
+                                /> :
+                                <MatchTile key={index} title={item} isMatched={matchedTiles.includes(item)}
+                                    setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
+                                    isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
+                                    isCorrectMatch={isCorrectMatch}
+                                />)
+                            }
+                        </div>
                     </div>
-                </div>
-            )}
+                )) : (
+                    <Ready setIsReady={setIsReady} isReady={isReady}/>
+                )
+
+            }
         </div>
     )
 }
