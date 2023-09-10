@@ -8,8 +8,10 @@ import Ready from "../Ready";
 import useLoading from "@/app/_custom_hooks/useLoading";
 
 interface IKanjiObject {
-    kanji: string;
+    character: string;
     meaning: string;
+    onyomi: string;
+    kunyomi: string;
 }
 
 interface IKanjiMatchBoardProps {
@@ -25,12 +27,10 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     const [isMatchChecked, setIsMatchChecked] = useState(false);
     const [isCorrectMatch, setIsCorrectMatch] = useState(false);
     const [isReady, setIsReady] = useState(false);
-    const [startCountdown, setStartCountdown] = useState(false);
-    const {isLoading, setIsLoading} = useLoading();
 
     const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    //Checks if the selected tiles of type string and IKanjiObject are correct
+    //Checks if the selected tiles' corresponding values are correct
     const areSelectedTilesCorrect = (tile1: IKanjiObject | string, tile2: IKanjiObject | string) => {
         if (typeof (tile1) === "object" && typeof (tile2 !== "object")) {
             //Compare the elements of the selectedTiles array
@@ -50,13 +50,14 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     const addMismatchedKanji = (kanji: IKanjiObject) => {
         setMismatchedKanjis((prevCounts) => {
             const newCounts = new Map(prevCounts);
-            newCounts.set(kanji?.kanji, (newCounts.get(kanji?.kanji) || 0) + 1);
+            const prevValue = newCounts.get(kanji?.kanji) || { kanji: kanji, count: 0 };
+            prevValue.count += 1;
+            newCounts.set(kanji?.kanji, prevValue);
             return newCounts;
         });
     }
 
     const onTileSelect = () => {
-        console.log(selectedTiles.length);
         if (selectedTiles.length === 2) {
             //If tiles are correctly matched, add to matched tiles
             if (areSelectedTilesCorrect(selectedTiles[0], selectedTiles[1])) {
@@ -64,16 +65,21 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                 setTimeout(() => {
                     setMatchedTiles([...matchedTiles, ...selectedTiles]);
                 }, 300);
+                setIsMatchChecked(true);
                 
+            } else if (typeof(selectedTiles[0]) == typeof(selectedTiles[1])) {
+                setSelectedTiles([]);
+                setIsMatchChecked(false);
             } else {
+                //If incorrect, add the object tile to the mismatched
                 if (typeof (selectedTiles[0]) === "object") {
                     addMismatchedKanji(selectedTiles[0]);
                 } else {
                     addMismatchedKanji(selectedTiles[1] as IKanjiObject);
                 }
                 setIsCorrectMatch(false);
+                setIsMatchChecked(true);
             }
-            setIsMatchChecked(true);
         } else if (selectedTiles.length > 2) {
             setIsMatchChecked(false);
             setSelectedTiles([]);

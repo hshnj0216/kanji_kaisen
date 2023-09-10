@@ -12,7 +12,6 @@ const useKanjiMatch = () => {
             const response = await axios.get(`http://localhost:5000/practiceData/kanjiMatchData/${grade}`);
             setKanjiMeaningPairs(response.data);
             setIsLoading(false);
-            console.log('has loaded');
             setIsPlayMode(true);
         } catch(error) {
             console.log(error);

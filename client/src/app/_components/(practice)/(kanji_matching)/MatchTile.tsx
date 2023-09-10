@@ -25,7 +25,7 @@ const MatchTile: FC<IMatchTileProps> = ({
             `}
             onClick={setSelectedTiles}
         >
-           <p className="text-center text-lg">{title}</p>
+           <p className="text-center text-lg line-clamp-2">{title}</p>
         </div>
     )
 }

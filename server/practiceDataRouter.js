@@ -69,9 +69,16 @@ router.get("/kanjiMatchData/:grade", async (req, res) => {
 
   //Create an array consisting of kanjis and their corresponding meaning
   for (let kanji of randomKanjisArray) {
-    kanjiMeaningPairArray.push({ kanji: kanji.ka_utf, meaning: kanji.meaning });
+    kanjiMeaningPairArray.push({
+      kanji: kanji.ka_utf,
+      meaning: kanji.meaning,
+      onyomi: kanji.onyomi_ja,
+      kunyomi: kanji.kunyomi_ja,
+    });
     kanjiMeaningPairArray.push(kanji.meaning);
   }
+
+  console.log(kanjiMeaningPairArray);
 
   //Scramble the kanjiMeaningPairs array
   for (let i = kanjiMeaningPairArray.length - 1; i > 0; i--) {
