@@ -3,12 +3,14 @@ import ModeCard from "./ModeCard";
 import {FC} from "react";
 
 interface IGradeSelectionProps{
+    pageName: string;
     onGradeSelection: (grade: number) => void;
 }
 
-const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection}) => {
+const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection, pageName}) => {
     return (
         <div className="flex flex-col w-full h-full justify-center ">
+            <h1 className="text-slate-50 text-7xl text-center">{pageName}</h1>
             <h3 className="text-slate-50 text-4xl text-center my-3">Select a grade level</h3>
             <div className="flex">
                 <ModeCard title="Grade 1" description="" onClick={() => onGradeSelection(1)}></ModeCard>

@@ -118,9 +118,9 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                 (isGameOver ? (
                     <Results mismatchedKanjis={mismatchedKanjis} elapsedTime={elapsedTime} />
                 ) : (
-                    <div>
+                    <div className="w-3/4">
                         <Timer onTimeUpdate={setElapsedTime} />
-                        <div className="border rounded w-3/4 mx-auto my-auto grid grid-cols-6 grid-rows-5 gap-10 p-5">
+                        <div className="border rounded w-full mx-auto my-auto grid grid-cols-6 grid-rows-5 gap-10 p-5">
                             {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
                                 <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
                                     setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}

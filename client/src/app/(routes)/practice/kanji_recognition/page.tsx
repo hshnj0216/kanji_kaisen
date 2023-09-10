@@ -16,7 +16,7 @@ const KanjiRecognition: FC = () => {
                 />
                 
             ) : (
-                <GradeSelection onGradeSelection={onGradeSelection}></GradeSelection>
+                <GradeSelection onGradeSelection={onGradeSelection} pageName="Kanji Recognition"></GradeSelection>
             )}
         </>
     )
