@@ -1,5 +1,5 @@
 "use client";
-import styles from '../loading_indicator.module.scss';
+import styles from '@/app/styles/loading_indicator.module.scss';
 import {FC} from "react";
 
 

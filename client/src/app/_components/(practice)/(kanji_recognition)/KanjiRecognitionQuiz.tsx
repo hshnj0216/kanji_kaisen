@@ -1,6 +1,6 @@
 "use client";
 import { useState, FC, useEffect } from "react";
-import styles from '@/app/practice.module.scss';
+import styles from '@/app/styles/practice.module.scss';
 import Link from "next/link";
 
 interface IQuizItem {

@@ -6,7 +6,8 @@ import { client } from "./server.js";
 router.get("/kanjiDetails/:kanji_id", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
-    const kanji = await client.json.get(req.params.kanji_id);
+    let { kanji_id } = req.params;
+    const kanji = await client.json.get(kanji_id);
     res.json(kanji);
   } catch(error) {
     console.log(error);
@@ -15,13 +16,13 @@ router.get("/kanjiDetails/:kanji_id", async (req, res) => {
 
 //Performs full string search on the Redis cloud db
 //Sends kanji object array containing the character and meaning
-router.get("/kanjis/:queryString", async (req, res) => {
+router.get("/kanjis/:query_string", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     //Initialize an empty array that will contain the matching objects
     let matches = [];
 
-    let query = req.params.queryString;
+    let { query_string } = req.params;
 
     // Remove spaces and punctuation marks from query string
     query = query.replace(/[\s\.,;:!?]/g, "");

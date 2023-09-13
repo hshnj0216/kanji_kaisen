@@ -19,9 +19,9 @@ const Ready: FC<IReadyProps> = ({ setIsReady, isReady }) => {
         <>
             {countddownStarted ?
                 <CountDownTimer />
-                : <div className="bg-slate-800 flex flex-col justify-center items-center w-full h-full">
+                : <div className="bg-slate-800 border rounded border-slate-50 flex flex-col justify-center items-center w-1/2 h-1/2">
                     <p className="mb-5 text-9xl text-slate-50 ">Ready?</p>
-                    <button type="button" className="p-3 bg-slate-50 border rounded text-lg"
+                    <button type="button" className="py-3 px-5 bg-slate-50 border rounded text-lg"
                         onClick={startCountdown}
                     >
                         Ready

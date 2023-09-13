@@ -8,9 +8,10 @@ router.get("/kanjiRecognitionData/:grade", async (req, res) => {
 
   // Pick 30 random items from the data
   const randomItems = [];
+  let { grade } = req.params;
   const response = await client.ft.search(
     "idx:kanjis",
-    `@grade:[${req.params.grade} ${req.params.grade}]`,
+    `@grade:[${req.params.grade} ${grade}]`,
     {
       LIMIT:{
         from: 0,
@@ -37,9 +38,10 @@ router.get("/kanjiRecognitionData/:grade", async (req, res) => {
 router.get("/kanjiMatchData/:grade", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
+  let { grade } = req.params;
   const response = await client.ft.search(
     "idx:kanjis",
-    `@grade:[${req.params.grade} ${req.params.grade}]`,
+    `@grade:[${req.params.grade} ${grade}]`,
     {
       LIMIT: {
         from: 0,

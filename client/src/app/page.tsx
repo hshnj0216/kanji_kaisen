@@ -5,7 +5,7 @@ import MainMenu from "@/app/_components/MainMenu";
 
 const Home = () => {
   return (
-    <div className="w-full h-full flex justify-center items-center border border-purple-300 ">
+    <div className="w-full h-full flex justify-center items-center">
       <MainMenu></MainMenu>
     </div>
   )
