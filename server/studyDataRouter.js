@@ -46,4 +46,6 @@ router.get("/kanjis/:query_string", async (req, res) => {
   }
 });
 
+
+
 export default router;

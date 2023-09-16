@@ -1,6 +1,8 @@
 import express from "express";
 import axios from "axios";
 import dotenv from "dotenv";
+import fs from "fs";
+import util from "util";
 const app = express();
 const router = express.Router();
 dotenv.config();
@@ -102,7 +104,7 @@ async function loadAllKanjiData() {
             type: SchemaFieldTypes.TAG,
             SEPARATOR: ",",
             AS: "onyomi_search",
-          },  
+          },
           "$.grade": {
             type: SchemaFieldTypes.NUMERIC,
             AS: "grade",
@@ -124,24 +126,57 @@ async function loadAllKanjiData() {
       }
     }
 
-    
-
-    
-
     console.log("All kanji data added to Redis cloud");
   }
-
-  
 }
+
+async function updateDatabase() {
+  const readFile = util.promisify(fs.readFile);
+  const data = await readFile("components-kc.csv", "utf8");
+
+  const lines = data.split("\r\n");
+  const csvMap = new Map();
+  
+
+  for (let line of lines) {
+    const [kanji, components] = line.split(",");
+    const componentsArray = [];
+
+    for (const char of components) {
+      componentsArray.push(char);
+    }
+
+    csvMap.set(kanji, componentsArray);
+  }
+  
+  const allRedisKanjiKeys = await client.keys('*');
+  const allRedisKanjis = await Promise.all(
+    allRedisKanjiKeys.map(async (key) => {
+      const kanjiObject = await client.json.get(key);
+      
+      // Update the JSON object with the 'component_decomposition' field
+      kanjiObject.component_decomposition = csvMap.get(kanjiObject.ka_utf);
+
+      // Set the updated JSON object back to Redis
+      await client.json.set(key, '.', kanjiObject);
+
+      return kanjiObject;
+    })
+  );
+  
+  return allRedisKanjis;
+}
+//updateDatabase();
 
 app.get("/", (req, res) => {
   res.send("Welcome to the server");
 });
 
 app.get("/test", async (req, res) => {
-  let result = await client.ft.search("idx:kanjis", "@meaning_search:{a}");
-  console.log(result);
-  res.send(result);
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  let result = await updateDatabase();
+  let arr = Array.from(result.entries(), ([key, value]) => value);
+  res.send(arr);
 });
 
 app.listen(5000, () => {

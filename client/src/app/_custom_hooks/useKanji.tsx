@@ -10,6 +10,7 @@ const useKanji = () => {
     //State that determines if a play or pause button is rendered
     const [isPlay, setIsPlay] = useState(true); 
     const [imageIndex, setImageIndex] = useState<number>();
+    const [displayDecomposition, setDisplayDecomposition] = useState(false);
     const videoRef = useRef(null);
 
     
@@ -73,6 +74,8 @@ const useKanji = () => {
     return {
         kanji, 
         onKanjiSelection,
+        displayDecomposition,
+        setDisplayDecomposition,
         kanjiMediaProps: {
             kanjiImageSrcs: kanji?.kanji?.strokes?.images,
             kanjiVideoSrcs: kanji?.kanji?.video,
