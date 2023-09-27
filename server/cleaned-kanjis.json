@@ -1,0 +1,158 @@
+{
+    "kanjis": [
+        {
+            "kanji": "丸",
+            "components": [
+                {"data": "丶", "parent": "丸"},
+                {"data": "九", "parent": "丸"}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+    ]
+}

@@ -132,23 +132,62 @@ async function loadAllKanjiData() {
 
 async function updateDatabase() {
   const readFile = util.promisify(fs.readFile);
-  const data = await readFile("components-kc.csv", "utf8");
+  const kcData = await readFile("components-kc.csv", "utf8");
+  const ckData = await readFile("components-ck.csv", "utf8");
 
-  const lines = data.split("\r\n");
-  const csvMap = new Map();
+  const kcLines = kcData.split("\r\n");
+  const ckLines = ckData.split("\r\n");
+  const kcMap = new Map();
+  const ckMap = new Map();
   
-
-  for (let line of lines) {
+  //Populate the kcMap
+  for (let line of kcLines) {
     const [kanji, components] = line.split(",");
-    const componentsArray = [];
 
-    for (const char of components) {
-      componentsArray.push(char);
+    kcMap.set(kanji, components);
+  }
+
+  //Populate the ckMap
+  for (let line of ckLines) {
+    const [component, kanjis] = line.split(",");
+
+    ckMap.set(component, kanjis);
+  }
+
+  class Node{
+    constructor(data, parentId, parent = null) {
+      this.data = data;
+      this.parentId = parentId; //this property is a string
+      this.parent = parent; //this property is a node or object
+    }
+  }
+
+  function buildTree(kanji, components) {
+    const rootNode = new Node(kanji);
+    const nodeArr = [rootNode];
+    //Loop through the kcMap
+    for(let [kanji, components] of kcMap.entries()) {
+      //Loop through the components 
+      for(let char of components) {
+        //Check if the char is a composite component or a pure component
+        //If it's in kcMap, then it's a composite component
+        if(kcMap.has(char)) {
+          var componentDecomposition = kcMap.get(char);
+          //Loop through the component decomposition 
+          for(let component of componentDecomposition) {
+            //Create a node
+            const node = new Node(component, char);
+            nodeArr.push(node);
+          }
+        }
+        //If it's not in kcMap, then it's a pure component
+
+      }
     }
 
-    csvMap.set(kanji, componentsArray);
   }
   
+  /*
   const allRedisKanjiKeys = await client.keys('*');
   const allRedisKanjis = await Promise.all(
     allRedisKanjiKeys.map(async (key) => {
@@ -165,6 +204,9 @@ async function updateDatabase() {
   );
   
   return allRedisKanjis;
+  */
+
+
 }
 //updateDatabase();
 
@@ -182,7 +224,7 @@ app.get("/test", async (req, res) => {
 app.listen(5000, () => {
   console.log("app listening on port 5000");
   //Load all the data as soon as the server starts
-  loadAllKanjiData();
+  //loadAllKanjiData();
 });
 
 export { client };
