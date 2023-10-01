@@ -8,10 +8,184 @@
             ]
         },
         {
+            "kanji": "亡",
+            "components": [
+                {"data": ",亠", "parent": "亡"},
+                {"data": "𠃊", "parent": "亡"}
+            ]
+        },
+        {
+            "kanji": "引",
+            "components": [
+                {"data": "弓", "parent": "引"},
+                {"data": "丨", "parent": "引"}
+            ]
+        },
+        {
+            "kanji": "化",
+            "components": [
+                {"data": "亻", "parent": "化"},
+                {"data": "匕", "parent": "化"}
+            ]
+        },
+        {
+            "kanji": "火",
+            "components": [
+               
+            ]
+        },
+        {
+            "kanji": "介",  
+            "components": [
+                {"data": "人", "parent": "介"},
+                {"data": "丿", "parent": "介"},
+                {"data": "丨", "parent": "介"}
+            ]
+        },
+        {
+            "kanji": "区",
+            "components": [
+                {"data": "匸", "parent": "区"},
+                {"data": "乂", "parent": "区"}
+            ]
+        },
+        {
+            "kanji": "犬",
+            "components": [
+                {"data": "大", "parent": "犬"},
+                {"data": "丶", "parent": "犬"}
+            ]
+        },
+        {
+            "kanji": "元",
+            "components": [
+                {"data": "二", "parent": "元"},
+                {"data": "儿", "parent": "元"}
+            ]
+        },
+        {
+            "kanji": "戸",
+            "components": [
+                {"data": "一", "parent": "戸"},
+                {"data": "尸", "parent": "戸"}
+            ]
+        },
+        {
+            "kanji": "五",
+            "components": [
+                {"data": "二", "parent": "五"}
+            ]
+        },
+        {
+            "kanji": "互",
+            "components": [
+                {"data": "二", "parent": "互"},
+                {"data": "彑", "parent": "互"}
+            ]
+        },
+        {
+            "kanji": "午",
+            "components": [
+                {"data": "𠂉", "parent": "午"},
+                {"data": "十", "parent": "午"}
+            ]
+        },
+        {
+            "kanji": "公",
+            "components": [
+                {"data": "八", "parent": "公"},
+                {"data": "厶", "parent": "公"}
+            ]
+        },
+        {
+            "kanji": "今",
+            "components": [
+                {"data": "亼", "parent": "今"},
+                {"data": "一", "parent": "亼"},
+                {"data": "人", "parent": "亼"},
+                {"data": "乛", "parent": "今"}
+            ]
+        },
+        {
+            "kanji": "支",
+            "components": [
+                {"data": "十", "parent": "支"},
+                {"data": "又", "parent": "支"}
+            ]
+        },
+        {
+            "kanji": "尺",
+            "components": [
+                {"data": "尸", "parent": "尺"}
+            ]
+        },
+        {
+            "kanji": "収",
+            "components": [
+                {"data": "丩", "parent": "収"},
+                {"data": "又", "parent": "収"}
+            ]
+        },
+        {
             "kanji": "",
             "components": [
                 {"data": "", "parent": ""},
                 {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "少",
+            "components": [
+                {"data": "ノ", "parent": "少"},
+                {"data": "小", "parent": "少"}
+            ]
+        },
+        {
+            "kanji": "冗",
+            "components": [
+                {"data": "冖", "parent": "冗"},
+                {"data": "几", "parent": "冗"}
+            ]
+        },
+        {
+            "kanji": "仁",
+            "components": [
+                {"data": "亻", "parent": "仁"},
+                {"data": "二", "parent": "仁"}
+            ]
+        },
+        {
+            "kanji": "切",
+            "components": [
+                {"data": "刀", "parent": "切"},
+                {"data": "七", "parent": "切"}
+            ]
+        },
+        {
+            "kanji": "双",
+            "components": [
+                {"data": "又", "parent": "双"}
+            ]
+        },
+        {
+            "kanji": "太",
+            "components": [
+                {"data": "大", "parent": "太"},
+                {"data": "丶", "parent": "太"}
+            ]
+        },
+        {
+            "kanji": "天",
+            "components": [
+                {"data": "一", "parent": "天"},
+                {"data": "大", "parent": "天"}
+            ]
+        },
+        {
+            "kanji": "内",
+            "components": [
+                {"data": "冂", "parent": "内"},
+                {"data": "人", "parent": "内"}
             ]
         },
         {
@@ -154,5 +328,125 @@
                 {"data": "", "parent": ""}
             ]
         },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        {
+            "kanji": "",
+            "components": [
+                {"data": "", "parent": ""},
+                {"data": "", "parent": ""}
+            ]
+        },
+        
     ]
 }

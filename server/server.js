@@ -3,6 +3,8 @@ import axios from "axios";
 import dotenv from "dotenv";
 import fs from "fs";
 import util from "util";
+import csv from "csv-parser";
+const readFile = util.promisify(fs.readFile);
 const app = express();
 const router = express.Router();
 dotenv.config();
@@ -131,84 +133,60 @@ async function loadAllKanjiData() {
 }
 
 async function updateDatabase() {
-  const readFile = util.promisify(fs.readFile);
-  const kcData = await readFile("components-kc.csv", "utf8");
-  const ckData = await readFile("components-ck.csv", "utf8");
+  try {
+    const kcData = await readFile("components-kc.csv", "utf8");
+    const ckData = await readFile("components-ck.csv", "utf8");
 
-  const kcLines = kcData.split("\r\n");
-  const ckLines = ckData.split("\r\n");
-  const kcMap = new Map();
-  const ckMap = new Map();
-  
-  //Populate the kcMap
-  for (let line of kcLines) {
-    const [kanji, components] = line.split(",");
+    const kcLines = kcData.split("\r\n");
+    const ckLines = ckData.split("\n");
+    const kcMap = new Map();
+    const ckMap = new Map();
 
-    kcMap.set(kanji, components);
-  }
-
-  //Populate the ckMap
-  for (let line of ckLines) {
-    const [component, kanjis] = line.split(",");
-
-    ckMap.set(component, kanjis);
-  }
-
-  class Node{
-    constructor(data, parentId, parent = null) {
-      this.data = data;
-      this.parentId = parentId; //this property is a string
-      this.parent = parent; //this property is a node or object
+    // Populate the kcMap
+    for (let line of kcLines) {
+      const [kanji, components] = line.split(",");
+      kcMap.set(kanji, components);
     }
-  }
 
-  function buildTree(kanji, components) {
-    const rootNode = new Node(kanji);
-    const nodeArr = [rootNode];
-    //Loop through the kcMap
-    for(let [kanji, components] of kcMap.entries()) {
-      //Loop through the components 
-      for(let char of components) {
-        //Check if the char is a composite component or a pure component
-        //If it's in kcMap, then it's a composite component
-        if(kcMap.has(char)) {
-          var componentDecomposition = kcMap.get(char);
-          //Loop through the component decomposition 
-          for(let component of componentDecomposition) {
-            //Create a node
-            const node = new Node(component, char);
-            nodeArr.push(node);
+    // Populate the ckMap
+    for (let line of ckLines) {
+      const [component, kanjis] = line.split(",");
+      ckMap.set(component, kanjis.split(","));
+    }
+
+    function createTree([kanji, components]) {
+      let tree = { data: kanji, children: [] };
+      const componentList = [...components];
+      for (let i = 0; i < componentList.length; i++) {
+        let component = componentList[i];
+        if (kcMap.has(component)) {
+          let subComponents = kcMap.get(component).split("");
+          if (
+            subComponents.every((subComponent) =>
+              componentList.includes(subComponent)
+            )
+          ) {
+            tree.children.push(createTree([component, kcMap.get(component)]));
+            i += subComponents.length - 1; // Skip over the sub-components in the next iterations
           }
+        } else if (!tree.children.some((child) => child.data === component)) {
+          tree.children.push({ data: component, children: [] });
         }
-        //If it's not in kcMap, then it's a pure component
-
       }
+      return tree;
     }
 
+    let trees = [];
+    for (let entry of kcMap) {
+      trees.push(createTree(entry));
+    }
+
+    console.log(trees.length);
+    return trees;
+  } catch (error) {
+    console.log(error);
   }
-  
-  /*
-  const allRedisKanjiKeys = await client.keys('*');
-  const allRedisKanjis = await Promise.all(
-    allRedisKanjiKeys.map(async (key) => {
-      const kanjiObject = await client.json.get(key);
-      
-      // Update the JSON object with the 'component_decomposition' field
-      kanjiObject.component_decomposition = csvMap.get(kanjiObject.ka_utf);
-
-      // Set the updated JSON object back to Redis
-      await client.json.set(key, '.', kanjiObject);
-
-      return kanjiObject;
-    })
-  );
-  
-  return allRedisKanjis;
-  */
-
-
 }
-//updateDatabase();
 
 app.get("/", (req, res) => {
   res.send("Welcome to the server");
@@ -217,8 +195,7 @@ app.get("/", (req, res) => {
 app.get("/test", async (req, res) => {
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   let result = await updateDatabase();
-  let arr = Array.from(result.entries(), ([key, value]) => value);
-  res.send(arr);
+  res.send(result);
 });
 
 app.listen(5000, () => {
