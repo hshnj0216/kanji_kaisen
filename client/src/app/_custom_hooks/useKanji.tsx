@@ -76,6 +76,9 @@ const useKanji = () => {
         onKanjiSelection,
         displayDecomposition,
         setDisplayDecomposition,
+        kanjiDecompositionProps: {
+            kanjiTree: kanji?.component_decomposition,
+        },
         kanjiMediaProps: {
             kanjiImageSrcs: kanji?.kanji?.strokes?.images,
             kanjiVideoSrcs: kanji?.kanji?.video,

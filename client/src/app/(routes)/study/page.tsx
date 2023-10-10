@@ -16,6 +16,7 @@ const Study: FC = () => {
 		onKanjiSelection,
 		displayDecomposition,
 		setDisplayDecomposition,
+		kanjiDecompositionProps,
 		kanjiInfoProps,
 		kanjiMediaProps,
 	} = useKanji();
@@ -23,11 +24,19 @@ const Study: FC = () => {
 		<div className="w-4/5 mx-auto">
 			<div className="flex justify-between items-center">
 				<SearchBar onKanjiSelection={onKanjiSelection}/>
-				(kanji && <button type="button" onClick={() => setDisplayDecomposition(!displayDecomposition)}>Show decomposition</button>)
+				{kanji ? 
+					<button 
+						type="button" 
+						onClick={() => setDisplayDecomposition(!displayDecomposition)}
+						className="bg-slate-50 border rounded p-3 hover:bg-slate-300"
+					>
+						{displayDecomposition ? "Show information" : "Show decomposition"}
+					</button> : ""
+				}
 			</div>
 			{kanji ? (
 				displayDecomposition ? (
-					<KanjiDecomposition kanji={kanji?.utf_8} components={kanji?.component_decomposition}/>
+					<KanjiDecomposition kanjiTree={kanjiDecompositionProps.kanjiTree}/>
 				) : (
 					<div className="grid lg:grid-cols-12 lg:gap-4">
 					<KanjiMedia	{...kanjiMediaProps}/>

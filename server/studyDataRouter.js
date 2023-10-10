@@ -5,6 +5,7 @@ import { client } from "./server.js";
 //Retrieve kanji details
 router.get("/kanjiDetails/:kanji_id", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
+  console.log(req.params.kanji_id);
   try {
     let { kanji_id } = req.params;
     const kanji = await client.json.get(kanji_id);
@@ -25,11 +26,11 @@ router.get("/kanjis/:query_string", async (req, res) => {
     let { query_string } = req.params;
 
     // Remove spaces and punctuation marks from query string
-    query = query.replace(/[\s\.,;:!?]/g, "");
+    query_string = query_string.replace(/[\s\.,;:!?]/g, "");
 
     const result = await client.ft.search(
       "idx:kanjis",
-      `(@meaning_search:{${query}}) | (@onyomi_search:{${query}}) | (@kunyomi_search:{${query}})`
+      `(@meaning_search:{${query_string}}) | (@onyomi_search:{${query_string}}) | (@kunyomi_search:{${query_string}})`
     );
 
     const kanjis = result.documents;

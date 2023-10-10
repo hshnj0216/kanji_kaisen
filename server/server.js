@@ -124,7 +124,6 @@ async function loadAllKanjiData() {
       } else {
         // Something went wrong, perhaps RediSearch isn't installed...
         console.error(e);
-        process.exit(1);
       }
     }
 
@@ -176,17 +175,37 @@ async function updateDatabase() {
       return tree;
     }
 
-    let trees = [];
+    const treeMap = new Map();
     for (let entry of kcMap) {
-      trees.push(createTree(entry));
+      console.log(entry[0]);
+      treeMap.set(entry[0], createTree(entry));
     }
 
-    console.log(trees.length);
-    return trees;
+    console.log(treeMap.size);  
+
+    const keys = await client.keys("*");
+    console.log(keys);
+    const redisKanjis = await Promise.all(keys.map(async (key) => {
+      return await client.json.get(key);
+    }));
+    console.log(`total redis kanjis: ${redisKanjis.length}`);
+
+    const updatePromises = redisKanjis.map(async (kanji) => {
+      const kanjiTree = treeMap.get(kanji.ka_utf);
+      if (kanjiTree) {
+        kanji.component_decomposition = kanjiTree;
+        await client.json.set(`kanji:${kanji._id}`, '.', kanji);
+      }
+    });
+
+    await Promise.all(updatePromises);
+
+    return Array.from(treeMap);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
+
 
 app.get("/", (req, res) => {
   res.send("Welcome to the server");
@@ -201,7 +220,7 @@ app.get("/test", async (req, res) => {
 app.listen(5000, () => {
   console.log("app listening on port 5000");
   //Load all the data as soon as the server starts
-  //loadAllKanjiData();
+  loadAllKanjiData();
 });
 
 export { client };
