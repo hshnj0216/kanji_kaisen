@@ -2,34 +2,50 @@ import express from "express";
 const router = express.Router();
 import { client } from "./server.js";
 
+function getUniqueSubset(array, size) {
+  const shuffledArray = array.slice();
+
+  // Fisher-Yates shuffle algorithm
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+
+   // Build the subset with unique values
+   const subset = [];
+   const valuesSet = new Set();
+ 
+   for (let i = 0; i < shuffledArray.length && subset.length < size; i++) {
+     const value = shuffledArray[i].value;
+     if (!valuesSet.has(value)) {
+       valuesSet.add(value);
+       subset.push(value);
+     }
+   }
+
+  return subset;
+}
+
 //Endpoint that provides data for the kanji recognition
 router.get("/kanjiRecognitionData/:grade", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
   // Pick 30 random items from the data
-  const randomItems = [];
+  // Items should be unique
   let { grade } = req.params;
   const response = await client.ft.search(
     "idx:kanjis",
     `@grade:[${req.params.grade} ${grade}]`,
     {
-      LIMIT:{
+      LIMIT: {
         from: 0,
         size: 300,
-      }
+      },
     }
   );
   const kanjiGroup = response.documents;
 
-  for (let i = 0; i < 30; i++) {
-    let randomIndex = Math.floor(Math.random() * kanjiGroup.length);
-    let randomItem = kanjiGroup.slice(randomIndex, randomIndex + 1)[0];
-    if (!randomItems.includes(randomItem)) {
-      randomItems.push(randomItem.value);
-    } else {
-      i--;
-    }
-  }
+  const randomItems = getUniqueSubset(kanjiGroup, 30);
 
   res.send(randomItems);
 });
@@ -45,15 +61,14 @@ router.get("/kanjiMatchData/:grade", async (req, res) => {
     {
       LIMIT: {
         from: 0,
-        size: 300
-      }
+        size: 300,
+      },
     }
-  )
+  );
 
   const kanjiGroup = response.documents;
 
   const randomKanjis = new Set();
-
 
   //Add random kanjis to the set
   while (randomKanjis.size < 15) {
@@ -90,7 +105,7 @@ router.get("/kanjiMatchData/:grade", async (req, res) => {
       kanjiMeaningPairArray[i],
     ];
   }
-  
+
   res.send(kanjiMeaningPairArray);
 });
 

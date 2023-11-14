@@ -19,7 +19,7 @@ const KanjiDecomposition: FC<IKanjiDecompositionProps> = ({ kanjiTree }) => {
         const height = +svg.attr("height");
 
         const simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().id((d: any) => d.id).distance(100))
+            .force("link", d3.forceLink().id((d: any) => d.id).distance(100 ))
             .force("charge", d3.forceManyBody().strength(-500))
             .force("center", d3.forceCenter(width / 2, height / 2));
 

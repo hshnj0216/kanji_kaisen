@@ -189,66 +189,66 @@
             ]
         },
         {
-            "kanji": "",
+            "kanji": "反",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "厂", "parent": "反"},
+                {"data": "又", "parent": "反"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "匹",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "匚", "parent": "匹"},
+                {"data": "儿", "parent": "匹"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "夫",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "二", "parent": "夫"},
+                {"data": "人", "parent": "夫"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "仏",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "亻", "parent": "仏"},
+                {"data": "厶", "parent": "仏"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "分",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "八", "parent": "分"},
+                {"data": "刀", "parent": "分"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "文",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "亠", "parent": "文"},
+                {"data": "乂", "parent": "文"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "方",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "丶", "parent": "方"},
+                {"data": "万", "parent": "方"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "乏",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "丿", "parent": "乏"},
+                {"data": "之", "parent": "乏"}
             ]
         },
         {
-            "kanji": "",
+            "kanji": "友",
             "components": [
-                {"data": "", "parent": ""},
-                {"data": "", "parent": ""}
+                {"data": "𠂇", "parent": "友"},
+                {"data": "又", "parent": "友"}
             ]
         },
         {

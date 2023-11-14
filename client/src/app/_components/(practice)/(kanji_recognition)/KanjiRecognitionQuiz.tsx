@@ -22,25 +22,28 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
     const [isQuizOver, setIsQuizOver] = useState(false);
 
     // Shuffle an array using sort() and Math.random()
-    function shuffle(array) {
-        return array.sort(() => Math.random() - 0.5);
+    function shuffle(array: Array<any>) {
+        console.log('Array before shuffling:', array);
+        const shuffledArray = array.slice().sort(() => Math.random() - 0.5);
+        console.log('Array after shuffling:', shuffledArray);
+        return shuffledArray;
     }
 
-    const generateFalseOptions = (correctAnswer:IQuizItem) => {
+    const generateFalseOptions = (correctAnswer: IQuizItem) => {
         // Filter out the correct answer from the quizItems array
-        let filteredQuizItems = fullQuizItems.filter((item) => item !== correctAnswer);
+        let filteredQuizItems = fullQuizItems.filter(item => item !== correctAnswer);
         console.log(`Correct answer: ${correctAnswer}`);
         // Randomly select two false options from the filteredQuizItems array
         let falseOption1 = filteredQuizItems[Math.floor(Math.random() * filteredQuizItems.length)];
         // Remove falseOption1 from filteredQuizItems
-        filteredQuizItems = filteredQuizItems.filter((item) => item !== falseOption1);
+        filteredQuizItems = filteredQuizItems.filter(item => item !== falseOption1);
         // Now select falseOption2
         let falseOption2 = filteredQuizItems[Math.floor(Math.random() * filteredQuizItems.length)];
         console.log()
-    
+
         return [falseOption1, falseOption2];
     };
-    
+
 
     const onQuizItemComplete = () => {
         if (quizItems.length > 0) {
@@ -55,6 +58,9 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
             setOptions(shuffledOptions);
             // Update quizItem state
             setQuizItem(updatedQuizItem);
+            console.log('Generated options:', generatedOptions);
+            console.log('Shuffled options:', shuffledOptions);
+            console.log('Shuffled options length:', shuffledOptions.length);
             setIsOptionSelected(false);
             setSelectedOption("");
         } else {
@@ -65,7 +71,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
     useEffect(() => {
         if (quizItems.length > 0 && !isQuizOver) {
             onQuizItemComplete();
-            
+
         }
     }, []);
 

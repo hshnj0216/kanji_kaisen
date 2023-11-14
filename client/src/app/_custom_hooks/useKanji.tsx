@@ -16,7 +16,8 @@ const useKanji = () => {
     
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
         try {
-            const response = await axios.get(`http://localhost:5000/studyData/kanjiDetails/${kanjiId}`);
+            const endpoint = `http://localhost:5000/studyData/kanjiDetails/${kanjiId}`;
+            const response = await axios.get(endpoint);
             setKanji(response.data);
             setImageIndex(response.data.kanji.strokes.count - 1);
         } catch (error) {
@@ -24,7 +25,6 @@ const useKanji = () => {
         }
     }, []);
 
-    console.log(imageIndex); 
 
     const onPrevBtnClick = () => {
         setIsImage(true);
