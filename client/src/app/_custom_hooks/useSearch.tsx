@@ -1,40 +1,41 @@
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 const useSearch = () => {
-    const [queryString, setQueryString] = useState('');
-    const [selectedValue, setSelectedValue] = useState('');
+    const [inputValue, setInputValue] = useState('');
     const [isInputFocused, setIsInputFocused] = useState(false);
     const [searchSuggestions, setSearchSuggestions] = useState([]);
 
-  
 
+    //Handle suggestive search
     useEffect(() => {
-        async function getMatchingKanjis() {
-            if(queryString) {
-                try{
-                    const response = await axios.get(`http://localhost:5000/studyData/kanjis/${queryString}`);
-                    setSearchSuggestions(response.data);
-                } catch(error) {
-                    if(error.response && error.response.status === '404') {
-                        setSearchSuggestions([]);
-                    }
+        async function getMatchingSuggestions() {
+            try {
+                const response = await axios.get(`http://localhost:5000/studyData/kanjis/${inputValue}`);
+                setSearchSuggestions(response.data);
+            } catch (error) {
+                if (error.response && error.response.status === 404) {
+                    setSearchSuggestions([]);
                 }
-            } else {
-                setSearchSuggestions([]);
             }
         }
-        getMatchingKanjis();
-    }, [queryString]);
+
+        getMatchingSuggestions();
+    }, [inputValue]);
+
+    const handleSuggestionClick = (selectedValue: string) => {
+        console.log(selectedValue);
+        setInputValue(selectedValue);
+    };
+
 
     return {
-        queryString,
-        setQueryString,
-        selectedValue,
-        setSelectedValue,
-        searchSuggestions, 
-        isInputFocused, 
-        setIsInputFocused, 
+        inputValue,
+        setInputValue,
+        searchSuggestions,
+        handleSuggestionClick,
+        isInputFocused,
+        setIsInputFocused,
     };
 }
 

@@ -1,21 +1,20 @@
 "use client";
-import {  FC } from "react";
+import { FC } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import useSearch from "@/app/_custom_hooks/useSearch";
 
-interface ISearchBarProps{
+interface ISearchBarProps {
     onKanjiSelection: (kanji: string) => void;
 }
 
-const SearchBar: FC<ISearchBarProps> = ({onKanjiSelection}) => {
+const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
     const {
-        queryString, 
-        setQueryString,
-        selectedValue,
-        setSelectedValue,
-        searchSuggestions, 
-        isInputFocused, 
-        setIsInputFocused, 
+        inputValue,
+        setInputValue,
+        handleSuggestionClick,
+        searchSuggestions,
+        isInputFocused,
+        setIsInputFocused,
     } = useSearch();
 
     return (
@@ -24,16 +23,15 @@ const SearchBar: FC<ISearchBarProps> = ({onKanjiSelection}) => {
                 <input
                     className="border border-gray-300 p-2 rounded-l-md col-span-9"
                     type="text"
-                    placeholder="Search kanjis using the kanji character or the english word"
+                    placeholder="Paste kanji character or type English word"
                     onChange={(e) => {
-                        setQueryString(e.target.value);
-                        setSelectedValue("");
+                        setInputValue(e.target.value);
                     }}
                     onBlur={() => {
                         setTimeout(() => setIsInputFocused(false), 100); // Delay to allow the click event to trigger on the ul
                     }}
                     onFocus={() => setIsInputFocused(true)}
-                    value={selectedValue !== "" ? selectedValue : queryString}
+                    value={inputValue}
                 />
                 <button
                     type="button"
@@ -52,12 +50,12 @@ const SearchBar: FC<ISearchBarProps> = ({onKanjiSelection}) => {
                         <li
                             key={kanji?.kanji}
                             className="bg-slate-50 hover:bg-slate-300 cursor-pointer p-2 col-span-12"
-                            onClick={() => { 
+                            onClick={() => {
                                 onKanjiSelection(kanji?.id);
-                                setSelectedValue(kanji?.ka_utf);
+                                handleSuggestionClick(kanji?.kanji)
                             }}
                         >
-                           <p className="truncate"> 
+                            <p className="truncate">
                                 <span className="me-2">{kanji?.kanji}</span>
                                 <span className="text-slate-400 ">{kanji?.meaning}</span>
                             </p>
