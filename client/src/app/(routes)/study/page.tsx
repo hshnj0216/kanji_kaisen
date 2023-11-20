@@ -17,6 +17,7 @@ const Study: FC = () => {
 		displayDecomposition,
 		setDisplayDecomposition,
 		kanjiDecompositionProps,
+		kanjiStrokeImagesProps,
 		kanjiInfoProps,
 		kanjiMediaProps,
 	} = useKanji();
@@ -42,7 +43,7 @@ const Study: FC = () => {
 					<KanjiMedia	{...kanjiMediaProps}/>
 					<KanjiInfo {...kanjiInfoProps} /> 
 					<Examples examples={kanji?.examples}></Examples>
-					<StrokeImages images={kanji?.kanji?.strokes.images}></StrokeImages>
+					<StrokeImages {...kanjiStrokeImagesProps}></StrokeImages>
 					</div>
 				)				
 			) : (
