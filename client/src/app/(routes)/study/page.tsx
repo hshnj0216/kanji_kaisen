@@ -22,7 +22,7 @@ const Study: FC = () => {
 		kanjiMediaProps,
 	} = useKanji();
 	return (
-		<div className="w-4/5 mx-auto">
+		<div className="w-4/5 mx-auto h-full">
 			<div className="flex justify-between items-center">
 				<SearchBar onKanjiSelection={onKanjiSelection}/>
 				{kanji ? 
@@ -39,11 +39,11 @@ const Study: FC = () => {
 				displayDecomposition ? (
 					<KanjiDecomposition kanjiTree={kanjiDecompositionProps.kanjiTree}/>
 				) : (
-					<div className="grid lg:grid-cols-12 lg:gap-4">
-					<KanjiMedia	{...kanjiMediaProps}/>
-					<KanjiInfo {...kanjiInfoProps} /> 
-					<Examples examples={kanji?.examples}></Examples>
-					<StrokeImages {...kanjiStrokeImagesProps}></StrokeImages>
+					<div className="grid lg:grid-cols-12 lg:gap-4 border-slate-50">
+						<KanjiMedia	{...kanjiMediaProps}/>
+						<KanjiInfo {...kanjiInfoProps} /> 
+						<Examples examples={kanji?.examples}></Examples>
+						<StrokeImages {...kanjiStrokeImagesProps}></StrokeImages>
 					</div>
 				)				
 			) : (

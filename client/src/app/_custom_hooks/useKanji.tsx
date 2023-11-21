@@ -64,13 +64,31 @@ const useKanji = () => {
 
     useEffect(() => {
         if (!isImage) {
-            // Save the current timestamp when transitioning from image to video
-            setVideoTiming((prevTiming) => {
-                return videoRef.current ? videoRef.current.currentTime : prevTiming;
-            });
+
+            videoRef.current.currentTime = kanji?.kanji?.strokes?.timings[timingIndex];
         }
-        console.log(videoTiming);
     }, [isImage]);
+
+    useEffect(() => {
+        console.log(`videoTiming: ${videoTiming}`);
+    }, [videoTiming]);
+
+    const onTimeUpdate = () => {
+        let currentTime = videoRef.current.currentTime;
+        let timings = kanji?.kanji?.strokes?.timings;
+        let closestTime = timings[0];
+        let closestTimeIndex = 0;
+
+        timings.forEach((time, index) => {
+            if (Math.abs(currentTime - time) < Math.abs(currentTime - closestTime)) {
+                closestTime = time;
+                closestTimeIndex = index;
+            }
+        });
+
+        setVideoTiming(closestTime);
+        setTimingIndex(closestTimeIndex);
+    }
 
     const onStrokeImageClick = (index: number) => {
         setTimingIndex(index);
@@ -97,6 +115,7 @@ const useKanji = () => {
             onPrevBtnClick,
             onPlayBtnClick,
             onNextBtnClick,
+            onTimeUpdate,
         },
         kanjiInfoProps: {
             meaning: kanji?.meaning,

@@ -8,11 +8,11 @@ interface IStrokeImages {
 }
 const StrokeImages: FC<IStrokeImages> = ({ images, onStrokeImageClick, timingIndex }) => {
     return (
-        <div className="grid grid-cols-12 col-span-12 bg-slate-300 h-50 gap-3 p-3">
+        <div className="grid grid-cols-12 col-span-12 bg-slate-300 h-52 gap-2 p-3">
             {images.map((image, index) =>
                 <div
                     key={index}
-                    className={`relative w-20 h-20 ${timingIndex === index ? 'border border-blue-500' : ''}`}
+                    className={`relative cursor-pointer w-20 h-20 ${timingIndex === index ? 'border border-blue-500' : ''}`}
                     onClick={() => onStrokeImageClick(index)}
                 >
                     <Image

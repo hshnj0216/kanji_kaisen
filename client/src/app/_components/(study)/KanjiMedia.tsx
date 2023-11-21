@@ -12,6 +12,7 @@ interface IKanjiMedia {
     onPlayBtnClick: () => void;
     onPrevBtnClick: () => void;
     onNextBtnClick: () => void;
+    onTimeUpdate: () => void;
     timings: number[];
 }
 
@@ -25,12 +26,13 @@ const KanjiMedia: FC<IKanjiMedia> = ({
     onPlayBtnClick,
     onPrevBtnClick,
     onNextBtnClick,
+    onTimeUpdate,
     timings,
 }) => {
 
 
     return (
-        <div className="col-span-3 bg-slate-50 flex flex-col items-center justify-center relative">
+        <div className="col-span-3 h-90 bg-slate-50 flex flex-col items-center justify-center relative">
             {isImage && (
                 <Image
                     className="h-5/6"
@@ -47,6 +49,7 @@ const KanjiMedia: FC<IKanjiMedia> = ({
                     className="w-full object-contain h-5/6"
                     autoPlay
                     ref={videoRef}
+                    onTimeUpdate={onTimeUpdate}
                 >
                     {kanjiVideoSrcs.mp4 && (
                         <source src={kanjiVideoSrcs.mp4} type="video/mp4" />
