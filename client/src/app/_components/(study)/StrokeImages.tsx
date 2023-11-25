@@ -4,15 +4,15 @@ import Image from "next/image";
 interface IStrokeImages {
     images: string[],
     onStrokeImageClick: () => void,
-    timingIndex: number,
+    imageIndex: number,
 }
-const StrokeImages: FC<IStrokeImages> = ({ images, onStrokeImageClick, timingIndex }) => {
+const StrokeImages: FC<IStrokeImages> = ({ images, onStrokeImageClick, imageIndex }) => {
     return (
         <div className="grid grid-cols-12 col-span-12 bg-slate-300 h-52 gap-2 p-3">
             {images.map((image, index) =>
                 <div
                     key={index}
-                    className={`relative cursor-pointer w-20 h-20 ${timingIndex === index ? 'border border-blue-500' : ''}`}
+                    className={`relative cursor-pointer w-20 h-20 ${imageIndex === index ? 'border border-blue-500' : ''}`}
                     onClick={() => onStrokeImageClick(index)}
                 >
                     <Image
@@ -22,7 +22,7 @@ const StrokeImages: FC<IStrokeImages> = ({ images, onStrokeImageClick, timingInd
                         className="border"
                         alt={`Image ${index}`}
                     />
-                    {timingIndex === index && (
+                    {imageIndex === index && (
                         <div className="absolute inset-0 bg-blue-200 opacity-50"></div>
                     )}
                 </div>

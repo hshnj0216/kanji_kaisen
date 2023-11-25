@@ -6,6 +6,7 @@ interface IKanjiMedia {
     kanjiVideoSrcs: string[] | undefined;
     kanjiImageSrcs: string[] | undefined;
     timingIndex: number;
+    imageIndex: number;
     isImage: boolean;
     isPlay: boolean;
     videoRef: any,
@@ -27,6 +28,7 @@ const KanjiMedia: FC<IKanjiMedia> = ({
     onPrevBtnClick,
     onNextBtnClick,
     onTimeUpdate,
+    imageIndex,
     timings,
 }) => {
 
@@ -36,8 +38,8 @@ const KanjiMedia: FC<IKanjiMedia> = ({
             {isImage && (
                 <Image
                     className="h-5/6"
-                    key={kanjiImageSrcs[timingIndex]}
-                    src={kanjiImageSrcs[timingIndex]}
+                    key={kanjiImageSrcs[imageIndex]}
+                    src={kanjiImageSrcs[imageIndex]}
                     width={300}
                     height={325}
                     alt="kanji_img"
@@ -60,13 +62,13 @@ const KanjiMedia: FC<IKanjiMedia> = ({
                 </video>
             )}
             <div className="flex justify-between w-full h-1/6 px-10">
-                <button type="button" title="Previous" onClick={onPrevBtnClick}>
+                <button type="button" title="Previous stroke image" onClick={onPrevBtnClick}>
                     <FaBackwardStep className="w-6 h-6" />
                 </button>
-                <button type="button" title="Play" onClick={onPlayBtnClick}>
+                <button type="button" title="Play video" onClick={onPlayBtnClick}>
                     {isPlay ? <FaPlay className="w-6 h-6" /> : <FaPause className="w-6 h-6" />}
                 </button>
-                <button type="button" title="Next" onClick={onNextBtnClick}>
+                <button type="button" title="Next stroke image" onClick={onNextBtnClick}>
                     <FaForwardStep className="w-6 h-6" />
                 </button>
             </div>
