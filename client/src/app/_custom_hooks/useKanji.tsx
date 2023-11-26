@@ -12,9 +12,6 @@ const useKanji = () => {
     const videoRef = useRef(null);
 
     //Side effects
-    useEffect(() => {
-        console.log(`videoTiming: ${videoTiming}`);
-    }, [videoTiming]);
 
     //Kanji change effects
     //Resets the imageIndex when the kanji changes

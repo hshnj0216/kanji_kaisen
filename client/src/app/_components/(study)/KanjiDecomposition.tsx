@@ -110,7 +110,7 @@ const KanjiDecomposition: FC<IKanjiDecompositionProps> = ({ kanjiTree }) => {
     }, [kanjiTree]);
 
     return (
-        <div className="border border-slate-50 rounded w-full h-full bg-slate-900 p-5">
+        <div className="border border-slate-50 rounded w-full bg-slate-900 p-5">
             <svg ref={displayRef} width="1080" height="500" className=" border-slate-50">
 
             </svg>
