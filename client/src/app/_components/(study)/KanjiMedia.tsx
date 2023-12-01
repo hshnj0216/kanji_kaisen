@@ -1,5 +1,5 @@
 "use client";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { FaPlay, FaPause, FaForwardStep, FaBackwardStep } from "react-icons/fa6";
 import Image from "next/image";
 interface IKanjiMedia {
@@ -31,7 +31,6 @@ const KanjiMedia: FC<IKanjiMedia> = ({
     imageIndex,
     timings,
 }) => {
-
 
     return (
         <div className="col-span-3 min-h-[370px] bg-slate-50 flex flex-col items-center justify-center relative">

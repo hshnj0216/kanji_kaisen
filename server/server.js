@@ -70,8 +70,6 @@ async function loadAllKanjiData() {
     };
     const response = await axios.request(options);
     const kanjis = response.data;
-    console.log(`Retrieved all ${kanjis.length} kanjis`);
-    console.log("Adding data to Redis cloud db");
     // Add data to the database
     for (let kanji of kanjis) {
       // Add kanji to the database...
@@ -111,6 +109,10 @@ async function loadAllKanjiData() {
             type: SchemaFieldTypes.NUMERIC,
             AS: "grade",
           },
+          "$.rad_search": {
+            type: SchemaFieldTypes.TEXT,
+            AS: "rad_search",
+          }
         },
         {
           ON: "JSON",
@@ -129,6 +131,7 @@ async function loadAllKanjiData() {
 
     console.log("All kanji data added to Redis cloud");
   }
+
 }
 
 async function updateDatabase() {
@@ -181,20 +184,21 @@ async function updateDatabase() {
       treeMap.set(entry[0], createTree(entry));
     }
 
-    console.log(treeMap.size);  
+    console.log(treeMap.size);
 
     const keys = await client.keys("*");
-    console.log(keys);
-    const redisKanjis = await Promise.all(keys.map(async (key) => {
-      return await client.json.get(key);
-    }));
+    const redisKanjis = await Promise.all(
+      keys.map(async (key) => {
+        return await client.json.get(key);
+      })
+    );
     console.log(`total redis kanjis: ${redisKanjis.length}`);
 
     const updatePromises = redisKanjis.map(async (kanji) => {
       const kanjiTree = treeMap.get(kanji.ka_utf);
       if (kanjiTree) {
         kanji.component_decomposition = kanjiTree;
-        await client.json.set(`kanji:${kanji._id}`, '.', kanji);
+        await client.json.set(`kanji:${kanji._id}`, ".", kanji);
       }
     });
 
@@ -206,6 +210,44 @@ async function updateDatabase() {
   }
 }
 
+async function createKanjiRadicalString() {
+  const data = await readFile('components-kc.csv', 'utf8');
+  const lines = data.split('\n');
+  const kanjiMap = new Map();
+  for(let line of lines) {
+    const [kanji, components] = line.split(',');
+    kanjiMap.set(kanji, components);
+  }
+  const matches = [];
+  console.log(lines.length);
+  const keys = await client.keys("*");
+  const redisKanjis = await Promise.all(
+    keys.map(async (key) => {
+      return await client.json.get(key);
+    })
+  );
+  console.log(redisKanjis.length);
+  for(let redisKanji of redisKanjis) {
+    if(kanjiMap.has(redisKanji.ka_utf)) {
+      matches.push(redisKanji.ka_utf);
+    } else {
+      console.log(`${redisKanji.ka_utf} has no match`);
+    }
+  }
+  console.log(`There are ${matches.length} matches`);
+
+  const updatePromises = redisKanjis.map(async (kanji) => {  
+    if(kanjiMap.has(kanji.ka_utf)) {
+      kanji.rad_search = kanjiMap.get(kanji.ka_utf);
+    } else {
+      kanji.rad_search = kanji.ka_utf;
+    }
+    await client.json.set(`kanji:${kanji._id}`, ".", kanji);
+  });
+
+  await Promise.all(updatePromises);
+
+}
 
 app.get("/", (req, res) => {
   res.send("Welcome to the server");
@@ -221,6 +263,7 @@ app.listen(5000, () => {
   console.log("app listening on port 5000");
   //Load all the data as soon as the server starts
   loadAllKanjiData();
+  //createKanjiRadicalString();
 });
 
 export { client };

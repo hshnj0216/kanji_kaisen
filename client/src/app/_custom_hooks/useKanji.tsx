@@ -17,6 +17,7 @@ const useKanji = () => {
     //Resets the imageIndex when the kanji changes
     useEffect(() => {
         const initialImageIndex = kanji?.kanji.strokes.count - 1;
+        setIsImage(true);
         setImageIndex(initialImageIndex);
     }, [kanji]);
 
@@ -34,8 +35,8 @@ const useKanji = () => {
 
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
         try {
-            const endpoint = `http://localhost:5000/studyData/kanjiDetails/${kanjiId}`;
-            const response = await axios.get(endpoint);
+            const serverUrl = `http://127.0.0.1:5000/studyData/kanjiDetails/${kanjiId}`;
+            const response = await axios.get(serverUrl);
             setKanji(response.data);
         } catch (error) {
             console.log(error);
