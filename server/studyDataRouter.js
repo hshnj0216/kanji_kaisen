@@ -3,7 +3,7 @@ const router = express.Router();
 import { client } from "./server.js";
 
 //Retrieve kanji details
-router.get("/kanjiDetails/:kanji_id", async (req, res) => {
+router.get("/kanjis/:kanji_id", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   console.log(req.params.kanji_id);
   try {
@@ -17,7 +17,7 @@ router.get("/kanjiDetails/:kanji_id", async (req, res) => {
 
 //Performs full string search on the Redis cloud db
 //Sends kanji object array containing the character and meaning
-router.get("/kanjis/:query_string", async (req, res) => {
+router.get("/kanjis/search/:query_string", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     //Initialize an empty array that will contain the matching objects
@@ -46,6 +46,33 @@ router.get("/kanjis/:query_string", async (req, res) => {
     console.log(error.message);
   }
 });
+
+router.get("/kanjis/radicals/:radicals", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  console.log(`request made to endpoitn`);
+  try {
+    const { radicals } = req.params;
+
+    console.log(`radicals: ${radicals}`);
+
+    const result = await client.ft.search(
+      "idx:kanjis",
+      `@rad_search:{${radicals}}`
+    );
+
+    const matches = [];
+    for(let item of result.documents) {
+      matches.push({
+        id: item.id,
+        kanji: item.value.ka_utf,
+      });
+    }
+
+    res.json(matches);
+  } catch(error) {
+    console.log(error.message);
+  }
+})
 
 
 

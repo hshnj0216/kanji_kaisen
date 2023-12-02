@@ -35,7 +35,7 @@ const useKanji = () => {
 
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
         try {
-            const serverUrl = `http://127.0.0.1:5000/studyData/kanjiDetails/${kanjiId}`;
+            const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/${kanjiId}`;
             const response = await axios.get(serverUrl);
             setKanji(response.data);
         } catch (error) {

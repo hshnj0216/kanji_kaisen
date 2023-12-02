@@ -11,7 +11,7 @@ const useSearch = () => {
     useEffect(() => {
         async function getMatchingSuggestions() {
             try {
-                const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/${inputValue}`;
+                const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/search/${inputValue}`;
                 const response = await axios.get(serverUrl);
                 setSearchSuggestions(response.data);
             } catch (error) {

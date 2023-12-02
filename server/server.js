@@ -47,6 +47,9 @@ client.on("error", (err) => {
   console.error("Redis error:", err);
 });
 
+const ftDropIndexAsync = util.promisify(client.ft.DROPINDEX).bind(client.ft);
+const ftCreateAsync = util.promisify(client.ft.CREATE).bind(client.ft);
+
 //Makes a call to the Kanji Alive API
 //Gets all the 1300 kanji from the API and their details
 async function loadAllKanjiData() {
@@ -110,9 +113,9 @@ async function loadAllKanjiData() {
             AS: "grade",
           },
           "$.rad_search": {
-            type: SchemaFieldTypes.TEXT,
+            type: SchemaFieldTypes.TAG,
             AS: "rad_search",
-          }
+          },
         },
         {
           ON: "JSON",
@@ -210,13 +213,13 @@ async function updateDatabase() {
   }
 }
 
-async function createKanjiRadicalString() {
-  const data = await readFile('components-kc.csv', 'utf8');
-  const lines = data.split('\n');
+async function createKanjiRadicalSearchField() {
+  const data = await readFile("components-kc.csv", "utf8");
+  const lines = data.split("\n");
   const kanjiMap = new Map();
-  for(let line of lines) {
-    const [kanji, components] = line.split(',');
-    kanjiMap.set(kanji, components);
+  for (let line of lines) {
+    const [kanji, components] = line.split(",");
+    kanjiMap.set(kanji, components.trim());
   }
   const matches = [];
   console.log(lines.length);
@@ -227,8 +230,8 @@ async function createKanjiRadicalString() {
     })
   );
   console.log(redisKanjis.length);
-  for(let redisKanji of redisKanjis) {
-    if(kanjiMap.has(redisKanji.ka_utf)) {
+  for (let redisKanji of redisKanjis) {
+    if (kanjiMap.has(redisKanji.ka_utf)) {
       matches.push(redisKanji.ka_utf);
     } else {
       console.log(`${redisKanji.ka_utf} has no match`);
@@ -236,17 +239,16 @@ async function createKanjiRadicalString() {
   }
   console.log(`There are ${matches.length} matches`);
 
-  const updatePromises = redisKanjis.map(async (kanji) => {  
-    if(kanjiMap.has(kanji.ka_utf)) {
-      kanji.rad_search = kanjiMap.get(kanji.ka_utf);
+  const updatePromises = redisKanjis.map(async (kanji) => {
+    if (kanjiMap.has(kanji.ka_utf)) {
+      kanji.rad_search = [...kanjiMap.get(kanji.ka_utf)];
     } else {
-      kanji.rad_search = kanji.ka_utf;
+      kanji.rad_search = [...kanji.ka_utf];
     }
     await client.json.set(`kanji:${kanji._id}`, ".", kanji);
   });
 
   await Promise.all(updatePromises);
-
 }
 
 app.get("/", (req, res) => {
@@ -263,7 +265,7 @@ app.listen(5000, () => {
   console.log("app listening on port 5000");
   //Load all the data as soon as the server starts
   loadAllKanjiData();
-  //createKanjiRadicalString();
+  //createKanjiRadicalSearchField();
 });
 
 export { client };
