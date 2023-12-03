@@ -59,7 +59,7 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     <FaMagnifyingGlass className="mx-auto"></FaMagnifyingGlass>
                 </button>
             </div>
-            {isInputFocused && searchSuggestions.length > 0 && (
+            {isInputFocused && searchSuggestions?.length > 0 && (
                 <ul
                     className="w-9/12 border rounded absolute z-10 bg-white grid grid-cols-12 top-full"
                     onBlur={() => setIsInputFocused(false)}

@@ -1,6 +1,7 @@
 "use client";
 
-import { FC, useState } from "react";
+import axios from "axios";
+import { FC, useEffect, useState } from "react";
 
 const RadicalSearch: FC = () => {
 
@@ -22,8 +23,10 @@ const RadicalSearch: FC = () => {
       ];
 
     const [selectedRadicals, setSelectedRadicals] = useState(new Set());
+    const [matchingKanjis, setMatchingKanjis] = useState([]);
 
     const onRadicalClick = (item: string) => {
+        //Manages the radicals state
         if(selectedRadicals.has(item)) {
             setSelectedRadicals(
                 (prevSet) => {
@@ -35,20 +38,44 @@ const RadicalSearch: FC = () => {
         } else {
             setSelectedRadicals((prevSet) => new Set(prevSet).add(item));
         }
+
+        
+
         
     }
+
+    useEffect(() => {
+        //Sends request
+        async function getMatchingKanjis() {
+            const radicals = Array.from(selectedRadicals).join(",");
+            const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/radicals/${radicals}`;
+            const response = await axios.get(serverUrl);
+            console.log(`response data: ${response.data}`);
+            setMatchingKanjis(response.data);
+        }
+        getMatchingKanjis();
+    }, [selectedRadicals]);
             
     return (
-        <div className="bg-slate-300 p-3 border rounded absolute top-full z-10 w-full h- flex flex-wrap max-h-80 justify-center overflow-scroll">
-            {kanjiRadicals.map((radical) => (
-                <div key={radical}      
-                    className={`border rounded bg-slate-50 p-1 m-1 cursor-pointer 
-                                ${selectedRadicals.has(radical) ? "bg-slate-500" : ""}`}
-                    onClick={() => onRadicalClick(radical)}
-                >
-                    {radical}
-                </div>
-            ))}
+        <div className="bg-slate-300 p-3 border rounded absolute top-full z-10 w-full flex flex-wrap max-h-80 justify-center overflow-scroll">
+            <div className="w-full h-2/6 flex border-b-black">
+                 {matchingKanjis?.map((kanji) => (
+                    <div key={kanji.id} className="border p-2 m-1">
+                        {kanji.kanji}
+                    </div>
+                 ))}
+            </div>
+            <div className="w-full h-4/6 flex flex-wrap">
+                {kanjiRadicals.map((radical) => (
+                    <div key={radical}      
+                        className={`border rounded bg-slate-50 p-2 m-1 cursor-pointer 
+                                    ${selectedRadicals.has(radical) ? "bg-slate-500" : ""}`}
+                        onClick={() => onRadicalClick(radical)}
+                    >
+                        {radical}
+                    </div>
+                ))}
+            </div>
         </div>
     )
 }
