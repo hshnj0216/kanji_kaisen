@@ -52,20 +52,41 @@ router.get("/kanjis/radicals/:radicals", async (req, res) => {
   console.log(`request made to endpoitn`);
   try {
     const { radicals } = req.params;
+    console.log(typeof(radicals));
 
     console.log(`radicals: ${radicals}`);
 
+    let tags = radicals.split(",");
+
+    let query = `@rad_search: {${tags.join(" | ")}}`;
+
+    console.log(query);
+
     const result = await client.ft.search(
       "idx:kanjis",
-      `@rad_search:{${radicals}}`
+      query
     );
+
+    function hasAllChars(string, chars) {
+      for(let i = 0; i < chars.length; i++) {
+        if(!string.includes(chars[i])) {
+          return false;
+        }
+      }
+      return true;
+    }
 
     const matches = [];
     for(let item of result.documents) {
-      matches.push({
-        id: item.id,
-        kanji: item.value.ka_utf,
-      });
+      let rad_string = item.value.rad_search.join("");
+      console.log(rad_string);
+      if(hasAllChars(rad_string, radicals)) {
+        matches.push({
+          id: item.id,
+          kanji: item.value.ka_utf,
+        });
+      }
+      
     }
 
     res.json(matches);

@@ -2,6 +2,7 @@
 
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
+import { FaRotateRight } from "react-icons/fa6";
 
 const RadicalSearch: FC = () => {
 
@@ -20,14 +21,14 @@ const RadicalSearch: FC = () => {
         '革', '韋', '韭', '音', '頁', '風', '飛', '食', '首', '香', '馬', '骨', '高', '髟', '鬥', '鬯',
         '鬲', '鬼', '魚', '鳥', '鹵', '鹿', '麥', '麻', '黃', '黍', '黑', '黹', '黽', '鼎', '鼓', '鼠',
         '鼻', '齊', '齒', '龍', '龜', '龠'
-      ];
+    ];
 
     const [selectedRadicals, setSelectedRadicals] = useState(new Set());
     const [matchingKanjis, setMatchingKanjis] = useState([]);
 
     const onRadicalClick = (item: string) => {
         //Manages the radicals state
-        if(selectedRadicals.has(item)) {
+        if (selectedRadicals.has(item)) {
             setSelectedRadicals(
                 (prevSet) => {
                     const newSet = new Set(prevSet);
@@ -38,12 +39,12 @@ const RadicalSearch: FC = () => {
         } else {
             setSelectedRadicals((prevSet) => new Set(prevSet).add(item));
         }
-
-        
-
-        
     }
 
+    const onResetTileClick = () => {
+        setSelectedRadicals(new Set());
+    }
+ 
     useEffect(() => {
         //Sends request
         async function getMatchingKanjis() {
@@ -55,19 +56,26 @@ const RadicalSearch: FC = () => {
         }
         getMatchingKanjis();
     }, [selectedRadicals]);
-            
+
     return (
         <div className="bg-slate-300 p-3 border rounded absolute top-full z-10 w-full flex flex-wrap max-h-80 justify-center overflow-scroll">
             <div className="w-full h-2/6 flex border-b-black">
-                 {matchingKanjis?.map((kanji) => (
+
+                {matchingKanjis?.map((kanji) => (
                     <div key={kanji.id} className="border p-2 m-1">
                         {kanji.kanji}
                     </div>
-                 ))}
+                ))}
             </div>
             <div className="w-full h-4/6 flex flex-wrap">
+                <div className="border p-2 m-1 rounded bg-slate-500 flex items-center justify-center cursor-pointer" 
+                    title="Reset selected components"
+                    onClick={onResetTileClick}
+                >
+                    <FaRotateRight />
+                </div>
                 {kanjiRadicals.map((radical) => (
-                    <div key={radical}      
+                    <div key={radical}
                         className={`border rounded bg-slate-50 p-2 m-1 cursor-pointer 
                                     ${selectedRadicals.has(radical) ? "bg-slate-500" : ""}`}
                         onClick={() => onRadicalClick(radical)}

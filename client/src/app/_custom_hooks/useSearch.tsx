@@ -29,8 +29,6 @@ const useSearch = () => {
         setInputValue(selectedValue);
     };
 
-    
-
     return {
         inputValue,
         setInputValue,
