@@ -21,7 +21,7 @@ const Study: FC = () => {
 		kanjiStrokeImagesProps,
 		kanjiInfoProps,
 		kanjiMediaProps,
-	} = useKanji();
+	} = useKanji(); 
 	return (
 		<div className="w-4/5 mx-auto h-full">
 			<div className="grid grid-cols-12 h-16 items-center">

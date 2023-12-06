@@ -5,6 +5,7 @@ import fs from "fs";
 import util from "util";
 import csv from "csv-parser";
 const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
 const app = express();
 const router = express.Router();
 dotenv.config();
@@ -257,8 +258,19 @@ app.get("/", (req, res) => {
 
 app.get("/test", async (req, res) => {
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
-  let result = await updateDatabase();
-  res.send(result);
+  //let result = await updateDatabase();
+  
+  const data = await readFile("kanji-radicals.csv", "utf8");
+  const lines = data.split("\n");
+  const strokeMap = new Map();
+  for(let line of lines) {
+    const [strokeCount, radical] = line.split(",");
+    strokeMap.set(strokeCount, [...(strokeMap.get(strokeCount) || []), radical]);
+  }
+  writeFile("radicals.json", JSON.stringify(Object.fromEntries(strokeMap), null, 2));
+  res.json(Object.fromEntries(strokeMap));
+  
+
 });
 
 app.listen(5000, () => {

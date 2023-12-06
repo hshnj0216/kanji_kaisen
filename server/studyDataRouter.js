@@ -52,24 +52,35 @@ router.get("/kanjis/radicals/:radicals", async (req, res) => {
   console.log(`request made to endpoitn`);
   try {
     const { radicals } = req.params;
-    console.log(typeof(radicals));
-
-    console.log(`radicals: ${radicals}`);
+    
+    let radicalsString = radicals.split(",").join("").trim();
+    console.log(radicalsString);
 
     let tags = radicals.split(",");
 
     let query = `@rad_search: {${tags.join(" | ")}}`;
 
-    console.log(query);
+    console.log(`query: ${query}`);
 
     const result = await client.ft.search(
       "idx:kanjis",
-      query
+      query,
+      {
+        LIMIT: {
+          from: 0,
+          size: 300,
+        },
+      }
     );
 
+    //console.log(`results: ${result.documents}`);
+
+    console.log(`There are ${result.documents.length} results for ${tags}`);
+
     function hasAllChars(string, chars) {
-      for(let i = 0; i < chars.length; i++) {
+       for(let i = 0; i < chars.length; i++) {
         if(!string.includes(chars[i])) {
+          console.log(`string: ${string} does not include ${chars[i]}`);
           return false;
         }
       }
@@ -79,11 +90,11 @@ router.get("/kanjis/radicals/:radicals", async (req, res) => {
     const matches = [];
     for(let item of result.documents) {
       let rad_string = item.value.rad_search.join("");
-      console.log(rad_string);
-      if(hasAllChars(rad_string, radicals)) {
+      if(hasAllChars(rad_string, radicalsString)) {
         matches.push({
           id: item.id,
           kanji: item.value.ka_utf,
+          rad_search: item.value.rad_search,
         });
       }
       
