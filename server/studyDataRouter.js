@@ -58,7 +58,7 @@ router.get("/kanjis/radicals/:radicals", async (req, res) => {
 
     let tags = radicals.split(",");
 
-    let query = `@rad_search: {${tags.join(" | ")}}`;
+    let query = `@rad_search: {${tags.join("|")}}`;
 
     console.log(`query: ${query}`);
 

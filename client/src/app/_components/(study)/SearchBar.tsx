@@ -32,7 +32,7 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
             <div className="grid grid-cols-12 col-span-full shadow-slate-300 box-border">
                 <button 
                     type="button"
-                    title="radical search"
+                    title="Find kanji by radical"
                     className="bg-slate-300 text-slate-500 p-2 rounded-l-md col-span-2"
                     onClick={onRadicalButtonClick}
                 >
@@ -81,7 +81,7 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     ))}
                 </ul>
             )}
-            {showRadicals && (<RadicalSearch/>)}
+            {showRadicals && (<RadicalSearch onKanjiSelection={onKanjiSelection}/>)}
         </div>
     );
 }
