@@ -49,18 +49,14 @@ router.get("/kanjis/search/:query_string", async (req, res) => {
 
 router.get("/kanjis/radicals/:radicals", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  console.log(`request made to endpoitn`);
   try {
     const { radicals } = req.params;
     
-    let radicalsString = radicals.split(",").join("").trim();
-    console.log(radicalsString);
+    let radicalsString = radicals.trim();
 
-    let tags = radicals.split(",");
+    let tags = radicals.split("");
 
-    let query = `@rad_search: {${tags.join("|")}}`;
-
-    console.log(`query: ${query}`);
+    let query = `@rad_search: {${tags.join(" | ")}}`;
 
     const result = await client.ft.search(
       "idx:kanjis",
@@ -73,14 +69,9 @@ router.get("/kanjis/radicals/:radicals", async (req, res) => {
       }
     );
 
-    //console.log(`results: ${result.documents}`);
-
-    console.log(`There are ${result.documents.length} results for ${tags}`);
-
     function hasAllChars(string, chars) {
        for(let i = 0; i < chars.length; i++) {
         if(!string.includes(chars[i])) {
-          console.log(`string: ${string} does not include ${chars[i]}`);
           return false;
         }
       }

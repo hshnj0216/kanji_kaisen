@@ -27,7 +27,7 @@ const RadicalSearch: FC = ({onKanjiSelection}) => {
     ];
 
 
-    const [selectedRadicals, setSelectedRadicals] = useState(new Set());
+    const [selectedRadicals, setSelectedRadicals] = useState<Set<string>>(new Set());
     const [matchingKanjis, setMatchingKanjis] = useState([]);
 
     const onRadicalClick = (item: string) => {
@@ -37,6 +37,7 @@ const RadicalSearch: FC = ({onKanjiSelection}) => {
                 (prevSet) => {
                     const newSet = new Set(prevSet);
                     newSet.delete(item);
+                    console.log(newSet);
                     return newSet;
                 }
             );
@@ -53,10 +54,9 @@ const RadicalSearch: FC = ({onKanjiSelection}) => {
     useEffect(() => {
         //Sends request
         async function getMatchingKanjis() {
-            const radicals = Array.from(selectedRadicals).join(",");
+            const radicals = [...selectedRadicals].join("");
             const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/radicals/${radicals}`;
             const response = await axios.get(serverUrl);
-            console.log(`response data: ${response.data}`);
             setMatchingKanjis(response.data);
         }
         getMatchingKanjis();
