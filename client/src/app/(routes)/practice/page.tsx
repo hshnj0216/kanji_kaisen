@@ -33,7 +33,7 @@ const Practice:FC = () => {
                     <ModeCard 
                         title={"Write the kanji"} 
                         description={"Given the meaning, write the kanji"}
-                        isDisabled={true}
+                        isDisabled={false}
                     >
                     </ModeCard>      
                 </Link>

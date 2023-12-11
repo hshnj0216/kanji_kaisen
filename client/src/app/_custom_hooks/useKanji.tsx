@@ -7,11 +7,10 @@ const useKanji = () => {
     const [isPlay, setIsPlay] = useState<boolean>(true);
     const [timingIndex, setTimingIndex] = useState<number>(0);
     const [imageIndex, setImageIndex] = useState<number>(0);
-    const [videoTiming, setVideoTiming] = useState<number>(0);
     const [displayDecomposition, setDisplayDecomposition] = useState<boolean>(false);
     const videoRef = useRef(null);
 
-    //Side effects
+    //Side effects section
 
     //Kanji change effects
     //Resets the imageIndex when the kanji changes
@@ -31,7 +30,7 @@ const useKanji = () => {
             }
         }
     }, [isImage, imageIndex, videoRef.current]);
-    //End of side effects
+    //End of side effects section
 
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
         try {
@@ -110,7 +109,6 @@ const useKanji = () => {
         setImageIndex(index);
         setIsImage(true);
     }
-
 
     return {
         kanji,

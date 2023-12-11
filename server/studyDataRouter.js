@@ -5,7 +5,6 @@ import { client } from "./server.js";
 //Retrieve kanji details
 router.get("/kanjis/:kanji_id", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
-  console.log(req.params.kanji_id);
   try {
     let { kanji_id } = req.params;
     const kanji = await client.json.get(kanji_id);
@@ -53,14 +52,10 @@ router.get("/kanjis/radicals/:radicals", async (req, res) => {
     const { radicals } = req.params;
     
     let radicalsString = radicals.replace(/\s/g, '');
-    console.log(`radicalString: ${radicalsString}`);
-
-    console.log(`radicalString len: ${radicalsString.length}`);
 
     let tags = radicalsString.split("").filter(char => char.trim() !== '');
 
     let query = `@rad_search: {${tags.join(" | ")}}`;
-    console.log(`query: ${query}`);
 
     const result = await client.ft.search(
       "idx:kanjis",
@@ -76,7 +71,6 @@ router.get("/kanjis/radicals/:radicals", async (req, res) => {
     function hasAllChars(string, chars) {
        for(let i = 0; i < chars.length; i++) {
         if(!string.includes(chars[i])) {
-          console.log(`${string} does not contain ${chars[i]}`);
           return false;
         }
       }

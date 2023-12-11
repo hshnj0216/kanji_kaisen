@@ -223,22 +223,17 @@ async function createKanjiRadicalSearchField() {
     kanjiMap.set(kanji, components.trim());
   }
   const matches = [];
-  console.log(lines.length);
   const keys = await client.keys("*");
   const redisKanjis = await Promise.all(
     keys.map(async (key) => {
       return await client.json.get(key);
     })
   );
-  console.log(redisKanjis.length);
   for (let redisKanji of redisKanjis) {
     if (kanjiMap.has(redisKanji.ka_utf)) {
       matches.push(redisKanji.ka_utf);
-    } else {
-      console.log(`${redisKanji.ka_utf} has no match`);
-    }
+    } 
   }
-  console.log(`There are ${matches.length} matches`);
 
   const updatePromises = redisKanjis.map(async (kanji) => {
     if (kanjiMap.has(kanji.ka_utf)) {
