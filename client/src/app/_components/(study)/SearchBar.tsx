@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import useSearch from "@/app/_custom_hooks/useSearch";
 import RadicalSearch from "./RadicalSearch";
+import DrawingSearch from "./DrawingSearch";
 
 interface ISearchBarProps {
     onKanjiSelection: (kanji: string) => void;
@@ -20,9 +21,16 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
 
     
     const [showRadicals, setShowRadicals] = useState(false);
+    const [showDrawingboard, setShowDrawingboard] = useState(false);
 
     const onRadicalButtonClick = () => {
+        setShowDrawingboard(false);
         setShowRadicals(!showRadicals);
+    }
+
+    const onDrawButtonClick = () => {
+        setShowRadicals(false);
+        setShowDrawingboard(!showDrawingboard);
     }
 
 
@@ -33,10 +41,19 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                 <button 
                     type="button"
                     title="Find kanji by radical"
-                    className="bg-slate-300 text-slate-500 p-2 rounded-l-md col-span-2"
+                    className={`bg-slate-300 text-slate-500 p-2 col-span-1 
+                        ${(showRadicals || showDrawingboard)? "rounded-tl-md":"rounded-l-md"}`}
                     onClick={onRadicalButtonClick}
                 >
                     部
+                </button>
+                <button
+                    type="button"
+                    title="Find kanji by drawing"
+                    className="bg-slate-300 text-slate-500 p-2 col-span-1 border border-l-slate-500"
+                    onClick={onDrawButtonClick}
+                >
+                        図
                 </button>
                 <input
                     className="border border-gray-300 p-2 col-span-8"
@@ -53,7 +70,8 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                 />
                 <button
                     type="button"
-                    className="bg-slate-300 text-slate-500 p-2 rounded-r-md col-span-2"
+                    className={`bg-slate-300 text-slate-500 p-2 col-span-2
+                        ${(showRadicals || showDrawingboard)? "rounded-tr-md":"rounded-r-md"}`}
                     title="search"
                 >
                     <FaMagnifyingGlass className="mx-auto"></FaMagnifyingGlass>
@@ -81,7 +99,8 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     ))}
                 </ul>
             )}
-            {showRadicals && (<RadicalSearch onKanjiSelection={onKanjiSelection}/>)}
+            {showRadicals && (<RadicalSearch />)}
+            {showDrawingboard && (<DrawingSearch />)}
         </div>
     );
 }

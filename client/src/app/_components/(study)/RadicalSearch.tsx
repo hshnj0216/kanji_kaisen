@@ -6,7 +6,7 @@ import { FaRotateRight } from "react-icons/fa6";
 
 
 
-const RadicalSearch: FC = ({onKanjiSelection}) => {
+const RadicalSearch: FC = () => {
 
     const kanjiRadicals = [
         ["1", ["一", "丨", "丶", "丿", "乙 ", "亅"]],
@@ -63,7 +63,7 @@ const RadicalSearch: FC = ({onKanjiSelection}) => {
     }, [selectedRadicals]);
 
     return (
-        <div className="bg-slate-300 p-3 border rounded absolute top-full z-10 w-full 
+        <div className="bg-slate-300 p-3 border-b rounded-b absolute top-full z-10 w-full
                         flex flex-wrap max-h-80 justify-center overflow-scroll overflow-x-hidden"
         >
             <div className="w-full h-2/6 flex flex-col border-b border-slate-50 flex-wrap">

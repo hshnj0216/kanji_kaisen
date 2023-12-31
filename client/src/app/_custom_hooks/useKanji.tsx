@@ -88,7 +88,6 @@ const useKanji = () => {
                 }
             });
 
-            setVideoTiming(closestTime);
             setImageIndex(closestTimeIndex);
             setTimingIndex(closestTimeIndex);
 
