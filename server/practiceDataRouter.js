@@ -1,6 +1,8 @@
 import express from "express";
 const router = express.Router();
 import { client } from "./server.js";
+import FormData from "form-data";
+import axios from "axios";
 
 function getUniqueSubset(array, size) {
   const shuffledArray = array.slice();
@@ -107,6 +109,41 @@ router.get("/kanjiMatchData/:grade", async (req, res) => {
   }
 
   res.send(kanjiMeaningPairArray);
+});
+
+//Endpoint for image classification
+router.post("/imageClassification", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+	//Todos:
+	//Convert base64 image string to IFormFile
+  const base64Image = req.body.image;
+  const imageBuffer = Buffer.from(base64Image, 'base64');
+
+  let formData = new FormData();
+
+  // Append the imageBuffer as a Blob
+  formData.append('image', imageBuffer, {
+    filename: 'canvas.png',
+    contentType: 'image/png',
+    knownLength: imageBuffer.length
+  });
+
+	//Make request to image classification API
+  try {
+    let startTime = performance.now();
+    const response = await axios.post('http://localhost:5227/api/Classification/classify_image', formData, {
+        headers: formData.getHeaders()
+    });
+    let duration = performance.now() - startTime;
+    console.log(`Operation took ${duration}ms to finish`);
+
+    res.json(response.data);
+  } catch (error) {
+        console.error('Error:', error);
+        res.status(500).send('An error occurred while forwarding the request to the .NET API.');
+  }
+	//Compare unicode values
+	//Return a boolean
 });
 
 export default router;

@@ -63,7 +63,7 @@ const RadicalSearch: FC = () => {
     }, [selectedRadicals]);
 
     return (
-        <div className="bg-slate-300 p-3 border-b rounded-b absolute top-full z-10 w-full
+        <div className="bg-slate-300 p-3 border-b border-r border-l border-slate-50 rounded-b absolute top-full z-10 w-full
                         flex flex-wrap max-h-80 justify-center overflow-scroll overflow-x-hidden"
         >
             <div className="w-full h-2/6 flex flex-col border-b border-slate-50 flex-wrap">
