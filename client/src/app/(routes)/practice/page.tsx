@@ -31,7 +31,7 @@ const Practice:FC = () => {
                 </Link>
                 <Link href={"practice/draw_the_kanji"}>
                     <ModeCard 
-                        title={"Write the kanji"} 
+                        title={"Draw the kanji"} 
                         description={"Given the meaning, write the kanji"}
                         isDisabled={false}
                     >

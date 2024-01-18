@@ -6,8 +6,12 @@ import {FC} from "react";
 const LoadingIndicator: FC = () => {
     console.log('loading indicator rendered');
     return (
-        <div className={`${styles.skeleton} bg-slate-300 border rounded`}>
+        <div className=''>
+            <div className='loading-container'>
+                <div className='loading-droplet'>
 
+                </div>
+            </div>
         </div>
     )
 }

@@ -19,7 +19,6 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
         setIsInputFocused,
     } = useSearch();
 
-    
     const [showRadicals, setShowRadicals] = useState(false);
     const [showDrawingboard, setShowDrawingboard] = useState(false);
 
@@ -36,7 +35,6 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
 
     return (
         <div className="col-start-4 col-end-9 my-3 grid grid-cols-12 relative">
-           
             <div className="grid grid-cols-12 col-span-full shadow-slate-300 box-border">
                 <button 
                     type="button"
@@ -99,8 +97,8 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     ))}
                 </ul>
             )}
-            {showRadicals && (<RadicalSearch />)}
-            {showDrawingboard && (<DrawingSearch />)}
+            {showRadicals && (<RadicalSearch onKanjiSelection={onKanjiSelection}/>)}
+            {showDrawingboard && (<DrawingSearch onKanjiSelection={onKanjiSelection}/>)}
         </div>
     );
 }

@@ -4,9 +4,12 @@ import axios from "axios";
 import { FC, useEffect, useState } from "react";
 import { FaRotateRight } from "react-icons/fa6";
 
+interface IRadicalSearchProps{
+    onKanjiSelection: (id: string) => void;
+}
 
 
-const RadicalSearch: FC = () => {
+const RadicalSearch: FC<IRadicalSearchProps> = ({onKanjiSelection}) => {
 
     const kanjiRadicals = [
         ["1", ["一", "丨", "丶", "丿", "乙 ", "亅"]],
@@ -30,14 +33,13 @@ const RadicalSearch: FC = () => {
     const [selectedRadicals, setSelectedRadicals] = useState<Set<string>>(new Set());
     const [matchingKanjis, setMatchingKanjis] = useState([]);
 
-    const onRadicalClick = (item: string) => {
+    const onRadicalClick = async (item: string) => {
         //Manages the radicals state
         if (selectedRadicals.has(item)) {
             setSelectedRadicals(
                 (prevSet) => {
                     const newSet = new Set(prevSet);
                     newSet.delete(item);
-                    console.log(newSet);
                     return newSet;
                 }
             );
@@ -48,16 +50,19 @@ const RadicalSearch: FC = () => {
 
     const onResetTileClick = () => {
         setSelectedRadicals(new Set());
+        setMatchingKanjis([]);
     }
 
     //Todo: debounce
     useEffect(() => {
         //Sends request
         async function getMatchingKanjis() {
-            const radicals = [...selectedRadicals].join("");
-            const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/radicals/${radicals}`;
-            const response = await axios.get(serverUrl);
-            setMatchingKanjis(response.data);
+            if(selectedRadicals) {
+                const radicals = [...selectedRadicals].join("");
+                const endpointURL = `http://127.0.0.1:5000/studyData/kanjis/search/radical_search/${radicals}`;
+                const response = await axios.get(endpointURL);
+                setMatchingKanjis(response.data);
+            }
         }
         getMatchingKanjis();
     }, [selectedRadicals]);
@@ -104,7 +109,6 @@ const RadicalSearch: FC = () => {
                         </div>
                     </div>
                 ))}
-
             </div>
         </div>
     )

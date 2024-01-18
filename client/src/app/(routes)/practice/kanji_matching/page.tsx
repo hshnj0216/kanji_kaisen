@@ -24,7 +24,7 @@ const KanjiMatching: FC = () => {
                     <KanjiMatchBoard kanjiMeaningPairs={kanjiMeaningPairs} />
                 )
             ) : (
-                <GradeSelection onGradeSelection={onGradeSelection} pageName="Kanji Matching"></GradeSelection>
+                <GradeSelection onGradeSelection={onGradeSelection} pageName="Kanji Matching" />
             )}
         </>
     )

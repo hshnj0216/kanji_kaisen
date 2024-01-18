@@ -7,11 +7,12 @@ const useSearch = () => {
     const [searchSuggestions, setSearchSuggestions] = useState([]);
 
 
-    //Handle suggestive search
+    //Handles suggestive search
+    //Makes request to the server for every input change
     useEffect(() => {
         async function getMatchingSuggestions() {
             try {
-                const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/search/${inputValue}`;
+                const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/search/field_search/${inputValue}`;
                 const response = await axios.get(serverUrl);
                 setSearchSuggestions(response.data);
             } catch (error) {
@@ -24,10 +25,16 @@ const useSearch = () => {
         getMatchingSuggestions();
     }, [inputValue]);
 
+    //Handles the selection from list of suggested results
     const handleSuggestionClick = (selectedValue: string) => {
-        console.log(selectedValue);
         setInputValue(selectedValue);
-    };
+    }; 
+
+    //Handle the mouse up event on the canvas
+    //Makes request to the .NET web API for inferrence
+    const inferOnMouseUp = () => {
+
+    }
 
     return {
         inputValue,

@@ -1,14 +1,35 @@
 "use client";
 
 import { FC } from "react";
-import Canvas from "@/app/_components/Canvas";
+import GradeSelection from "@/app/_components/(practice)/GradeSelection";
+import useKanjiDrawing from "@/app/_custom_hooks/useKanjiDrawing";
+import LoadingIndicator from "@/app/_components/LoadingIndicator";
+import DrawTheKanjiBoard from "@/app/_components/(practice)/(draw_the_kanji)/DrawTheKanjiBoard";
+
 const DrawTheKanji: FC = () => {
+
+    const {
+        isLoading, 
+        isPlayMode, 
+        onGradeSelection,
+        onDrawingSubmission,
+        currentKanji,
+    } = useKanjiDrawing();
+
     return(
-        <div>
-            <h1 className="text-slate-50 text-9xl">Draw the kanji</h1>
-            <Canvas></Canvas>
-        </div>
+       <>
+            {isPlayMode ? (
+                isLoading ? (
+                    <LoadingIndicator />
+                ) : (
+                    <DrawTheKanjiBoard 
+                        onDrawingSubmission={onDrawingSubmission}
+                        currentKanji={currentKanji}
+                    />
+                )
+            ) : (<GradeSelection onGradeSelection={onGradeSelection} pageName="Draw the kanji"/>)}
+       </>
     )
-}
+} 
 
 export default DrawTheKanji;

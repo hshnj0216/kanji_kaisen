@@ -1,7 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
-import axios from 'axios';
+//This hook houses the functionalities for the Canvas component
+import { useEffect, useState, useRef } from "react";
 
-const useCanvasDrawing = () => {
+const useDrawing = () => {
     const [isDrawing, setIsDrawing] = useState(false);
 	const canvasRef = useRef(null);
 	let lastPos = null;
@@ -28,7 +28,7 @@ const useCanvasDrawing = () => {
 		const ctx = canvasRef.current.getContext('2d');
 		ctx.fillStyle = 'white';
 		ctx.strokeStyle = 'white';
-		ctx.lineWidth = 10;
+		ctx.lineWidth = 8;
 		ctx.beginPath();
 		if (lastPos) {
 			ctx.moveTo(lastPos.x, lastPos.y);
@@ -74,22 +74,7 @@ const useCanvasDrawing = () => {
 		ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
 	};
 
-    const submitDrawing = async () => {
-        const canvas = canvasRef.current;
-        const dataURL = canvas.toDataURL('image/png');
-
-        // Remove the prefix from the dataURL
-        const base64Image = dataURL.replace(/^data:image\/png;base64,/, "");
-
-        try {
-            const response = await axios.post('http://localhost:5000/practiceData/imageClassification', { image: base64Image });
-            console.log(response.data);
-        } catch (error) {
-            console.error('Error:', error);
-        }
-
-    }
-
+   
 	useEffect(() => {
 		const canvas = canvasRef.current;
 
@@ -98,23 +83,21 @@ const useCanvasDrawing = () => {
 			lastPos = null;
 		};
 
-		canvas.addEventListener('mousedown', handleMouseDown);
-		canvas.addEventListener('mousemove', handleMouseMove);
+		canvas?.addEventListener('mousedown', handleMouseDown);
+		canvas?.addEventListener('mousemove', handleMouseMove);
 		document.addEventListener('mouseup', handleMouseUpOutsideCanvas);
 
 		return () => {
-			canvas.removeEventListener('mousedown', handleMouseDown);
-			canvas.removeEventListener('mousemove', handleMouseMove);
+			canvas?.removeEventListener('mousedown', handleMouseDown);
+			canvas?.removeEventListener('mousemove', handleMouseMove);
 			document.removeEventListener('mouseup', handleMouseUpOutsideCanvas);
 		};
 	}, [handleMouseDown, handleMouseMove]);
 
     return {
-		canvasRef,
-		isDrawing,
-		clearCanvas,
-        submitDrawing,
-	};
+        canvasRef,
+        clearCanvas,
+    }
 }
 
-export default useCanvasDrawing;
+export default useDrawing;
