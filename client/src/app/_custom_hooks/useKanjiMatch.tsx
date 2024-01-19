@@ -9,6 +9,7 @@ const useKanjiMatch = () => {
 
     const onGradeSelection = async (grade: number) => {
         try{
+            setIsLoading(true);
             const response = await axios.get(`http://localhost:5000/practiceData/kanjiMatchData/${grade}`);
             setKanjiMeaningPairs(response.data);
             setIsLoading(false);

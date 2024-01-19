@@ -21,7 +21,7 @@ module.exports = {
       },
       textWrap: {
         'balance': 'balance',
-      }
+      },
     }
    
   },

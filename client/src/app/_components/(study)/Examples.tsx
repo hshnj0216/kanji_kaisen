@@ -14,7 +14,7 @@ const Examples: FC<IExamples> = ({ examples }) => {
     const limitedExamples = examples.slice(0, 5);
     const audioRefs = useRef<HTMLAudioElement[]>([]);
     
-    const handlePlay = (index) => {
+    const handlePlay = (index: number) => {
         if (audioRefs.current[index]) {
             audioRefs.current[index].play();
         }

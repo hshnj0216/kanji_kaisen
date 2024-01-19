@@ -76,28 +76,44 @@ const useDrawing = () => {
 
    
 	useEffect(() => {
-		const canvas = canvasRef.current;
+        const canvas = canvasRef.current;
 
-		const handleMouseUpOutsideCanvas = () => {
-			setIsDrawing(false);
-			lastPos = null;
-		};
+        const handleMouseUpOutsideCanvas = () => {
+            setIsDrawing(false);
+            lastPos = null;
+        };
 
-		canvas?.addEventListener('mousedown', handleMouseDown);
-		canvas?.addEventListener('mousemove', handleMouseMove);
-		document.addEventListener('mouseup', handleMouseUpOutsideCanvas);
+        const handleMouseDown = (e) => {
+            if (isInsideCanvas(e)) {
+                setIsDrawing(true);
+                const pos = getMousePos(e);
+                drawLine(pos);
+            }
+        };
 
-		return () => {
-			canvas?.removeEventListener('mousedown', handleMouseDown);
-			canvas?.removeEventListener('mousemove', handleMouseMove);
-			document.removeEventListener('mouseup', handleMouseUpOutsideCanvas);
-		};
-	}, [handleMouseDown, handleMouseMove]);
+        const handleMouseMove = (e) => {
+            if (isDrawing && isInsideCanvas(e)) {
+                const pos = getMousePos(e);
+                drawLine(pos);
+            }
+        };
+
+        canvas?.addEventListener('mousedown', handleMouseDown);
+        canvas?.addEventListener('mousemove', handleMouseMove);
+        document.addEventListener('mouseup', handleMouseUpOutsideCanvas);
+
+        // Cleanup function
+        return () => {
+            canvas?.removeEventListener('mousedown', handleMouseDown);
+            canvas?.removeEventListener('mousemove', handleMouseMove);
+        };
+
+    }, [isDrawing, handleMouseDown, handleMouseMove]);
 
     return {
         canvasRef,
         clearCanvas,
-    }
-}
+    };
+};
 
 export default useDrawing;

@@ -9,6 +9,7 @@ interface IGradeSelectionProps{
 }
 
 const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection, pageName}) => {
+    const grades = [1, 2, 3, 4, 5, 6];
     return (
         <div className="flex flex-col w-full h-full justify-center ">
             <div className="box-border grid grid-cols-12 grid-rows-3 px-5 h-36 justify-items-start">
@@ -22,12 +23,8 @@ const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection, pageName}) 
                 </div>
             </div>
             <div className="flex">
-                <ModeCard title="Grade 1" description="" onClick={() => onGradeSelection(1)}></ModeCard>
-                <ModeCard title="Grade 2" description="" onClick={() => onGradeSelection(2)}></ModeCard>
-                <ModeCard title="Grade 3" description="" onClick={() => onGradeSelection(3)}></ModeCard>
-                <ModeCard title="Grade 4" description="" onClick={() => onGradeSelection(4)}></ModeCard>
-                <ModeCard title="Grade 5" description="" onClick={() => onGradeSelection(5)}></ModeCard>
-                <ModeCard title="Grade 6" description="" onClick={() => onGradeSelection(6)}></ModeCard>
+                {grades.map(grade => <ModeCard key={grade} title={`Grade ${grade}`} description="" 
+                    onClick={() => onGradeSelection(grade)} isDisabled={false}/>)}
             </div>
         </div>
     )

@@ -1,6 +1,8 @@
 "use client";
 
 import {FC} from "react";
+import SpinnerLoadingIndicator from "../SpinnerLoadingIndicator";
+import BouncingBallLoadingIndicator from "../BouncingBallsLoadingIndicator";
 
 const MainScreen: FC = () => {
     return (
@@ -13,6 +15,8 @@ const MainScreen: FC = () => {
                 <p>Kanji game 2</p>
                 <button>Find match</button>
             </div>
+            <SpinnerLoadingIndicator />
+            <BouncingBallLoadingIndicator />
         </div>
     )
 }

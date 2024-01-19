@@ -11,10 +11,10 @@ const Canvas: FC<ICanvasProps> = ({onMouseUp, onDrawingSubmission, clearInferred
 	const {canvasRef, clearCanvas} = useDrawing();
 
 	return (
-		<div className="flex items-center flex-col items-center justify-center p-5 h-1/2
+		<div className="flex flex-col items-center justify-center p-5 h-1/2
 				 border-slate-50 cursor-crosshair"
 		>
-			<div className="grid grid-cols-1 grid-rows-1 bg-red-500 p-3 m-3">
+			<div className="grid grid-cols-1 grid-rows-1 p-3 m-3 mb-1">
 				<canvas
 					className="col-start-1 col-end-2 row-start-1 row-end-2 border border-slate-50 bg-black z-0"
 					width={224}
@@ -28,11 +28,10 @@ const Canvas: FC<ICanvasProps> = ({onMouseUp, onDrawingSubmission, clearInferred
 					<div className="border border-slate-50 border-opacity-80"></div>
 					<div className="border border-slate-50 border-opacity-80"></div>
 					<div className="border border-slate-50 border-opacity-80"></div>
-
 				</div>
 			</div>
 
-			<div className="flex justify-between">
+			<div className={`flex ${onDrawingSubmission? "justify-evenly" : "justify-center"} w-full mx-5`}>
 				<button
 					type="button"
 					title="Clear canvas"
@@ -52,7 +51,7 @@ const Canvas: FC<ICanvasProps> = ({onMouseUp, onDrawingSubmission, clearInferred
 						type="button"
 						title="Submit drawing"
 						onClick={() => onDrawingSubmission(canvasRef?.current?.toDataURL('image/png'))}
-						className="border rounded px-3 bg-slate-300 text-white"
+						className="border rounded px-3 bg-slate-50 text-black"
 					>
 						Submit
 					</button>

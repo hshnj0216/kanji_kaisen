@@ -3,8 +3,8 @@
 import { FC } from "react";
 import GradeSelection from "@/app/_components/(practice)/GradeSelection";
 import useKanjiDrawing from "@/app/_custom_hooks/useKanjiDrawing";
-import LoadingIndicator from "@/app/_components/LoadingIndicator";
 import DrawTheKanjiBoard from "@/app/_components/(practice)/(draw_the_kanji)/DrawTheKanjiBoard";
+import BouncingBallLoadingIndicator from "@/app/_components/BouncingBallsLoadingIndicator";
 
 const DrawTheKanji: FC = () => {
 
@@ -18,16 +18,15 @@ const DrawTheKanji: FC = () => {
 
     return(
        <>
-            {isPlayMode ? (
-                isLoading ? (
-                    <LoadingIndicator />
-                ) : (
+            {isPlayMode ? ( 
                     <DrawTheKanjiBoard 
                         onDrawingSubmission={onDrawingSubmission}
                         currentKanji={currentKanji}
                     />
-                )
-            ) : (<GradeSelection onGradeSelection={onGradeSelection} pageName="Draw the kanji"/>)}
+                ) : (
+                isLoading ? (<BouncingBallLoadingIndicator />) : 
+                (<GradeSelection onGradeSelection={onGradeSelection} pageName="Draw the kanji"/>)
+            )}
        </>
     )
 } 

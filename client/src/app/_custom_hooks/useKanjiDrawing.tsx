@@ -14,7 +14,6 @@ const useKanjiDrawing = () => {
         console.log("onGradeSelection called");
         const endpointURL = `http://localhost:5000/practiceData/drawTheKanjiData/${grade}`;
         const response = await axios.get(endpointURL);
-        console.log(response.data);
         setKanjis(response.data);
         setIsPlayMode(true);
         setIsLoading(false);

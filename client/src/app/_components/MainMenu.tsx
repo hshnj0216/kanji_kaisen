@@ -1,15 +1,20 @@
 "use client";
 import { FC, useEffect, useState } from "react";
 import Link from "next/link";
+import ModeCard from "./(practice)/ModeCard";
 
 const MainMenu: FC = (  ) => {
     return (
-        <div className="bg-slate-300 p-3 rounded w-full sm:w-8/12 md:w-6/12 lg:w-4/12 lg:h-1/2">
-            <div className="flex flex-col">
-                <Link href="/study" className="bg-slate-500 text-white my-5 p-3 text-center rounded">Study</Link>
-                <Link href="/practice" className="bg-slate-500 text-white my-5 p-3 text-center rounded">Practice</Link>
-                <Link href="/multiplayer" className="bg-slate-500 text-white my-5 p-3 text-center rounded">Multiplayer</Link>
-            </div>
+        <div className="flex">
+             <Link href="/study">
+                    <ModeCard title="Study" description="Study kanjis." isDisabled={false}/>
+             </Link>
+             <Link href="/practice">
+                    <ModeCard title="Practice" description="Test your kanji knowledge." isDisabled={false}/>
+             </Link>
+             <Link href="/multiplayer">
+                    <ModeCard title="Multiplayer" description="Compete with others." isDisabled={false}/>
+             </Link>
         </div>
     )
 
