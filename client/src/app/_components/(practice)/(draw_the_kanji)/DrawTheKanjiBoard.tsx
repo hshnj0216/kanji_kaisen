@@ -2,8 +2,12 @@
 import { FC } from "react";
 import Canvas from "../../Canvas";
 
+interface IDrawTheKanjiBoardProps{
+    currentKanji: any;
+    onDrawingSubmission: (dataURL: string) => void;
+}
  
-const DrawTheKanjiBoard = ({onDrawingSubmission, currentKanji}) => {
+const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({onDrawingSubmission, currentKanji}) => {
 
     return (
         <div className="h-full w-full flex flex-col items-center justify-center p-3 border border-slate-50 rounded">

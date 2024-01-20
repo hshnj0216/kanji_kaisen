@@ -2,12 +2,11 @@ import { MutableRefObject, RefObject, FC } from "react";
 import useDrawing from "../_custom_hooks/useDrawing";
 
 interface ICanvasProps {
-	onMouseUp?: (dataURL: string) => void;
-	onDrawingSubmission?: (dataURL: string) => void;
+	onDrawingSubmission: (dataURL: string) => void;
 	clearInferredKanjis?: () => void;
 }
 
-const Canvas: FC<ICanvasProps> = ({onMouseUp, onDrawingSubmission, clearInferredKanjis }) => {
+const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis}) => {
 	const {canvasRef, clearCanvas} = useDrawing();
 
 	return (
@@ -20,8 +19,6 @@ const Canvas: FC<ICanvasProps> = ({onMouseUp, onDrawingSubmission, clearInferred
 					width={224}
 					height={224}
 					ref={canvasRef}
-					onMouseUp={onMouseUp ? ()=>onMouseUp(canvasRef?.current?.toDataURL('image/png')) : undefined}
-
 				/>
 				<div className="col-start-1 col-end-2 row-start-1 row-end-2 grid grid-cols-2 grid-rows-2 z-20 h-56 pointer-events-none">
 					<div className="border border-slate-50 border-opacity-80"></div>
@@ -31,7 +28,7 @@ const Canvas: FC<ICanvasProps> = ({onMouseUp, onDrawingSubmission, clearInferred
 				</div>
 			</div>
 
-			<div className={`flex ${onDrawingSubmission? "justify-evenly" : "justify-center"} w-full mx-5`}>
+			<div className={`flex justify-evenly w-full mx-5`}>
 				<button
 					type="button"
 					title="Clear canvas"
@@ -46,17 +43,14 @@ const Canvas: FC<ICanvasProps> = ({onMouseUp, onDrawingSubmission, clearInferred
 				>
 					Clear
 				</button>
-				{onDrawingSubmission && (
-					<button
+				<button
 						type="button"
 						title="Submit drawing"
 						onClick={() => onDrawingSubmission(canvasRef?.current?.toDataURL('image/png'))}
 						className="border rounded px-3 bg-slate-50 text-black"
 					>
 						Submit
-					</button>
-				)}
-
+				</button>
 			</div>
 		</div>
 	);

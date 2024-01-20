@@ -12,9 +12,9 @@ const DrawingSearch: FC<IDrawingSearchProps> = ({onKanjiSelection}) => {
     const [inferredKanjis, setInferredKanjis] = useState([]);
     const {isLoading, setIsLoading} = useLoading();
 
-    const onMouseUp = async (dataURL: string) => {
+    const onDrawingSubmission = async (dataURL: string) => {
         const base64Image = dataURL.replace(/^data:image\/png;base64,/, "");
-        const endpointURL = "http://127.0.0.1:5000/studyData/kanjis/search/infer";
+        const endpointURL = process.env.INFER_CLASSES_URL;
         setIsLoading(true);
         const response = await axios.post(endpointURL, {image: base64Image});
         setInferredKanjis(response.data);
@@ -30,7 +30,7 @@ const DrawingSearch: FC<IDrawingSearchProps> = ({onKanjiSelection}) => {
         <div className="bg-slate-300 p-2 border-b rounded-b absolute top-full z-10 w-full 
             grid grid-cols-12 grid-rows-6 max-h-80 overflow-scroll overflow-x-hidden">
                 <div className="col-start-1 col-span-8 row-span-6 flex items-center">
-                    <Canvas onMouseUp={onMouseUp} clearInferredKanjis={clearInferredKanjis}/>
+                    <Canvas onDrawingSubmission={onDrawingSubmission} clearInferredKanjis={clearInferredKanjis}/>
                 </div>
                 <div className="col-span-4 row-span-6 grid grid-cols-4 gap-2 cursor-pointer p-2">
                     {isLoading ? (
