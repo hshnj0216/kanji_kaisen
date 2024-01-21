@@ -55,20 +55,13 @@ router.get("/kanjis/search/radical_search/:radicals", async (req, res) => {
 	try {
 		const { radicals } = req.params;
 
-		console.log(radicals);
-		console.log("request made here");
-		let startTime = performance.now();
 		let radicalsString = radicals.replace(/\s/g, "");
 
 		let tags = radicalsString
 			.split("")
 			.filter((char) => char.trim() !== "");
 
-		console.log(tags);
-
 		let query = `@rad_search: {${tags.join(" | ")}}`;
-
-		console.log(query);
 
 		const result = await client.ft.search("idx:kanjis", query, {
 			LIMIT: {
@@ -97,9 +90,6 @@ router.get("/kanjis/search/radical_search/:radicals", async (req, res) => {
 				});
 			}
 		}
-		let endTime = performance.now();
-		let duration = endTime - startTime;
-		console.log(`It took: ${duration}`);
 		res.json(matches);
 	} catch (error) {
 		console.log(error.message);
@@ -108,7 +98,6 @@ router.get("/kanjis/search/radical_search/:radicals", async (req, res) => {
 
 //Handle the drawing inferrence
 router.post("/kanjis/search/infer", async (req, res) => {
-	console.log("request made to infer");
 	let imageBase64 = req.body.image;
 	let imageBuffer = Buffer.from(imageBase64, "base64");
 

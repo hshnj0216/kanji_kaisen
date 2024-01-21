@@ -1,6 +1,7 @@
 "use client";
 import { FC, useState } from "react";
 import CountDownTimer from "../CountDownTimer";
+import Link from "next/link";
 
 interface IReadyProps {
     isReady: boolean;
@@ -21,11 +22,19 @@ const Ready: FC<IReadyProps> = ({ setIsReady, isReady }) => {
                 <CountDownTimer />
                 : <div className="bg-slate-800 border rounded border-slate-50 flex flex-col justify-center items-center w-1/2 h-1/2">
                     <p className="mb-5 text-9xl text-slate-50 ">Ready?</p>
-                    <button type="button" className="py-3 px-5 bg-slate-50 border rounded text-lg"
-                        onClick={startCountdown}
-                    >
-                        Ready
-                    </button>
+                    <div className="w-full flex justify-evenly mt-3">
+                            <button type="button" className="py-3 px-5 bg-slate-50 border rounded text-lg"
+                                onClick={startCountdown}
+                            >
+                                Ready
+                            </button>
+                            <Link href="/practice/kanji_matching">
+                            <button type="button"  className="py-3 px-5 bg-slate-50 border rounded text-lg">
+                            
+                                    Return
+                            </button>
+                            </Link>
+                    </div>
                 </div>
             }
         </>

@@ -4,23 +4,39 @@ import useLoading from "./useLoading";
 
 const useKanjiQuiz = () => {
     const [fullQuizItems, setFullQuizItems] = useState([]);
-    const [isPlayMode, setIsPlayMode] = useState(false);
+    const [isPlayMode, setIsPlayMode] = useState<boolean>(false);
     const {isLoading, setIsLoading} = useLoading();
+    const [grade, setGrade] = useState<number>();
+    const [testSize, setTestSize] = useState<number>();
+    const [hasSelectedTestSize, setHasSelectedTestSize] = useState<boolean>(false);
+    const [hasSelectedGrade, setHasSelectedGrade] = useState<boolean>(false);
 
 
-    const onGradeSelection = async (grade: number) => {
-        try {
-            setIsLoading(true);
-            const response = await axios.get(`http://localhost:5000/practiceData/kanjiRecognitionData/${grade}`);
-            setFullQuizItems(response.data);
-            setIsLoading(false);
-            setIsPlayMode(true);
-        } catch (error) {
-            console.error(error);
-        }
+    const onGradeSelection = (grade: number) => {
+        setGrade(grade);
+        setHasSelectedGrade(true);
     };
 
-    return { fullQuizItems, isPlayMode, onGradeSelection, setIsPlayMode, isLoading };
+    const onTestSizeSelection = async (testSize: number) => {
+        console.log("onTestSizeSelection clicked");
+        setTestSize(testSize);
+        setHasSelectedTestSize(true);
+        setIsLoading(true);
+        const response = await axios.get(`http://localhost:5000/practiceData/kanjiRecognitionData/${grade}/${testSize}`);
+        setFullQuizItems(response.data);
+        setIsLoading(false);
+        setIsPlayMode(true);
+    }
+
+    return { fullQuizItems, 
+        isPlayMode, 
+        onGradeSelection, 
+        setIsPlayMode, 
+        isLoading, 
+        onTestSizeSelection, 
+        hasSelectedTestSize,
+        hasSelectedGrade,
+    };
 }
 
 export default useKanjiQuiz;

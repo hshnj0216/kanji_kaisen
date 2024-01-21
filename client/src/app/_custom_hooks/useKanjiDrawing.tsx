@@ -9,13 +9,23 @@ const useKanjiDrawing = () => {
     const [currentKanji, setCurrentKanji] = useState();
     const [currentKanjiIndex, setCurrentKanjiIndex] = useState(0);
     const {isLoading, setIsLoading} = useLoading();
+    const [grade, setGrade] = useState<number>();
+    const [hasSelectedGrade, setHasSelectedGrade] = useState<boolean>(false);
+    const [testSize, setTestSize] = useState<number>();
+    const [hasSelectedTestSize, setHasSelectedTestSize] = useState<boolean>(false);
    
 
-    const onGradeSelection = async (grade: number) => {
-        const endpointURL = `http://localhost:5000/practiceData/drawTheKanjiData/${grade}`;
+    const onGradeSelection = (grade: number) => {
+       setGrade(grade);
+       setHasSelectedGrade(true);
+    }
+
+    const onTestSizeSelection = async (testSize: number) => {
+        setTestSize(testSize);
+        setHasSelectedTestSize(true);
+        const endpointURL = `http://localhost:5000/practiceData/drawTheKanjiData/${grade}/${testSize}`;
         const response = await axios.get(endpointURL);
         setKanjis(response.data);
-        setIsPlayMode(true);
         setIsLoading(false);
     }
 
@@ -24,7 +34,7 @@ const useKanjiDrawing = () => {
         // Remove the prefix from the dataURL
         const base64Image = dataURL.replace(/^data:image\/png;base64,/, "");
         try {
-            const response = await axios.post(process.env.IMAGE_CLASSIFICATION_URL, { image: base64Image, kanji_utf: currentKanji?.ka_utf });
+            const response = await axios.post(process.env.IMAGE_CLASSIFICATION_URL, { image: base64Image, kanji_utf: currentKanji?.ka_utf});
             let isCorrect = response.data;
             setCurrentKanjiIndex(prevVal => prevVal + 1);
             if(isCorrect) {
@@ -49,7 +59,9 @@ const useKanjiDrawing = () => {
         isLoading,
         setIsLoading,
         isPlayMode,
-        setIsPlayMode,
+        onTestSizeSelection,
+        hasSelectedGrade,
+        hasSelectedTestSize,
     }
 }
 

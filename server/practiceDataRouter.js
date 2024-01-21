@@ -4,6 +4,7 @@ import { client } from "./server.js";
 import FormData from "form-data";
 import axios from "axios";
 
+//Gets up to 300 kanjis for a given grade
 async function getKanjisByGrade(grade) {
 	const response = await client.ft.search(
 		"idx:kanjis",
@@ -18,6 +19,7 @@ async function getKanjisByGrade(grade) {
 	return response.documents;
 }
 
+//Returns an array unique elements of specified size from the given array
 function getUniqueSubset(array, size) {
   const shuffledArray = array.slice();
 
@@ -43,35 +45,31 @@ function getUniqueSubset(array, size) {
 }
 
 //Endpoint that provides data for the kanji recognition
-router.get("/kanjiRecognitionData/:grade", async (req, res) => {
+router.get("/kanjiRecognitionData/:grade/:testSize", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
-  // Pick 30 random items from the data
-  // Items should be unique
-  let { grade } = req.params;
+  let { grade, testSize } = req.params;
   
   const kanjiGroup = await getKanjisByGrade(grade);
 
-  const randomItems = getUniqueSubset(kanjiGroup, 30);
+  const randomItems = getUniqueSubset(kanjiGroup, testSize);
 
   res.send(randomItems);
 });
 
 //Endpoint that provides data for kanji match
-router.get("/kanjiMatchData/:grade", async (req, res) => {
+router.get("/kanjiMatchData/:grade/:testSize", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
 
-  let { grade } = req.params;
+  let { grade, testSize } = req.params;
 
   const kanjiGroup = await getKanjisByGrade(grade);
 
   const randomKanjis = new Set();
 
   //Add random kanjis to the set
-  while (randomKanjis.size < 15) {
-    //console.log(`Size: ${randomKanjis.size}`);
+  while (randomKanjis.size < testSize) {
     let randomIndex = Math.floor(Math.random() * kanjiGroup.length);
-    //console.log(`Random Index: ${randomIndex}`);
     let randomKanji = kanjiGroup[randomIndex];
     randomKanjis.add(randomKanji.value);
   }
@@ -92,8 +90,6 @@ router.get("/kanjiMatchData/:grade", async (req, res) => {
     kanjiMeaningPairArray.push(kanji.meaning);
   }
 
-  console.log(kanjiMeaningPairArray);
-
   //Scramble the kanjiMeaningPairs array
   for (let i = kanjiMeaningPairArray.length - 1; i > 0; i--) {
     let j = Math.floor(Math.random() * (i + 1));
@@ -107,11 +103,11 @@ router.get("/kanjiMatchData/:grade", async (req, res) => {
 });
 
 //Endpoint for draw the kanji
-router.get("/drawTheKanjiData/:grade", async (req, res) => {
+router.get("/drawTheKanjiData/:grade/:testSize", async (req, res) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
-	const {grade} = req.params;
+	const { grade, testSize } = req.params;
 	const kanjiGroup = await getKanjisByGrade(grade);
-	const randomItems = getUniqueSubset(kanjiGroup, 10);
+	const randomItems = getUniqueSubset(kanjiGroup, testSize);
 	res.send(randomItems);
 });
 

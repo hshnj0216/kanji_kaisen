@@ -2,7 +2,7 @@ import { FC } from "react";
 import styles from '@/app/styles/practice.module.scss';
 
 interface IModeCardProp {
-    title: string;
+    title: string | number;
     description?: string;
     isDisabled: boolean;
     onClick?: () => void;

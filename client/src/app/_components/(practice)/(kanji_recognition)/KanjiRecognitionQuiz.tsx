@@ -23,24 +23,19 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
 
     // Shuffle an array using sort() and Math.random()
     function shuffle(array: Array<any>) {
-        console.log('Array before shuffling:', array);
         const shuffledArray = array.slice().sort(() => Math.random() - 0.5);
-        console.log('Array after shuffling:', shuffledArray);
         return shuffledArray;
     }
 
     const generateFalseOptions = (correctAnswer: IQuizItem) => {
         // Filter out the correct answer from the quizItems array
         let filteredQuizItems = fullQuizItems.filter(item => item !== correctAnswer);
-        console.log(`Correct answer: ${correctAnswer}`);
         // Randomly select two false options from the filteredQuizItems array
         let falseOption1 = filteredQuizItems[Math.floor(Math.random() * filteredQuizItems.length)];
         // Remove falseOption1 from filteredQuizItems
         filteredQuizItems = filteredQuizItems.filter(item => item !== falseOption1);
         // Now select falseOption2
         let falseOption2 = filteredQuizItems[Math.floor(Math.random() * filteredQuizItems.length)];
-        console.log()
-
         return [falseOption1, falseOption2];
     };
 
@@ -58,9 +53,6 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
             setOptions(shuffledOptions);
             // Update quizItem state
             setQuizItem(updatedQuizItem);
-            console.log('Generated options:', generatedOptions);
-            console.log('Shuffled options:', shuffledOptions);
-            console.log('Shuffled options length:', shuffledOptions.length);
             setIsOptionSelected(false);
             setSelectedOption("");
         } else {
@@ -71,7 +63,6 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
     useEffect(() => {
         if (quizItems.length > 0 && !isQuizOver) {
             onQuizItemComplete();
-
         }
     }, []);
 
@@ -121,7 +112,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
                 <div className="w-1/2 border rounded p-3 border-slate-50 flex-col justify-center items-center mt-8">
                     <div className="mb-5">
                         <p className="text-7xl text-slate-50 text-center">You scored:</p>
-                        <p className="text-9xl text-slate-50 text-center">{score}/30</p>
+                        <p className="text-9xl text-slate-50 text-center">{score}/{quizItems.length}</p>
                     </div>
                     <div className="flex justify-center">
                         <Link href="/">

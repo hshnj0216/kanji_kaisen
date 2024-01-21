@@ -3,6 +3,7 @@
 import {FC} from "react";
 import SpinnerLoadingIndicator from "../SpinnerLoadingIndicator";
 import BouncingBallLoadingIndicator from "../BouncingBallsLoadingIndicator";
+import TestSizeSetter from "../(practice)/TestSizeSetter";
 
 const MainScreen: FC = () => {
     return (
@@ -15,6 +16,7 @@ const MainScreen: FC = () => {
                 <p>Kanji game 2</p>
                 <button>Find match</button>
             </div>
+            <TestSizeSetter />
         </div>
     )
 }
