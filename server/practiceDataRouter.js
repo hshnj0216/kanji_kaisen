@@ -63,12 +63,13 @@ router.get("/kanjiMatchData/:grade/:testSize", async (req, res) => {
 
   let { grade, testSize } = req.params;
 
+
   const kanjiGroup = await getKanjisByGrade(grade);
 
   const randomKanjis = new Set();
 
   //Add random kanjis to the set
-  while (randomKanjis.size < testSize) {
+  while (randomKanjis.size < testSize / 2) {
     let randomIndex = Math.floor(Math.random() * kanjiGroup.length);
     let randomKanji = kanjiGroup[randomIndex];
     randomKanjis.add(randomKanji.value);

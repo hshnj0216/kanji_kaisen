@@ -9,12 +9,12 @@ interface ITestSizeSetter{
 
 const TestSizeSetter: FC<ITestSizeSetter> = ({onTestSizeSelection}) => {
 
-    const sizes = [10, 15, 20, 25, 30];
+    const sizes = [10, 20, 30];
 
     return (
-        <div className="flex flex-col">
-            <p className="text-slate-50">Select a test size:</p>
-            <div className="flex">
+        <div className="flex flex-col items-center justify-center h-full">
+            <p className="text-slate-50 text-7xl">Select a test size:</p>
+            <div className="flex justify-center">
                 {sizes.map(size => <ModeCard key={size} title={size} description="" isDisabled={false} onClick={() => onTestSizeSelection(size)} />)}
             </div>
         </div>

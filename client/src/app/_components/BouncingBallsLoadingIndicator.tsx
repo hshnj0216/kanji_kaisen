@@ -16,11 +16,8 @@ const BouncingBallLoadingIndicator = () => {
                 {animations.map((animation, index) => (
                     <div
                         key={index}
-                        className={`bouncing-ball bg-slate-300 rounded-full w-10 h-10`}
-                        style={{ 
-                            animation: `bounce 1s ${animation} infinite alternate`,
-                            animationDelay: `${index * 0.2}s`
-                        }}
+                        className={`bouncing-ball animate-cubic-bounce bg-slate-300 rounded-full w-10 h-10 transform-gpu`}
+                        style={{ animationDelay: `${(index+1)*200}ms` }}
                     />
                 ))}
             </div>

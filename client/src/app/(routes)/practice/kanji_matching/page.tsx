@@ -9,7 +9,6 @@ import TestSizeSetter from "@/app/_components/(practice)/TestSizeSetter";
 const KanjiMatching: FC = () => {
     const {
         kanjiMeaningPairs,
-        isPlayMode,
         onGradeSelection,
         isLoading,
         hasSelectedGrade,
@@ -32,7 +31,7 @@ const KanjiMatching: FC = () => {
                                 ) :
 
                                 ( /* If the app is not loading, display the KanjiRecognitionQuiz component */
-                                    <KanjiMatchBoard kanjiMeaningPairs={kanjiMeaningPairs}/>
+                                    <KanjiMatchBoard kanjiMeaningPairs={kanjiMeaningPairs} />                                            
                                 )
                         ) :
                         ( /* If a test size has been selected, display the TestSizeSetter component */

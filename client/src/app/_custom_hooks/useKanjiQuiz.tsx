@@ -18,7 +18,6 @@ const useKanjiQuiz = () => {
     };
 
     const onTestSizeSelection = async (testSize: number) => {
-        console.log("onTestSizeSelection clicked");
         setTestSize(testSize);
         setHasSelectedTestSize(true);
         setIsLoading(true);

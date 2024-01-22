@@ -11,7 +11,6 @@ const DrawTheKanji: FC = () => {
 
     const {
         isLoading, 
-        isPlayMode, 
         onGradeSelection,
         onDrawingSubmission,
         onTestSizeSelection,
@@ -34,7 +33,7 @@ const DrawTheKanji: FC = () => {
                                     <BouncingBallLoadingIndicator />
                                 ) :
 
-                                ( /* If the app is not loading, display the KanjiRecognitionQuiz component */
+                                ( /* If the app is not loading, display the DrawTheKanjiBoard component */
                                     <DrawTheKanjiBoard currentKanji={currentKanji} onDrawingSubmission={onDrawingSubmission} />
                                 )
                         ) :

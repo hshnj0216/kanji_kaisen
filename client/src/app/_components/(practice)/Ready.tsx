@@ -16,6 +16,7 @@ const Ready: FC<IReadyProps> = ({ setIsReady, isReady }) => {
             setIsReady(true);
         }, 4000);
     }
+
     return (
         <>
             {countddownStarted ?
@@ -28,12 +29,7 @@ const Ready: FC<IReadyProps> = ({ setIsReady, isReady }) => {
                             >
                                 Ready
                             </button>
-                            <Link href="/practice/kanji_matching">
-                            <button type="button"  className="py-3 px-5 bg-slate-50 border rounded text-lg">
-                            
-                                    Return
-                            </button>
-                            </Link>
+                          
                     </div>
                 </div>
             }

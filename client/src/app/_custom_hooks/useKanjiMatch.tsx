@@ -10,6 +10,8 @@ const useKanjiMatch = () => {
     const [grade, setGrade] = useState<number>();
     const [hasSelectedGrade, setHasSelectedGrade] = useState<boolean>(false);
     const {isLoading, setIsLoading} = useLoading();
+    
+    
 
     const onGradeSelection = (grade: number) => {
         setGrade(grade);
@@ -34,6 +36,8 @@ const useKanjiMatch = () => {
         onTestSizeSelection,
         hasSelectedGrade,
         hasSelectedTestSize,
+        setHasSelectedGrade,
+        setHasSelectedTestSize,
     };
 }
 
