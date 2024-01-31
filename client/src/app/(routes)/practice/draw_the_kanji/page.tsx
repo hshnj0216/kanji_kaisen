@@ -17,6 +17,8 @@ const DrawTheKanji: FC = () => {
         hasSelectedGrade,
         hasSelectedTestSize,
         currentKanji,
+        hasSubmittedDrawing,
+        onNextButtonClick,
     } = useKanjiDrawing();
 
     return(
@@ -34,7 +36,9 @@ const DrawTheKanji: FC = () => {
                                 ) :
 
                                 ( /* If the app is not loading, display the DrawTheKanjiBoard component */
-                                    <DrawTheKanjiBoard currentKanji={currentKanji} onDrawingSubmission={onDrawingSubmission} />
+                                    <DrawTheKanjiBoard currentKanji={currentKanji} onDrawingSubmission={onDrawingSubmission} 
+                                        hasSubmittedDrawing={hasSubmittedDrawing} onNextButtonClick={onNextButtonClick}
+                                    />
                                 )
                         ) :
                         ( /* If a test size has been selected, display the TestSizeSetter component */
@@ -43,7 +47,7 @@ const DrawTheKanji: FC = () => {
                 ) :
 
                 ( /* If a grade has not been selected, display the GradeSelection component */
-                    <GradeSelection onGradeSelection={onGradeSelection} pageName="Kanji Recognition" />
+                    <GradeSelection onGradeSelection={onGradeSelection} pageName="Draw the Kanji" />
                 )
             }
        </>

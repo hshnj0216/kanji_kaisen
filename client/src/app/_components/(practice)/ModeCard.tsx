@@ -18,7 +18,7 @@ const ModeCard: FC<IModeCardProp> = ({ title, description, isDisabled, onClick }
             disabled={isDisabled}
         >
             <div>
-                <h3 className="text-slate-50 text-2xl mb-3 text-center">{title}</h3>
+                <h3 className="text-slate-50 text-2xl mb-3 text-center select-none">{title}</h3>
                 {description && (<p className="text-slate-50 text-center">{description}</p>)}
             </div>
         </button>

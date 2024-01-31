@@ -18,8 +18,8 @@ const GradeSelection: FC<IGradeSelectionProps> = ({onGradeSelection, pageName}) 
                     Return to selection page
                 </Link>
                 <div className="col-start-5 col-end-10">
-                    <h1 className="text-slate-50 text-7xl text-center">{pageName}</h1>
-                    <h3 className="text-slate-50 text-4xl text-center my-3">Select a grade level</h3>
+                    <h1 className="text-slate-50 text-7xl text-center select-none">{pageName}</h1>
+                    <h3 className="text-slate-50 text-4xl text-center my-3 select-none">Select a grade level</h3>
                 </div>
             </div>
             <div className="flex">

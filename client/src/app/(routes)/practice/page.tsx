@@ -7,7 +7,7 @@ const Practice:FC = () => {
     return(
         <div className="w-full h-full flex flex-col items-center justify-center border">
             <div className="w-full box-border grid grid-cols-12 grid-rows-3 px-5 h-36 items-center">
-                <h1 className="text-7xl col-start-5 col-end-10 text-slate-50 row-start-2">Select a Game</h1>
+                <h1 className="text-7xl col-start-5 col-end-10 text-slate-50 row-start-2 select-none">Select a Game</h1>
                 <Link href="/" className="bg-slate-50 p-3 border rounded col-start-1 col-end-3 row-start-2 text-center">
                     Return to Main Menu
                 </Link>

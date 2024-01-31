@@ -13,7 +13,7 @@ const TestSizeSetter: FC<ITestSizeSetter> = ({onTestSizeSelection}) => {
 
     return (
         <div className="flex flex-col items-center justify-center h-full">
-            <p className="text-slate-50 text-7xl">Select a test size:</p>
+            <p className="text-slate-50 text-7xl select-none">Select a test size:</p>
             <div className="flex justify-center">
                 {sizes.map(size => <ModeCard key={size} title={size} description="" isDisabled={false} onClick={() => onTestSizeSelection(size)} />)}
             </div>

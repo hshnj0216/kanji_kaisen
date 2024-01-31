@@ -40,7 +40,7 @@ const KanjiMatching: FC = () => {
                 ) :
 
                 ( /* If a grade has not been selected, display the GradeSelection component */
-                    <GradeSelection onGradeSelection={onGradeSelection} pageName="Kanji Recognition" />
+                    <GradeSelection onGradeSelection={onGradeSelection} pageName="Kanji Matching" />
                 )
             }
         </>

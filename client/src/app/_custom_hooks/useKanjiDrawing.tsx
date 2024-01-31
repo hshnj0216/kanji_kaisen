@@ -13,6 +13,7 @@ const useKanjiDrawing = () => {
     const [hasSelectedGrade, setHasSelectedGrade] = useState<boolean>(false);
     const [testSize, setTestSize] = useState<number>();
     const [hasSelectedTestSize, setHasSelectedTestSize] = useState<boolean>(false);
+    const [hasSubmittedDrawing, setHasSubmittedDrawing] = useState<boolean>(false);
    
 
     const onGradeSelection = (grade: number) => {
@@ -34,9 +35,9 @@ const useKanjiDrawing = () => {
         // Remove the prefix from the dataURL
         const base64Image = dataURL.replace(/^data:image\/png;base64,/, "");
         try {
-            const response = await axios.post(process.env.IMAGE_CLASSIFICATION_URL, { image: base64Image, kanji_utf: currentKanji?.ka_utf});
-            let isCorrect = response.data;
-            setCurrentKanjiIndex(prevVal => prevVal + 1);
+            const response = await axios.post(process.env.IMAGE_CLASSIFICATION_URL, { image: base64Image, kanji_utf: currentKanji?.ka_utf});          
+            setHasSubmittedDrawing(true);
+            const isCorrect = response.data;
             if(isCorrect) {
                 setScore(prevVal => prevVal + 1);
             }
@@ -44,6 +45,13 @@ const useKanjiDrawing = () => {
         } catch (error) {
             console.error('Error:', error);
         }
+    }
+
+    const onNextButtonClick = () => {
+        if(currentKanjiIndex < testSize) {
+            setCurrentKanjiIndex(prevVal => prevVal + 1);
+        }
+        setHasSubmittedDrawing(false);
     }
 
     useEffect(() => {
@@ -62,6 +70,8 @@ const useKanjiDrawing = () => {
         onTestSizeSelection,
         hasSelectedGrade,
         hasSelectedTestSize,
+        onNextButtonClick,
+        hasSubmittedDrawing,
     }
 }
 
