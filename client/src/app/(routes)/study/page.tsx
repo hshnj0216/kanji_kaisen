@@ -7,7 +7,6 @@ import KanjiMedia from "@/app/_components/(study)/KanjiMedia";
 import Examples from "@/app/_components/(study)/Examples";
 import StrokeImages from "@/app/_components/(study)/StrokeImages";
 import Introduction from "@/app/_components/(study)/Introduction";
-import KanjiDecomposition from "@/app/_components/(study)/KanjiDecomposition";
 import Link from "next/link";
 
 
@@ -15,9 +14,6 @@ const Study: FC = () => {
 	const {
 		kanji,
 		onKanjiSelection,
-		displayDecomposition,
-		setDisplayDecomposition,
-		kanjiDecompositionProps,
 		kanjiStrokeImagesProps,
 		kanjiInfoProps,
 		kanjiMediaProps,
@@ -29,27 +25,15 @@ const Study: FC = () => {
 					Return to Main Menu
 				</Link>
 				<SearchBar onKanjiSelection={onKanjiSelection}/>
-				{kanji &&
-					<button
-						type="button"
-						onClick={() => setDisplayDecomposition(!displayDecomposition)}
-						className="bg-slate-50 border rounded p-2 hover:bg-slate-300 col-start-10 col-end-13 my-3"
-					>
-						{displayDecomposition ? "Show information" : "Show decomposition"}
-					</button>
-				}
+				
 			</div>
 			{kanji ? (
-				displayDecomposition ? (
-					<KanjiDecomposition kanjiTree={kanjiDecompositionProps.kanjiTree} />
-				) : (
-					<div className="grid lg:grid-cols-12 lg:gap-4 border-slate-50">
-						<KanjiMedia	{...kanjiMediaProps} />
-						<KanjiInfo {...kanjiInfoProps} />
-						<Examples examples={kanji?.examples}></Examples>
-						<StrokeImages {...kanjiStrokeImagesProps}></StrokeImages>
-					</div>
-				)
+				<div className="grid lg:grid-cols-12 lg:gap-4 border-slate-50">
+					<KanjiMedia	{...kanjiMediaProps} />
+					<KanjiInfo {...kanjiInfoProps} />
+					<Examples examples={kanji?.examples} />
+					<StrokeImages {...kanjiStrokeImagesProps} />
+				</div>
 			) : (
 				<Introduction />
 			)}

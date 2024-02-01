@@ -20,7 +20,7 @@ export interface IKanjiMatchBoardProps {
 
 const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
     const {
-        colSize,
+        rowSize,
         isReady,
         isGameOver,
         mismatchedKanjis,
@@ -40,19 +40,21 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                 (isGameOver ? (
                     <Results mismatchedKanjis={mismatchedKanjis} elapsedTime={elapsedTime} />
                 ) : (
-                    <div className="w-3/4">
+                    <div className="w-3/4 flex flex-col items-center justify-center">
                         <Timer onTimeUpdate={setElapsedTime} />
-                        <div className={`border rounded w-full mx-auto my-auto grid grid-cols-${colSize} grid-rows-5 gap-10 p-5`}>
+                        <div className={`border b-box rounded grid grid-cols-6 grid-rows-${rowSize} w-5/6 h-full gap-5 p-4   
+                        `}
+                        >
                             {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
                                 <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
                                     setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
                                     isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
-                                    isCorrectMatch={isCorrectMatch}
+                                    isCorrectMatch={isCorrectMatch} isKanjiCharacter={true}
                                 /> :
                                 <MatchTile key={index} title={item} isMatched={matchedTiles.includes(item)}
                                     setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
                                     isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
-                                    isCorrectMatch={isCorrectMatch}
+                                    isCorrectMatch={isCorrectMatch} isKanjiCharacter={false}
                                 />)
                             }
                         </div>

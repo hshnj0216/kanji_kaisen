@@ -5,11 +5,11 @@ import ModeCard from "./ModeCard";
 
 interface ITestSizeSetter{
     onTestSizeSelection: (grade: number) => void;
+    sizes: number[];
 }
 
-const TestSizeSetter: FC<ITestSizeSetter> = ({onTestSizeSelection}) => {
+const TestSizeSetter: FC<ITestSizeSetter> = ({onTestSizeSelection, sizes}) => {
 
-    const sizes = [10, 20, 30];
 
     return (
         <div className="flex flex-col items-center justify-center h-full">

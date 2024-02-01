@@ -11,9 +11,11 @@ const useKanjiDrawing = () => {
     const {isLoading, setIsLoading} = useLoading();
     const [grade, setGrade] = useState<number>();
     const [hasSelectedGrade, setHasSelectedGrade] = useState<boolean>(false);
-    const [testSize, setTestSize] = useState<number>();
+    const [testSize, setTestSize] = useState<number | undefined>();
     const [hasSelectedTestSize, setHasSelectedTestSize] = useState<boolean>(false);
     const [hasSubmittedDrawing, setHasSubmittedDrawing] = useState<boolean>(false);
+    const [isCorrect, setIsCorrect] = useState<boolean>(false);
+    const [isGameOver, setIsGameOver] = useState<boolean>(false);
    
 
     const onGradeSelection = (grade: number) => {
@@ -37,11 +39,11 @@ const useKanjiDrawing = () => {
         try {
             const response = await axios.post(process.env.IMAGE_CLASSIFICATION_URL, { image: base64Image, kanji_utf: currentKanji?.ka_utf});          
             setHasSubmittedDrawing(true);
-            const isCorrect = response.data;
-            if(isCorrect) {
+            setIsCorrect(response.data);
+            if(hasSubmittedDrawing && isCorrect) {
                 setScore(prevVal => prevVal + 1);
             }
-            console.log(score);
+
         } catch (error) {
             console.error('Error:', error);
         }
@@ -52,6 +54,7 @@ const useKanjiDrawing = () => {
             setCurrentKanjiIndex(prevVal => prevVal + 1);
         }
         setHasSubmittedDrawing(false);
+        setIsCorrect(false);
     }
 
     useEffect(() => {
@@ -72,6 +75,10 @@ const useKanjiDrawing = () => {
         hasSelectedTestSize,
         onNextButtonClick,
         hasSubmittedDrawing,
+        isCorrect,
+        isGameOver,
+        score,
+        testSize,
     }
 }
 

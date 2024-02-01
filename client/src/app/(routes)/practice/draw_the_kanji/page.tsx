@@ -19,6 +19,10 @@ const DrawTheKanji: FC = () => {
         currentKanji,
         hasSubmittedDrawing,
         onNextButtonClick,
+        isCorrect,
+        isGameOver,
+        score,
+        testSize,
     } = useKanjiDrawing();
 
     return(
@@ -38,11 +42,12 @@ const DrawTheKanji: FC = () => {
                                 ( /* If the app is not loading, display the DrawTheKanjiBoard component */
                                     <DrawTheKanjiBoard currentKanji={currentKanji} onDrawingSubmission={onDrawingSubmission} 
                                         hasSubmittedDrawing={hasSubmittedDrawing} onNextButtonClick={onNextButtonClick}
+                                        isCorrect={isCorrect} isGameOver={isGameOver} score={score} testSize={testSize}
                                     />
                                 )
                         ) :
                         ( /* If a test size has been selected, display the TestSizeSetter component */
-                            <TestSizeSetter onTestSizeSelection={onTestSizeSelection} />
+                            <TestSizeSetter onTestSizeSelection={onTestSizeSelection} sizes={[10, 20, 30]}/>
                         ) 
                 ) :
 

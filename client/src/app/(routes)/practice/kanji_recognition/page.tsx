@@ -36,7 +36,7 @@ const KanjiRecognition: FC = () => {
                                 )
                         ) :
                         ( /* If a test size has been selected, display the TestSizeSetter component */
-                            <TestSizeSetter onTestSizeSelection={onTestSizeSelection} />
+                            <TestSizeSetter onTestSizeSelection={onTestSizeSelection} sizes={[10, 20, 30]}/>
                         ) 
                 ) :
 

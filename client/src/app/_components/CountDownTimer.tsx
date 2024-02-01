@@ -15,8 +15,8 @@
     }, [time]); // Add time as a dependency so that the effect is run every time the time changes
     return (
         <div className="">
-            {isGo? <p className="text-15xl text-slate-50">Go!</p> 
-                : <p className="text-15xl text-slate-50">{time}</p>
+            {isGo? <p className="text-15xl text-slate-50 select-none">Go!</p> 
+                : <p className="text-15xl text-slate-50 select-none">{time}</p>
             }
         </div>
     )

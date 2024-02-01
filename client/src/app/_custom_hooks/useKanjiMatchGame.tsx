@@ -95,10 +95,10 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
         }
     }, [matchedTiles, mismatchedKanjis, isMatchChecked]);
 
-    let colSize = kanjiMeaningPairs.length / 5;
+    let rowSize = kanjiMeaningPairs.length / 6;
 
     return {
-        colSize,
+        rowSize,
         onTileSelect,
         isReady,
         isGameOver,
