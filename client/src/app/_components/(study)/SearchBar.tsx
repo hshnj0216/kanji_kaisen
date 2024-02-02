@@ -19,6 +19,7 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
         setIsInputFocused,
     } = useSearch();
 
+
     const [showRadicals, setShowRadicals] = useState(false);
     const [showDrawingboard, setShowDrawingboard] = useState(false);
 

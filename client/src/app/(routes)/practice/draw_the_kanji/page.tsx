@@ -19,6 +19,8 @@ const DrawTheKanji: FC = () => {
         currentKanji,
         hasSubmittedDrawing,
         onNextButtonClick,
+        isSubmitButtonHidden,
+        setIsSubmitButtonHidden,
         isCorrect,
         isGameOver,
         score,
@@ -43,6 +45,7 @@ const DrawTheKanji: FC = () => {
                                     <DrawTheKanjiBoard currentKanji={currentKanji} onDrawingSubmission={onDrawingSubmission} 
                                         hasSubmittedDrawing={hasSubmittedDrawing} onNextButtonClick={onNextButtonClick}
                                         isCorrect={isCorrect} isGameOver={isGameOver} score={score} testSize={testSize}
+                                        isSubmitButtonHidden={isSubmitButtonHidden} setIsSubmitButtonHidden={setIsSubmitButtonHidden}
                                     />
                                 )
                         ) :

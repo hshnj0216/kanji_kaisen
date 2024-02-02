@@ -7,7 +7,6 @@ const useKanjiDrawing = () => {
     const [kanjis, setKanjis] = useState([]);
     const [score, setScore] = useState(0);
     const [currentKanji, setCurrentKanji] = useState();
-    const [currentKanjiIndex, setCurrentKanjiIndex] = useState(0);
     const {isLoading, setIsLoading} = useLoading();
     const [grade, setGrade] = useState<number>();
     const [hasSelectedGrade, setHasSelectedGrade] = useState<boolean>(false);
@@ -16,6 +15,7 @@ const useKanjiDrawing = () => {
     const [hasSubmittedDrawing, setHasSubmittedDrawing] = useState<boolean>(false);
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
+    const [isSubmitButtonHidden, setIsSubmitButtonHidden] = useState(false);
    
 
     const onGradeSelection = (grade: number) => {
@@ -38,9 +38,10 @@ const useKanjiDrawing = () => {
         const base64Image = dataURL.replace(/^data:image\/png;base64,/, "");
         try {
             const response = await axios.post(process.env.IMAGE_CLASSIFICATION_URL, { image: base64Image, kanji_utf: currentKanji?.ka_utf});          
+            const result = response.data;
             setHasSubmittedDrawing(true);
             setIsCorrect(response.data);
-            if(hasSubmittedDrawing && isCorrect) {
+            if(result) {
                 setScore(prevVal => prevVal + 1);
             }
 
@@ -50,17 +51,18 @@ const useKanjiDrawing = () => {
     }
 
     const onNextButtonClick = () => {
-        if(currentKanjiIndex < testSize) {
-            setCurrentKanjiIndex(prevVal => prevVal + 1);
-        }
         setHasSubmittedDrawing(false);
         setIsCorrect(false);
+        if(kanjis.length > 0) {
+            setCurrentKanji(kanjis.pop());
+        } else {
+            setIsGameOver(true);
+        }
     }
 
     useEffect(() => {
-        setCurrentKanji(kanjis[currentKanjiIndex]);
-    }, [currentKanjiIndex, kanjis]);
-
+        setCurrentKanji(kanjis.pop());
+    }, [kanjis]);
 
 
     return {
@@ -75,6 +77,8 @@ const useKanjiDrawing = () => {
         hasSelectedTestSize,
         onNextButtonClick,
         hasSubmittedDrawing,
+        isSubmitButtonHidden,
+        setIsSubmitButtonHidden,
         isCorrect,
         isGameOver,
         score,

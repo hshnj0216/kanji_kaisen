@@ -3,6 +3,7 @@ import { FC } from "react";
 import Canvas from "../../Canvas";
 import BouncingBallLoadingIndicator from "../../BouncingBallsLoadingIndicator";
 import Link from "next/link";
+import useDrawing from "@/app/_custom_hooks/useDrawing";
 
 interface IDrawTheKanjiBoardProps{
     currentKanji: any;
@@ -13,17 +14,19 @@ interface IDrawTheKanjiBoardProps{
     isGameOver: boolean;
     score: number;
     testSize: number | undefined;
+    isSubmitButtonHidden: boolean;
+    setIsSubmitButtonHidden: (state: boolean) => void;
 }
  
 const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({onDrawingSubmission, currentKanji, 
-    onNextButtonClick, hasSubmittedDrawing, isCorrect, isGameOver, score, testSize}) => {
-
+    onNextButtonClick, hasSubmittedDrawing, isCorrect, isGameOver, score, testSize, isSubmitButtonHidden, setIsSubmitButtonHidden}) => {
+    const {canvasRef, clearCanvas} = useDrawing();
     return (
         <div className="h-full w-full flex flex-col items-center justify-center p-3 border border-slate-50 rounded">
             {currentKanji ? (
                 <div className="flex flex-col items-center p-3 border border-slate-50 rounded h-3/4 w-3/4">
                     <p className="text-slate-50 text-center text-5xl w-full select-none mb-3">{currentKanji?.meaning}</p>
-                    <div className="h-full grid grid-cols-12 gap-3">
+                    <div className="h-full grid grid-cols-12 gap-3 w-full">
                         <div className="col-start-1 col-end-5 border flex border-slate-50 select-none">
                             {hasSubmittedDrawing ? (
                                 <div className="flex flex-col justify-center items-center w-full pb-14">
@@ -40,7 +43,9 @@ const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({onDrawingSubmission, cu
                             ) : ""}
                         </div>
                         <div className="col-start-5 col-end-9 border border-slate-50 flex items-center justify-center">
-                            <Canvas onDrawingSubmission={onDrawingSubmission} />
+                            <Canvas onDrawingSubmission={onDrawingSubmission} canvasRef={canvasRef} clearCanvas={clearCanvas}
+                                isSubmitButtonHidden={isSubmitButtonHidden} setIsSubmitButtonHidden={setIsSubmitButtonHidden}
+                            />
                         </div>
                         <div className="col-start-9 col-end-13 border rounded p-3 flex flex-col items-center justify-center">
                             {!isGameOver ? (
@@ -51,18 +56,23 @@ const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({onDrawingSubmission, cu
                                                 "Your drawing doesn't quite match the expected Kanji."
                                             }
                                         </p>
-                                        <button type="button" className="p-3 text-slate-800 bg-slate-300 rounded" onClick={onNextButtonClick}>
+                                        <button type="button" className="p-3 text-slate-800 bg-slate-300 rounded" onClick={() => {
+                                            onNextButtonClick();
+                                            clearCanvas();
+                                            setIsSubmitButtonHidden(false);
+                                        }
+                                        }>
                                             Proceed to next item
                                         </button>
                                     </>
                                 ) : ""
                             ) : (
                                 <>
-                                    <p className="text-3xl text-slate-50 mb-5 select-none">
+                                    <p className="text-3xl text-slate-50 text-center mb-5 select-none">
                                         Game Over! You got {score}/{testSize}!
                                     </p>
                                     <Link href="/practice/">
-                                        <button type="button">
+                                        <button type="button" className="bg-slate-300 p-3 border rounded">
                                             Return to game selection
                                         </button>
                                     </Link>

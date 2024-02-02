@@ -3,6 +3,7 @@ import Canvas from "../Canvas";
 import axios from "axios";
 import useLoading from "@/app/_custom_hooks/useLoading";
 import SpinnerLoadingIndicator from "../SpinnerLoadingIndicator";
+import useDrawing from "@/app/_custom_hooks/useDrawing";
 
 interface IDrawingSearchProps {
     onKanjiSelection: (id: string) => void;
@@ -21,6 +22,8 @@ const DrawingSearch: FC<IDrawingSearchProps> = ({onKanjiSelection}) => {
         setIsLoading(false);
     }
 
+    const {canvasRef, clearCanvas} = useDrawing();
+
     const clearInferredKanjis = () => {
         setInferredKanjis([]);
     }
@@ -30,7 +33,8 @@ const DrawingSearch: FC<IDrawingSearchProps> = ({onKanjiSelection}) => {
         <div className="bg-slate-300 p-2 border-b rounded-b absolute top-full z-10 w-full 
             grid grid-cols-12 grid-rows-6 max-h-80 overflow-scroll overflow-x-hidden">
                 <div className="col-start-1 col-span-8 row-span-6 flex items-center">
-                    <Canvas onDrawingSubmission={onDrawingSubmission} clearInferredKanjis={clearInferredKanjis}/>
+                    <Canvas canvasRef={canvasRef} clearCanvas={clearCanvas} onDrawingSubmission={onDrawingSubmission} 
+                        clearInferredKanjis={clearInferredKanjis}/>
                 </div>
                 <div className="col-span-4 row-span-6 grid grid-cols-4 gap-2 cursor-pointer p-2">
                     {isLoading ? (

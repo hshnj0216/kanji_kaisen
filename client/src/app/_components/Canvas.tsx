@@ -1,14 +1,18 @@
-import { MutableRefObject, RefObject, FC } from "react";
+import { MutableRefObject, RefObject, FC, useState } from "react";
 import useDrawing from "../_custom_hooks/useDrawing";
 
 interface ICanvasProps {
 	onDrawingSubmission: (dataURL: string) => void;
 	clearInferredKanjis?: () => void;
+	isSubmitButtonHidden?: boolean;
+	setIsSubmitButtonHidden?: (state: boolean) => void;
+	clearCanvas: () => void;
+	canvasRef: RefObject<HTMLCanvasElement>;
 }
 
-const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis}) => {
-	const {canvasRef, clearCanvas} = useDrawing();
-
+const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis, setIsSubmitButtonHidden, 
+	isSubmitButtonHidden, canvasRef, clearCanvas}) => {
+	
 	return (
 		<div className="flex flex-col items-center justify-center p-5 h-1/2
 				 border-slate-50 cursor-crosshair"
@@ -21,10 +25,10 @@ const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis}) =>
 					ref={canvasRef}
 				/>
 				<div className="col-start-1 col-end-2 row-start-1 row-end-2 grid grid-cols-2 grid-rows-2 z-20 h-56 pointer-events-none">
-					<div className="border border-slate-50 border-opacity-80"></div>
-					<div className="border border-slate-50 border-opacity-80"></div>
-					<div className="border border-slate-50 border-opacity-80"></div>
-					<div className="border border-slate-50 border-opacity-80"></div>
+					<div className="border border-slate-50 border-opacity-70"></div>
+					<div className="border border-slate-50 border-opacity-70"></div>
+					<div className="border border-slate-50 border-opacity-70"></div>
+					<div className="border border-slate-50 border-opacity-70"></div>
 				</div>
 			</div>
 
@@ -46,8 +50,13 @@ const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis}) =>
 				<button
 						type="button"
 						title="Submit drawing"
-						onClick={() => onDrawingSubmission(canvasRef?.current?.toDataURL('image/png'))}
-						className="border rounded px-3 bg-slate-50 text-black"
+						onClick={() => {
+								onDrawingSubmission(canvasRef?.current?.toDataURL('image/png'));
+								setIsSubmitButtonHidden(true);
+							}
+						}
+						className={`border rounded px-3 bg-slate-50 text-black ${isSubmitButtonHidden ? "hidden" : ""}`}
+						disabled={isSubmitButtonHidden}
 					>
 						Submit
 				</button>

@@ -24,8 +24,7 @@ const Study: FC = () => {
 				<Link href="/" className="bg-slate-50 p-2 border rounded col-start-1 col-end-3 text-center my-3">
 					Return to Main Menu
 				</Link>
-				<SearchBar onKanjiSelection={onKanjiSelection}/>
-				
+				<SearchBar onKanjiSelection={onKanjiSelection}/>	
 			</div>
 			{kanji ? (
 				<div className="grid lg:grid-cols-12 lg:gap-4 border-slate-50">
