@@ -11,10 +11,7 @@ const MainMenu: FC = (  ) => {
              </Link>
              <Link href="/practice">
                     <ModeCard title="Practice" description="Test your kanji knowledge." isDisabled={false}/>
-             </Link>
-             <Link href="/multiplayer">
-                    <ModeCard title="Test" description="Test" isDisabled={false} />
-             </Link>
+             </Link> 
         </div>
     )
 

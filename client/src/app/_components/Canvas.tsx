@@ -24,7 +24,8 @@ const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis, set
 					height={224}
 					ref={canvasRef}
 				/>
-				<div className="col-start-1 col-end-2 row-start-1 row-end-2 grid grid-cols-2 grid-rows-2 z-20 h-56 pointer-events-none">
+				<div className="col-start-1 col-end-2 row-start-1 row-end-2 grid grid-cols-2 grid-rows-2 z-20
+					 pointer-events-none w-56 h-56">
 					<div className="border border-slate-50 border-opacity-70"></div>
 					<div className="border border-slate-50 border-opacity-70"></div>
 					<div className="border border-slate-50 border-opacity-70"></div>
@@ -52,7 +53,9 @@ const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis, set
 						title="Submit drawing"
 						onClick={() => {
 								onDrawingSubmission(canvasRef?.current?.toDataURL('image/png'));
-								setIsSubmitButtonHidden(true);
+								if(setIsSubmitButtonHidden) {
+									setIsSubmitButtonHidden(true);
+								}
 							}
 						}
 						className={`border rounded px-3 bg-slate-50 text-black ${isSubmitButtonHidden ? "hidden" : ""}`}

@@ -8,22 +8,23 @@ interface IStrokeImages {
 }
 const StrokeImages: FC<IStrokeImages> = ({ images, onStrokeImageClick, imageIndex }) => {
     return (
-        <div className="grid grid-cols-12 col-span-12 bg-slate-300 h-52 gap-2 p-3">
+        <div className="grid grid-cols-12 grid-rows-2 col-span-12 bg-slate-300 h-48 gap-2 p-3">
             {images.map((image, index) =>
                 <div
                     key={index}
-                    className={`relative cursor-pointer w-20 h-20 ${imageIndex === index ? 'border border-blue-500' : ''}`}
+                    className={`relative cursor-pointer col-span-1 row-span-1 grid grid-cols-1 
+                        ${imageIndex === index ? 'border border-blue-500' : ''}`}
                     onClick={() => onStrokeImageClick(index)}
                 >
                     <Image
                         src={image}
-                        width={80}
-                        height={80}
-                        className="border"
+                        className="border col-span-1"
                         alt={`Image ${index}`}
+                        layout="fill"
+                        objectFit="contain"
                     />
                     {imageIndex === index && (
-                        <div className="absolute inset-0 bg-blue-200 opacity-50"></div>
+                        <div className="absolute z-10 inset-0 bg-red-400 opacity-50 col-span-1"></div>
                     )}
                 </div>
             )}

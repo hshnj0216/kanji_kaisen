@@ -25,7 +25,9 @@ const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({onDrawingSubmission, cu
         <div className="h-full w-full flex flex-col items-center justify-center p-3 border border-slate-50 rounded">
             {currentKanji ? (
                 <div className="flex flex-col items-center p-3 border border-slate-50 rounded h-3/4 w-3/4">
-                    <p className="text-slate-50 text-center text-5xl w-full select-none mb-3">{currentKanji?.meaning}</p>
+                    <p className="text-slate-50 text-center text-5xl w-full select-none mb-3">
+                        {isGameOver ? "" : currentKanji?.meaning}
+                    </p>
                     <div className="h-full grid grid-cols-12 gap-3 w-full">
                         <div className="col-start-1 col-end-5 border flex border-slate-50 select-none">
                             {hasSubmittedDrawing ? (

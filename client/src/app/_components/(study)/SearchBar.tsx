@@ -35,13 +35,13 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
 
 
     return (
-        <div className="col-start-4 col-end-9 my-3 grid grid-cols-12 relative">
-            <div className="grid grid-cols-12 col-span-full shadow-slate-300 box-border">
-                <button 
+        <div className="col-start-4 col-end-9 my-3 grid grid-cols-12 grid-rows-6 relative h-10">
+            <div className="grid grid-cols-12 col-span-full row-span-full shadow-slate-300 box-border">
+                <button
                     type="button"
                     title="Find kanji by radical"
                     className={`bg-slate-300 text-slate-500 p-2 col-span-1 
-                        ${(showRadicals || showDrawingboard)? "rounded-tl-md":"rounded-l-md"}`}
+                        ${(showRadicals || showDrawingboard) ? "rounded-tl-md" : "rounded-l-md"}`}
                     onClick={onRadicalButtonClick}
                 >
                     部
@@ -52,7 +52,7 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     className="bg-slate-300 text-slate-500 p-2 col-span-1 border border-l-slate-500"
                     onClick={onDrawButtonClick}
                 >
-                        図
+                    図
                 </button>
                 <input
                     className="border border-gray-300 p-2 col-span-8"
@@ -62,23 +62,23 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                         setInputValue(e.target.value);
                     }}
                     onBlur={() => {
-                        setTimeout(() => setIsInputFocused(false), 100);  
+                        setTimeout(() => setIsInputFocused(false), 100);
                     }}
                     onFocus={() => setIsInputFocused(true)}
                     value={inputValue}
+                    list="suggestions"
                 />
                 <button
                     type="button"
                     className={`bg-slate-300 text-slate-500 p-2 col-span-2
-                        ${(showRadicals || showDrawingboard)? "rounded-tr-md":"rounded-r-md"}`}
+                        ${(showRadicals || showDrawingboard) ? "rounded-tr-md" : "rounded-r-md"}`}
                     title="search"
                 >
                     <FaMagnifyingGlass className="mx-auto"></FaMagnifyingGlass>
                 </button>
-            </div>
-            {isInputFocused && searchSuggestions?.length > 0 && (
+                {isInputFocused && searchSuggestions?.length > 0 && (
                 <ul
-                    className="w-9/12 border rounded absolute z-10 bg-white grid grid-cols-12 top-full"
+                    className=" col-start-3 col-end-11 border rounded z-10 bg-white grid grid-cols-12 top-full"
                     onBlur={() => setIsInputFocused(false)}
                 >
                     {searchSuggestions.map((kanji) => (
@@ -98,8 +98,10 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     ))}
                 </ul>
             )}
-            {showRadicals && (<RadicalSearch onKanjiSelection={onKanjiSelection}/>)}
-            {showDrawingboard && (<DrawingSearch onKanjiSelection={onKanjiSelection}/>)}
+            </div>
+            
+            {showRadicals && (<RadicalSearch onKanjiSelection={onKanjiSelection} />)}
+            {showDrawingboard && (<DrawingSearch onKanjiSelection={onKanjiSelection} />)}
         </div>
     );
 }

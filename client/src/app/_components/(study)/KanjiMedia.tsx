@@ -36,18 +36,18 @@ const KanjiMedia: FC<IKanjiMedia> = ({
         <div className="col-span-3 min-h-[370px] bg-slate-50 flex flex-col items-center justify-center relative">
             {isImage && (
                 <Image
-                    className="h-90"
+                    className="h-56"
                     key={kanjiImageSrcs[imageIndex]}
                     src={kanjiImageSrcs[imageIndex]}
-                    height={290}
-                    width={290}
+                    height={224}
+                    width={224}
                     alt="kanji_img"
                 />
             )}
             {!isImage && (
                 <video
                     key={kanjiVideoSrcs?.mp4}
-                    className="w-full object-contain h-90"
+                    className="w-full object-contain h-56 w-56"
                     autoPlay
                     ref={videoRef}
                     onTimeUpdate={onTimeUpdate}
