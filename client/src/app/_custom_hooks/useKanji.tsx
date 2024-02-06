@@ -1,36 +1,13 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 
+
 const useKanji = () => {
     const [kanji, setKanji] = useState<any | null | never>();
-    const [isImage, setIsImage] = useState<boolean>(true);
-    const [isPlay, setIsPlay] = useState<boolean>(true);
-    const [timingIndex, setTimingIndex] = useState<number>(0);
-    const [imageIndex, setImageIndex] = useState<number>(0);
-    const [displayDecomposition, setDisplayDecomposition] = useState<boolean>(false);
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const videoRef = useRef(null);
 
-    //Side effects section
-
-    //Kanji change effects
-    //Resets the imageIndex when the kanji changes
-    useEffect(() => {
-        const initialImageIndex = kanji?.kanji.strokes.count - 1;
-        setIsImage(true);
-        setImageIndex(initialImageIndex);
-    }, [kanji]);
-
-    // Media switch side effect
-    useEffect(() => {
-        // Check if transitioning from image to video
-        if (!isImage) {
-            const timings = kanji?.kanji.strokes.timings;
-            if (timings && timings.length > imageIndex && videoRef.current) {
-                videoRef.current.currentTime = timings[timingIndex];
-            }
-        }
-    }, [isImage, imageIndex, videoRef.current]);
-    //End of side effects section
 
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
         try {
@@ -42,78 +19,54 @@ const useKanji = () => {
         }
     }, []);
 
-    const onPrevBtnClick = () => {
-        setIsImage(true);
-        setIsPlay(true);
-        if (timingIndex > 0 || imageIndex > 0) {
-            setTimingIndex(prevTimingIndex => prevTimingIndex - 1);
-            setImageIndex(prevImageIndex => prevImageIndex - 1);
+    useEffect(() => {
+        if(kanji) {
+            let maxIndex = kanji.stroketimes.length - 1;
+            setCurrentIndex(maxIndex);
         }
-    }
+    }, [kanji])
 
-    const onPlayBtnClick = () => {
-        setIsImage(false);
-        setIsPlay(!isPlay);
-        if (isPlay) {
-            videoRef.current?.play();
-        } else {
-            videoRef.current?.pause();
-        }
-    }
-
-    const onNextBtnClick = () => {
-        setIsImage(true);
-        setIsPlay(true);
-        let strokeCount = kanji?.kanji.strokes.count - 1;
-        if (imageIndex < strokeCount) {
-            setImageIndex(prevImageIndex => prevImageIndex + 1);
-            setTimingIndex(prevTimingIndex => prevTimingIndex + 1);
-        }
-    }
-
-    //Event handler for the video element
-    const onTimeUpdate = () => {
-
-        if (videoRef.current) {
-
-            let currentTime = videoRef.current.currentTime;
-            let timings = kanji?.kanji?.strokes?.timings;
-            let closestTime = timings[0];
-            let closestTimeIndex = 0;
-
-            timings.forEach((time, index) => {
-                if (Math.abs(currentTime - time) < Math.abs(currentTime - closestTime)) {
-                    closestTime = time;
-                    closestTimeIndex = index;
-                }
-            });
-
-            setImageIndex(closestTimeIndex);
-            setTimingIndex(closestTimeIndex);
-
-            if (videoRef.current.ended) {
-                console.log('video ended');
-                let images = kanji?.kanji.strokes.images;
-                setImageIndex(images.length - 1);
-                setTimingIndex(0);
-                setIsImage(true);
-                setIsPlay(true);
+    const onPlayPauseButtonClick = () => {
+        setIsPlaying(!isPlaying);
+        if(kanji && videoRef.current) {
+            if(isPlaying) {
+                videoRef.current.pause();
+            } else {
+                videoRef.current.play();
             }
         }
-
-
     }
 
+    const onPrevButtonClick = () => {
+        if(videoRef.current && currentIndex > 0) {
+            setCurrentIndex(prevValue => prevValue - 1);
+        }
+    }
+
+    const onNextButtonClick = () => {
+        let maxIndex = kanji.stroketimes.length - 1;
+        if(videoRef.current &&  currentIndex < maxIndex) {
+            console.log('increment triggered');
+            setCurrentIndex(prevValue => prevValue + 1);
+        }
+    }
+    
     const onStrokeImageClick = (index: number) => {
-        setImageIndex(index);
-        setIsImage(true);
+        setCurrentIndex(index);
+        setIsPlaying(false);
     }
+
+    useEffect(() => {
+        if(kanji) {
+            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
+            videoRef.current.pause();
+            setIsPlaying(false);
+        }
+    }, [currentIndex])
 
     return {
         kanji,
         onKanjiSelection,
-        displayDecomposition,
-        setDisplayDecomposition,
         kanjiDecompositionProps: {
             kanjiTree: kanji?.component_decomposition,
         },
@@ -121,15 +74,12 @@ const useKanji = () => {
             kanjiImageSrcs: kanji?.kanji?.strokes?.images,
             kanjiVideoSrcs: kanji?.kanji?.video,
             timings: kanji?.strokes?.timings,
-            isImage,
-            isPlay,
-            timingIndex,
-            imageIndex,
+            isPlaying,
+            currentIndex,
             videoRef,
-            onPrevBtnClick,
-            onPlayBtnClick,
-            onNextBtnClick,
-            onTimeUpdate,
+            onPlayPauseButtonClick,
+            onPrevButtonClick,
+            onNextButtonClick,
         },
         kanjiInfoProps: {
             meaning: kanji?.meaning,
@@ -145,8 +95,7 @@ const useKanji = () => {
         kanjiStrokeImagesProps: {
             images: kanji?.kanji?.strokes.images,
             onStrokeImageClick,
-            timingIndex,
-            imageIndex,
+            currentIndex,
         },
     };
 };

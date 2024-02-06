@@ -29,10 +29,10 @@ const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({onDrawingSubmission, cu
                         {isGameOver ? "" : currentKanji?.meaning}
                     </p>
                     <div className="h-full grid grid-cols-12 gap-3 w-full">
-                        <div className="col-start-1 col-end-5 border flex border-slate-50 select-none">
+                        <div className="col-start-1 col-end-5 border flex flex-col border-slate-50 select-none">
+                            <p className="text-slate-50 text-3xl text-center w-full mb-5">Correct answer</p>
                             {hasSubmittedDrawing ? (
-                                <div className="flex flex-col justify-center items-center w-full pb-14">
-                                    <p className="text-slate-50 text-3xl text-center mb-3">Correct answer</p>
+                                <div className="flex flex-col justify-center items-center w-full mt-4">
                                     <video autoPlay loop className="h-56 w-56">
                                         currentKanji.kanji.video.mp4 && (
                                             <source src={currentKanji?.kanji.video.mp4} type="video/mp4"/>
