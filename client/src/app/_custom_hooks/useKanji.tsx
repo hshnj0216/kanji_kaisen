@@ -21,6 +21,7 @@ const useKanji = () => {
 
     useEffect(() => {
         if(kanji) {
+            console.log(kanji.stroketimes.length);
             let maxIndex = kanji.stroketimes.length - 1;
             setCurrentIndex(maxIndex);
         }
@@ -29,26 +30,36 @@ const useKanji = () => {
     const onPlayPauseButtonClick = () => {
         setIsPlaying(!isPlaying);
         if(kanji && videoRef.current) {
+            let maxIndex = kanji.stroketimes.length - 1;
+            if(currentIndex == maxIndex) {
+                setCurrentIndex(0);
+            }
             if(isPlaying) {
                 videoRef.current.pause();
             } else {
                 videoRef.current.play();
-            }
-        }
-    }
-
-    const onPrevButtonClick = () => {
-        if(videoRef.current && currentIndex > 0) {
-            setCurrentIndex(prevValue => prevValue - 1);
+            } 
+            
         }
     }
 
     const onNextButtonClick = () => {
-        let maxIndex = kanji.stroketimes.length - 1;
-        if(videoRef.current &&  currentIndex < maxIndex) {
-            console.log('increment triggered');
-            setCurrentIndex(prevValue => prevValue + 1);
-        }
+        setCurrentIndex((prevValue) => {
+            let maxIndex = kanji.stroketimes.length - 1;
+            if (prevValue < maxIndex) {
+                return prevValue + 1;
+            }
+            return prevValue;
+        });
+    }
+    
+    const onPrevButtonClick = () => {
+        setCurrentIndex((prevValue) => {
+            if (prevValue > 0) {
+                return prevValue - 1;
+            }
+            return prevValue;
+        });
     }
     
     const onStrokeImageClick = (index: number) => {
