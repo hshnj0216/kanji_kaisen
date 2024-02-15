@@ -2,7 +2,7 @@ import { MutableRefObject, RefObject, FC, useState } from "react";
 import useDrawing from "../_custom_hooks/useDrawing";
 
 interface ICanvasProps {
-	onDrawingSubmission: (dataURL: string) => void;
+	onDrawingSubmission: (dataURL: string | undefined) => void;
 	clearInferredKanjis?: () => void;
 	isSubmitButtonHidden?: boolean;
 	setIsSubmitButtonHidden?: (state: boolean) => void;

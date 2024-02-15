@@ -6,7 +6,34 @@ const useKanji = () => {
     const [kanji, setKanji] = useState<any | null | never>();
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
+    const [timingReferenceIndex, setTimingReferenceIndex] = useState(1);
+
     const videoRef = useRef(null);
+
+    //Side effects
+    useEffect(() => {
+        if(kanji) {
+            console.log(kanji.stroketimes.length);
+            let maxIndex = kanji.stroketimes.length - 1;
+            setCurrentIndex(maxIndex);
+        }
+    }, [kanji]);
+
+    useEffect(() => {
+        if(kanji) {
+            const time = kanji.stroketimes[currentIndex];
+            if (videoRef.current.buffered.length > 0) {
+                for (let i = 0; i < videoRef.current.buffered.length; i++) {
+                    if (time >= videoRef.current.buffered.start(i) && time <= videoRef.current.buffered.end(i)) {
+                        videoRef.current.currentTime = time;
+                        break;
+                    }
+                }
+            }
+            videoRef.current.pause();
+            setIsPlaying(false);
+        }
+    }, [currentIndex]);
 
 
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
@@ -19,13 +46,7 @@ const useKanji = () => {
         }
     }, []);
 
-    useEffect(() => {
-        if(kanji) {
-            console.log(kanji.stroketimes.length);
-            let maxIndex = kanji.stroketimes.length - 1;
-            setCurrentIndex(maxIndex);
-        }
-    }, [kanji])
+    
 
     const onPlayPauseButtonClick = () => {
         setIsPlaying(!isPlaying);
@@ -33,6 +54,7 @@ const useKanji = () => {
             let maxIndex = kanji.stroketimes.length - 1;
             if(currentIndex == maxIndex) {
                 setCurrentIndex(0);
+                videoRef.current.play();
             }
             if(isPlaying) {
                 videoRef.current.pause();
@@ -63,17 +85,22 @@ const useKanji = () => {
     }
     
     const onStrokeImageClick = (index: number) => {
-        setCurrentIndex(index);
+        if(index + 1 !== kanji.stroketimes.length - 1) {
+            setCurrentIndex(index + 1)
+        } else {
+            setCurrentIndex(0);
+        };
         setIsPlaying(false);
     }
 
-    useEffect(() => {
-        if(kanji) {
-            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
-            videoRef.current.pause();
-            setIsPlaying(false);
+    const onTimeUpdate = () => {
+        if(videoRef.current) {
+            
         }
-    }, [currentIndex])
+    }
+
+    
+    
 
     return {
         kanji,

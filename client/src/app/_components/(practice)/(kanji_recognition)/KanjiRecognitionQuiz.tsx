@@ -62,8 +62,8 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
                         <p className="text-9xl text-slate-50 text-center">{score}/{fullQuizItems.length}</p>
                     </div>
                     <div className="flex justify-center">
-                        <Link href="/">
-                            <button className="border rounded bg-slate-50 p-3 m-3" type="button">Return to Main Menu</button>
+                        <Link href="/practice">
+                            <button className="border rounded bg-slate-50 p-3 m-3" type="button">Return to practice menu</button>
                         </Link>
                         <button
                             className="border rounded bg-slate-50 p-3 m-3"

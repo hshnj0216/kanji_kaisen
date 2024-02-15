@@ -1,0 +1,31 @@
+.card {
+    perspective: 1000px;
+}
+
+.card div {
+    position: relative;
+    width: 10rem;
+    height: 10rem;
+    backface-visibility: hidden;
+}
+
+.card .front {
+    background-color: blue;
+    color: white;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.card .back {
+    background-color: red;
+    color: white;
+    display: flex;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    transform: rotateY(180deg);
+}

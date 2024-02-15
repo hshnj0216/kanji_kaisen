@@ -6,8 +6,8 @@ import SearchBar from "@/app/_components/(study)/SearchBar";
 import KanjiMedia from "@/app/_components/(study)/KanjiMedia";
 import Examples from "@/app/_components/(study)/Examples";
 import StrokeImages from "@/app/_components/(study)/StrokeImages";
-import Introduction from "@/app/_components/(study)/Introduction";
 import Link from "next/link";
+import Skeleton from "@/app/_components/(study)/Skeleton";
 
 
 const Study: FC = () => {
@@ -34,7 +34,7 @@ const Study: FC = () => {
 					<StrokeImages {...kanjiStrokeImagesProps} />
 				</div>
 			) : (
-				<Introduction />
+				<Skeleton />
 			)}
 		</div>
 	);

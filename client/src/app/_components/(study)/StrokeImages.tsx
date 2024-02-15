@@ -13,17 +13,17 @@ const StrokeImages: FC<IStrokeImages> = ({ images, onStrokeImageClick, currentIn
                 <div
                     key={index}
                     className={`relative cursor-pointer col-span-1 row-span-1 grid grid-cols-1 
-                        ${currentIndex == index ? 'border border-blue-500' : ''}`}
+                        ${currentIndex == index + 1 ? 'border border-blue-500' : ''}`}
                     onClick={() => onStrokeImageClick(index)}
                 >
                     <Image
                         src={image}
                         className="border col-span-1"
-                        alt={`Image ${index}`}
+                        alt={`stroke ${index} image`}
                         layout="fill"
                         objectFit="content"
                     />
-                    {currentIndex == index && (
+                    {currentIndex == index + 1 && (
                         <div className="absolute z-10 inset-0 bg-blue-200 opacity-50 col-span-1"></div>
                     )}
                 </div>

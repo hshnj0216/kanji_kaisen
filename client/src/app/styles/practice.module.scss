@@ -9,3 +9,12 @@ $spectral-blue: rgb(173, 216, 230);
 .selected-tile{
     
 }
+
+.backface-hidden {
+    backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+    transform: rotateY(180deg);
+}
+

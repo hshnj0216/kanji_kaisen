@@ -2,6 +2,7 @@
 import { FC } from "react";
 import ModeCard from "@/app/_components/(practice)/ModeCard";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const Practice:FC = () => {
     return(
