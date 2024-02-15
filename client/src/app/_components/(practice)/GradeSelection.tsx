@@ -31,7 +31,7 @@ const GradeSelection: FC<IGradeSelectionProps> = ({ onGradeSelection, pageName }
                     <h3 className="text-slate-50 text-4xl text-center my-3 select-none">Select a grade level</h3>
                 </div>
             </div>
-            <div className="flex justify-center gap-x-11">
+            <div className="flex justify-center gap-x-11 mt-3">
                 {grades.map((grade, index) => (
                    <GradeCard key={grade} grade={grade} index={index} variants={variants} onGradeSelection={onGradeSelection} />
                 ))}
