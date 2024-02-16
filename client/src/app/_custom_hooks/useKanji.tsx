@@ -6,7 +6,7 @@ const useKanji = () => {
     const [kanji, setKanji] = useState<any | null | never>();
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
-    const [timingReferenceIndex, setTimingReferenceIndex] = useState(1);
+    const [timingReferenceIndex, setTimingReferenceIndex] = useState(0);
 
     const videoRef = useRef(null);
 
@@ -16,6 +16,9 @@ const useKanji = () => {
             console.log(kanji.stroketimes.length);
             let maxIndex = kanji.stroketimes.length - 1;
             setCurrentIndex(maxIndex);
+            if(videoRef.current) {
+                videoRef.current.currentTime = kanji.stroketimes[maxIndex];
+            }
         }
     }, [kanji]);
 
@@ -95,9 +98,19 @@ const useKanji = () => {
 
     const onTimeUpdate = () => {
         if(videoRef.current) {
-            
+            let stroketimes = kanji?.stroketimes;
+            if(stroketimes) {
+                for(let i = 0; i < stroketimes.length; i++) {
+                    if(videoRef.current.currentTime >= stroketimes[i]) {
+                        setTimingReferenceIndex(i);
+                    } else {
+                        break;
+                    }
+                }
+            }
         }
     }
+    
 
     
     
@@ -118,6 +131,7 @@ const useKanji = () => {
             onPlayPauseButtonClick,
             onPrevButtonClick,
             onNextButtonClick,
+            onTimeUpdate,
         },
         kanjiInfoProps: {
             meaning: kanji?.meaning,
@@ -134,6 +148,7 @@ const useKanji = () => {
             images: kanji?.kanji?.strokes.images,
             onStrokeImageClick,
             currentIndex,
+            timingReferenceIndex,
         },
     };
 };

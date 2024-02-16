@@ -7,8 +7,14 @@ interface IModeCardProp {
     description?: string;
     isDisabled: boolean;
     onClick?: () => void;
+    shouldAnimate?: boolean;
+    titleSizeLg?: boolean;
 }
-const ModeCard: FC<IModeCardProp> = ({ title, description, isDisabled, onClick }) => {
+const ModeCard: FC<IModeCardProp> = ({ title, description, isDisabled, onClick, shouldAnimate, titleSizeLg }) => {
+    const variants = shouldAnimate ? {
+        hidden: { opacity: 0, y: -50 },
+        visible: { opacity: 1, y: 0 }
+    } : {};
     return (
         <motion.button
             type="button"
@@ -19,9 +25,14 @@ const ModeCard: FC<IModeCardProp> = ({ title, description, isDisabled, onClick }
             disabled={isDisabled}
             whileHover={{ scale: 1.1 }} 
             whileTap={{ scale: 0.9 }}
+            variants={variants} 
+            initial="hidden"  
+            animate="visible"  
         >
             <div>
-                <h3 className="text-slate-50 text-2xl mb-3 text-center select-none">{title}</h3>
+                <h3 className={`text-slate-50  mb-3 text-center select-none ${titleSizeLg? "text-5xl" : "text-2xl" }`}>
+                    {title}
+                </h3>
                 {description && (<p className="text-slate-50 text-center">{description}</p>)}
             </div>
         </motion.button>

@@ -38,8 +38,6 @@ client.on("connect", () => {
 	console.log("Connected to Redis");
 });
 
-const ftDropIndexAsync = util.promisify(client.ft.DROPINDEX).bind(client.ft);
-const ftCreateAsync = util.promisify(client.ft.CREATE).bind(client.ft);
 
 //Makes a call to the Kanji Alive API
 //Gets all the 1235 kanji from the API and their details
@@ -82,7 +80,7 @@ async function loadAllKanjiData() {
 					"idx:kanjis",
 					{
 						"$.ka_utf": {
-							type: SchemaFieldTypes.TEXT,
+							type: SchemaFieldTypes.TAG,
 							AS: "kanji",
 						},
 						"$.meaning_search": {
@@ -119,7 +117,6 @@ async function loadAllKanjiData() {
 				if (e.message === "Index already exists") {
 					console.log("Index exists already, skipped creation.");
 				} else {
-					// Something went wrong, perhaps RediSearch isn't installed...
 					console.error(e);
 				}
 			}
@@ -134,8 +131,8 @@ async function loadAllKanjiData() {
 
 async function updateDatabase() {
 	try {
-		const kcData = await readFile("components-kc.csv", "utf8");
-		const ckData = await readFile("components-ck.csv", "utf8");
+		const kcData = await readFile("csv/components-kc.csv", "utf8");
+		const ckData = await readFile("csv/components-ck.csv", "utf8");
 
 		const kcLines = kcData.split("\r\n");
 		const ckLines = ckData.split("\n");
@@ -169,7 +166,7 @@ async function updateDatabase() {
 						tree.children.push(
 							createTree([component, kcMap.get(component)])
 						);
-						i += subComponents.length - 1; // Skip over the sub-components in the next iterations
+						i += subComponents.length - 1;
 					}
 				} else if (
 					!tree.children.some((child) => child.data === component)
@@ -213,7 +210,7 @@ async function updateDatabase() {
 }
 
 async function createKanjiRadicalSearchField() {
-	const data = await readFile("components-kc.csv", "utf8");
+	const data = await readFile("csv/components-kc.csv", "utf8");
 	const lines = data.split("\n");
 	const kanjiMap = new Map();
 	for (let line of lines) {
@@ -243,6 +240,7 @@ async function createKanjiRadicalSearchField() {
 	});
 
 	await Promise.all(updatePromises);
+	console.log("finished update");
 }
 
 app.get("/", (req, res) => {
@@ -260,7 +258,6 @@ app.listen(5000, () => {
 	console.log("app listening on port 5000");
 	//Load all the data as soon as the server starts
 	loadAllKanjiData();
-	//createKanjiRadicalSearchField();
 });
 
 export { client };

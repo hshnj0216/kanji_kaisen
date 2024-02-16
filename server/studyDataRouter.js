@@ -30,10 +30,10 @@ router.get("/kanjis/search/field_search/:query_string", async (req, res) => {
 
 		// Remove spaces and punctuation marks from query string
 		query_string = query_string.replace(/[\s\.,;:!?]/g, "");
-
+		console.log(query_string);
 		const result = await client.ft.search(
 			"idx:kanjis",
-			`(@meaning_search:{${query_string}}) | (@onyomi_search:{${query_string}}) | (@kunyomi_search:{${query_string}})`
+			`(@kanji:{${query_string}}) | (@meaning_search:{${query_string}}) | (@onyomi_search:{${query_string}}) | (@kunyomi_search:{${query_string}})`
 		);
 
 		const kanjis = result.documents;
@@ -133,7 +133,6 @@ router.post("/kanjis/search/infer", async (req, res) => {
 			};
 			characters.push(simplifiedObj);
 		}
-		console.log(characters);
 		res.send(characters);
 	} catch (error) {
 		console.log(error.message);

@@ -40,7 +40,7 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                 <button
                     type="button"
                     title="Find kanji by radical"
-                    className={`bg-slate-300 text-slate-500 p-2 col-span-1 
+                    className={`bg-slate-300 text-slate-500 p-2 col-span-1
                         ${(showRadicals || showDrawingboard) ? "rounded-tl-md" : "rounded-l-md"}`}
                     onClick={onRadicalButtonClick}
                 >
@@ -55,7 +55,7 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     図
                 </button>
                 <input
-                    className="border border-gray-300 p-2 col-span-8"
+                    className="border border-gray-300 p-2 col-span-10 rounded-r"
                     type="text"
                     placeholder="Paste kanji character or type English word"
                     onChange={(e) => {
@@ -68,17 +68,10 @@ const SearchBar: FC<ISearchBarProps> = ({ onKanjiSelection }) => {
                     value={inputValue}
                     list="suggestions"
                 />
-                <button
-                    type="button"
-                    className={`bg-slate-300 text-slate-500 p-2 col-span-2
-                        ${(showRadicals || showDrawingboard) ? "rounded-tr-md" : "rounded-r-md"}`}
-                    title="search"
-                >
-                    <FaMagnifyingGlass className="mx-auto"></FaMagnifyingGlass>
-                </button>
+               
                 {isInputFocused && searchSuggestions?.length > 0 && (
                 <ul
-                    className=" col-start-3 col-end-11 border rounded z-10 bg-white grid grid-cols-12 top-full"
+                    className=" col-start-3 col-end-13 border rounded z-10 bg-white grid grid-cols-12 top-full"
                     onBlur={() => setIsInputFocused(false)}
                 >
                     {searchSuggestions.map((kanji) => (

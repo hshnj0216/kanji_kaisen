@@ -11,6 +11,7 @@ interface IKanjiMediaProps {
     onPlayPauseButtonClick: () => void;
     onPrevButtonClick: () => void;
     onNextButtonClick: () => void;
+    onTimeUpdate: () => void;
 }
 
 const KanjiMedia: FC<IKanjiMediaProps> = ({
@@ -20,6 +21,7 @@ const KanjiMedia: FC<IKanjiMediaProps> = ({
     onPlayPauseButtonClick,
     onNextButtonClick,
     onPrevButtonClick,
+    onTimeUpdate
 }) => {
 
     return (
@@ -29,6 +31,7 @@ const KanjiMedia: FC<IKanjiMediaProps> = ({
                 className="object-contain h-56 w-56"
                 autoPlay={false}
                 ref={videoRef}
+                onTimeUpdate={onTimeUpdate}
             >
                 {kanjiVideoSrcs.mp4 && (
                     <source src={kanjiVideoSrcs.mp4} type="video/mp4" />

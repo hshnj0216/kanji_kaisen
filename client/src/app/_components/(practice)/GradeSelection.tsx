@@ -14,10 +14,7 @@ interface IGradeSelectionProps {
 const GradeSelection: FC<IGradeSelectionProps> = ({ onGradeSelection, pageName }) => {
     const grades = [1, 2, 3, 4, 5, 6];
 
-    const variants = {
-        hidden: { opacity: 0, x: 50 },
-        visible: { opacity: 1, x: 0 }
-    };
+    
 
     return (
         <div className="flex flex-col w-full h-full justify-center ">
@@ -33,7 +30,7 @@ const GradeSelection: FC<IGradeSelectionProps> = ({ onGradeSelection, pageName }
             </div>
             <div className="flex justify-center gap-x-11 mt-3">
                 {grades.map((grade, index) => (
-                   <GradeCard key={grade} grade={grade} index={index} variants={variants} onGradeSelection={onGradeSelection} />
+                   <GradeCard key={grade} grade={grade} index={index} onGradeSelection={onGradeSelection} />
                 ))}
             </div>
         </div>

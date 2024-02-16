@@ -19,6 +19,7 @@ const Practice:FC = () => {
                         title={"Kanji matching"} 
                         description={"Match kanjis and their meaning"}
                         isDisabled={false}
+                        shouldAnimate={true}
                     >
                     </ModeCard>
                 </Link>
@@ -27,6 +28,7 @@ const Practice:FC = () => {
                         title={"Kanji recognition"} 
                         description={"Test yourself by recognizing random kanjis"}
                         isDisabled={false}
+                        shouldAnimate={true}
                     >
                     </ModeCard>
                 </Link>
@@ -35,6 +37,7 @@ const Practice:FC = () => {
                         title={"Draw the kanji"} 
                         description={"Given the meaning, write the kanji"}
                         isDisabled={false}
+                        shouldAnimate={true}
                     >
                     </ModeCard>      
                 </Link>

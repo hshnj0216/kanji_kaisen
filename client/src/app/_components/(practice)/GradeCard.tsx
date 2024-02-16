@@ -11,12 +11,15 @@ interface IAnimationState {
 interface IGradeCardProps {
     grade: number;
     index: number;
-    variants: { [key: string]: IAnimationState };
     onGradeSelection: (grade: number) => void;
 }
 
 
-const GradeCard: FC<IGradeCardProps> = ({grade, index, variants, onGradeSelection}) => {
+const GradeCard: FC<IGradeCardProps> = ({grade, index, onGradeSelection}) => {
+    const variants = {
+        hidden: { opacity: 0, x: 50 },
+        visible: { opacity: 1, x: 0 }
+    };
     return (
         <motion.button
             custom={index}
