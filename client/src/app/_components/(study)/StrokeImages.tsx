@@ -9,7 +9,7 @@ interface IStrokeImages {
 }
 const StrokeImages: FC<IStrokeImages> = ({ images, onStrokeImageClick, currentIndex, timingReferenceIndex }) => {
     return (
-        <div className="grid grid-cols-12 grid-rows-2 col-span-12 bg-slate-300 h-48 gap-2 p-3">
+        <div className="grid grid-cols-12 grid-rows-2 col-span-12 bg-slate-300 h-48 gap-2 p-3 rounded">
             {images.map((image, index) =>
                 <div
                     key={index}

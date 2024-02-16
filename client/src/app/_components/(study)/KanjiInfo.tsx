@@ -32,7 +32,7 @@ const KanjiInfo:FC<IKanjiInfoProps> = ({
       });
       
     return(
-        <div className="col-span-5 grid grid-cols-12 grid-row-12 bg-slate-300 p-3 h-90">
+        <div className="col-span-5 grid grid-cols-12 grid-row-12 bg-slate-300 p-3 h-90 rounded">
             <div className="col-span-6 row-span-8">
                 <div className="mb-2">
                     <p className="text-lg font-bold">Meaning</p>

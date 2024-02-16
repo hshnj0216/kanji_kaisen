@@ -25,7 +25,7 @@ const KanjiMedia: FC<IKanjiMediaProps> = ({
 }) => {
 
     return (
-        <div className="col-span-3 min-h-[370px] bg-slate-50 flex flex-col items-center justify-center relative p-3">
+        <div className="col-span-3 min-h-[370px] bg-slate-50 flex flex-col items-center justify-center relative p-3 rounded">
             <video
                 key={kanjiVideoSrcs?.mp4}
                 className="object-contain h-56 w-56"

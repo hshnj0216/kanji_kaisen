@@ -56,17 +56,19 @@ const useKanji = () => {
         if(kanji && videoRef.current) {
             let maxIndex = kanji.stroketimes.length - 1;
             if(currentIndex == maxIndex) {
-                setCurrentIndex(0);
-                videoRef.current.play();
+                videoRef.current.currentTime = 0; 
+                videoRef.current.addEventListener('loadeddata', () => {
+                    videoRef.current.play();
+                });
             }
             if(isPlaying) {
                 videoRef.current.pause();
             } else {
                 videoRef.current.play();
             } 
-            
         }
     }
+    
 
     const onNextButtonClick = () => {
         setCurrentIndex((prevValue) => {

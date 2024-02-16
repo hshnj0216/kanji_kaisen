@@ -21,7 +21,7 @@ const Examples: FC<IExamples> = ({ examples }) => {
     }
 
     return (
-        <div className="col-span-4 bg-slate-300 p-4 h-90">
+        <div className="col-span-4 bg-slate-300 p-4 h-90 rounded">
             <h6 className="mb-3 font-bold">Examples</h6>
             {limitedExamples.map((example, index) => (
                 <div key={index} className="flex flex-col mb-2">
