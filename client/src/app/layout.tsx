@@ -27,11 +27,11 @@ export default function RootLayout({
       <body className="{inter.className} bg-slate-700 h-screen shadow-inner">
         <nav className="bg-slate-300">
           <Link href="/">
-            <Image src={logo} width={"100"} height={"25"} alt='app-logo'></Image>
+            <Image src={logo} width={"200"} height={"64"} alt='app-logo'></Image>
           </Link>
         </nav>
         <div id='main' className="">
-        {children}
+          {children}
         </div>
       </body>
     </html>

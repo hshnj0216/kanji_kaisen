@@ -8,6 +8,7 @@ import Examples from "@/app/_components/(study)/Examples";
 import StrokeImages from "@/app/_components/(study)/StrokeImages";
 import Link from "next/link";
 import Skeleton from "@/app/_components/(study)/Skeleton";
+import Introduction from "@/app/_components/(study)/Introduction";
 
 
 const Study: FC = () => {
@@ -34,7 +35,7 @@ const Study: FC = () => {
 					<StrokeImages {...kanjiStrokeImagesProps} />
 				</div>
 			) : (
-				<Skeleton />
+				<Introduction />
 			)}
 		</div>
 	);

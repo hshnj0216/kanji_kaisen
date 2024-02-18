@@ -7,10 +7,10 @@ const MainMenu: FC = (  ) => {
     return (
         <div className="flex">
              <Link href="/study">
-                    <ModeCard title="Study" description="Study kanjis." isDisabled={false}/>
+                    <ModeCard title="Study" description="Search and study kanjis" isDisabled={false}/>
              </Link>
              <Link href="/practice">
-                    <ModeCard title="Practice" description="Test your kanji knowledge." isDisabled={false}/>
+                    <ModeCard title="Practice" description="Test your kanji knowledge" isDisabled={false}/>
              </Link> 
         </div>
     )

@@ -22,22 +22,6 @@ const useKanji = () => {
         }
     }, [kanji]);
 
-    useEffect(() => {
-        if(kanji) {
-            const time = kanji.stroketimes[currentIndex];
-            if (videoRef.current.buffered.length > 0) {
-                for (let i = 0; i < videoRef.current.buffered.length; i++) {
-                    if (time >= videoRef.current.buffered.start(i) && time <= videoRef.current.buffered.end(i)) {
-                        videoRef.current.currentTime = time;
-                        break;
-                    }
-                }
-            }
-            videoRef.current.pause();
-            setIsPlaying(false);
-        }
-    }, [currentIndex]);
-
 
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
         try {
@@ -78,6 +62,11 @@ const useKanji = () => {
             }
             return prevValue;
         });
+        if(videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
+        }
+        setIsPlaying(false);
     }
     
     const onPrevButtonClick = () => {
@@ -87,7 +76,13 @@ const useKanji = () => {
             }
             return prevValue;
         });
+        if(videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
+        }
+        setIsPlaying(false);
     }
+    
     
     const onStrokeImageClick = (index: number) => {
         if(index + 1 !== kanji.stroketimes.length - 1) {
