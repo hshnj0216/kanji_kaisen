@@ -6,7 +6,6 @@ const useKanji = () => {
     const [kanji, setKanji] = useState<any | null | never>();
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const [currentIndex, setCurrentIndex] = useState<number>(0);
-    const [timingReferenceIndex, setTimingReferenceIndex] = useState(0);
 
     const videoRef = useRef(null);
 
@@ -21,6 +20,33 @@ const useKanji = () => {
             }
         }
     }, [kanji]);
+
+     //Update video time when currentIndex changes
+     useEffect(() => {
+        if(videoRef.current) {
+            videoRef.current.pause();
+            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
+        }
+    }, [currentIndex]);
+
+
+    useEffect(() => {
+        if(kanji) {
+            let maxIndex = kanji.stroketimes.length - 1;
+            setCurrentIndex(maxIndex);
+        }
+    }, [kanji])
+
+    useEffect(() => {
+        if(videoRef.current) {
+            if(isPlaying) {
+                videoRef.current.play();
+            } else {
+                videoRef.current.pause();
+            }
+        }
+    }, [isPlaying])
+
 
 
     const onKanjiSelection = useCallback(async (kanjiId: string) => {
@@ -37,34 +63,13 @@ const useKanji = () => {
 
     const onPlayPauseButtonClick = () => {
         setIsPlaying(!isPlaying);
-        if(kanji && videoRef.current) {
-            let maxIndex = kanji.stroketimes.length - 1;
-            if(currentIndex == maxIndex) {
-                videoRef.current.currentTime = 0; 
-                videoRef.current.addEventListener('loadeddata', () => {
-                    videoRef.current.play();
-                });
-            }
-            if(isPlaying) {
-                videoRef.current.pause();
-            } else {
-                videoRef.current.play();
-            } 
-        }
     }
     
 
     const onNextButtonClick = () => {
-        setCurrentIndex((prevValue) => {
-            let maxIndex = kanji.stroketimes.length - 1;
-            if (prevValue < maxIndex) {
-                return prevValue + 1;
-            }
-            return prevValue;
-        });
-        if(videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
+        let maxIndex = kanji.stroketimes.length - 1;
+        if(currentIndex < maxIndex) {
+            setCurrentIndex(prevValue => prevValue + 1);
         }
         setIsPlaying(false);
     }
@@ -76,39 +81,40 @@ const useKanji = () => {
             }
             return prevValue;
         });
-        if(videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
-        }
         setIsPlaying(false);
+
     }
     
     
     const onStrokeImageClick = (index: number) => {
-        if(index + 1 !== kanji.stroketimes.length - 1) {
-            setCurrentIndex(index + 1)
+        if(index + 1 <= kanji.stroketimes.length - 1) {
+            setCurrentIndex(index + 1);
         } else {
             setCurrentIndex(0);
         };
         setIsPlaying(false);
+        videoRef.current.currentTime = kanji.stroketimes[currentIndex];
     }
 
     const onTimeUpdate = () => {
         if(videoRef.current) {
             let stroketimes = kanji?.stroketimes;
-            if(stroketimes) {
-                for(let i = 0; i < stroketimes.length; i++) {
-                    if(videoRef.current.currentTime >= stroketimes[i]) {
-                        setTimingReferenceIndex(i);
-                    } else {
-                        break;
+            if(videoRef.current.currentTime == stroketimes[stroketimes.length - 1]) {
+                setIsPlaying(false);
+            } else {
+                if(stroketimes) {
+                    for(let i = 0; i < stroketimes.length; i++) {
+                        if(videoRef.current.currentTime >= stroketimes[i]) {
+                        } else {
+                            break;
+                        }
                     }
                 }
             }
         }
     }
     
-
+   
     
     
 
@@ -145,7 +151,6 @@ const useKanji = () => {
             images: kanji?.kanji?.strokes.images,
             onStrokeImageClick,
             currentIndex,
-            timingReferenceIndex,
         },
     };
 };

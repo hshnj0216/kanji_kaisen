@@ -9,7 +9,6 @@ router.get("/kanjis/:kanji_id", async (req, res) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	try {
 		let { kanji_id } = req.params;
-		console.log(kanji_id);
 		const kanji = await client.json.get(kanji_id);
 		res.json(kanji);
 	} catch (error) {

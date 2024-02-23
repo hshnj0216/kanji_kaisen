@@ -35,7 +35,7 @@ const Practice:FC = () => {
                 <Link href={"practice/draw_the_kanji"}>
                     <ModeCard 
                         title={"Draw the kanji"} 
-                        description={"Given the meaning, write the kanji"}
+                        description={"Given the meaning, draw the kanji"}
                         isDisabled={false}
                         shouldAnimate={true}
                     >
