@@ -6,16 +6,14 @@ import Results from "./Results";
 import Ready from "../Ready";
 import useKanjiMatchGame from "@/app/_custom_hooks/useKanjiMatchGame";
 
-export interface IKanjiObject {
+export interface IKanjiMatchBoardKanjiObject {
     character: string;
     meaning: string;
     onyomi: string;
     kunyomi: string;
 }
-
 export interface IKanjiMatchBoardProps {
-    kanjiMeaningPairs: (IKanjiObject | string)[];
-
+    kanjiMeaningPairs: (IKanjiMatchBoardKanjiObject | string)[];
 }
 
 const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
@@ -46,7 +44,7 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                         `}
                         >
                             {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
-                                <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
+                                <MatchTile key={index} title={item.character} isMatched={matchedTiles.includes(item)}
                                     setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
                                     isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
                                     isCorrectMatch={isCorrectMatch} isKanjiCharacter={true}

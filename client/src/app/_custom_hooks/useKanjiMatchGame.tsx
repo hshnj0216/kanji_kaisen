@@ -1,23 +1,24 @@
-import {useState, useEffect, useRef} from "react"
-import { IKanjiObject } from "../_components/(practice)/(kanji_matching)/KanjiMatchBoard";
+import { useState, useEffect, useRef } from "react"
+import { IKanjiMatchBoardKanjiObject } from "../_components/(practice)/(kanji_matching)/KanjiMatchBoard";
 
 
 //This custom hook contains all the game logic and implementation for the Kanji Match game or component
 //The hook is responsible for managing the game states and logic but not the stages or phases
-const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
+const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiMatchBoardKanjiObject | string)[]) => {
     const [isGameOver, setIsGameOver] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
-    const [selectedTiles, setSelectedTiles] = useState<(IKanjiObject | string)[]>([]);
-    const [matchedTiles, setMatchedTiles] = useState<(IKanjiObject | string)[]>([]);
+    const [selectedTiles, setSelectedTiles] = useState<(IKanjiMatchBoardKanjiObject | string)[]>([]);
+    const [matchedTiles, setMatchedTiles] = useState<(IKanjiMatchBoardKanjiObject | string)[]>([]);
     const [mismatchedKanjis, setMismatchedKanjis] = useState(new Map());
     const [isMatchChecked, setIsMatchChecked] = useState(false);
     const [isCorrectMatch, setIsCorrectMatch] = useState(false);
     const [isReady, setIsReady] = useState(false);
 
-    const timeoutIdRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const timeoutIdRef = useRef<number | null>(null);
+
 
     //Checks if the selected tiles' corresponding values are correct
-    const areSelectedTilesCorrect = (tile1: IKanjiObject | string, tile2: IKanjiObject | string) => {
+    const areSelectedTilesCorrect = (tile1: IKanjiMatchBoardKanjiObject | string, tile2: IKanjiMatchBoardKanjiObject | string) => {
         if (typeof (tile1) === "object" && typeof (tile2 !== "object")) {
             //Compare the elements of the selectedTiles array
             if (tile1?.meaning === tile2) {
@@ -33,12 +34,12 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
         }
     }
 
-    const addMismatchedKanji = (kanji: IKanjiObject) => {
+    const addMismatchedKanji = (kanji: IKanjiMatchBoardKanjiObject) => {
         setMismatchedKanjis((prevCounts) => {
             const newCounts = new Map(prevCounts);
-            const prevValue = newCounts.get(kanji?.kanji) || { kanji: kanji, count: 0 };
+            const prevValue = newCounts.get(kanji?.character) || { kanji: kanji, count: 0 };
             prevValue.count += 1;
-            newCounts.set(kanji?.kanji, prevValue);
+            newCounts.set(kanji?.character, prevValue);
             return newCounts;
         });
     }
@@ -48,12 +49,12 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
             //If tiles are correctly matched, add to matched tiles
             if (areSelectedTilesCorrect(selectedTiles[0], selectedTiles[1])) {
                 setIsCorrectMatch(true);
-                setTimeout(() => {
+                timeoutIdRef.current = window.setTimeout(() => {
                     setMatchedTiles([...matchedTiles, ...selectedTiles]);
                 }, 300);
                 setIsMatchChecked(true);
-                
-            } else if (typeof(selectedTiles[0]) == typeof(selectedTiles[1])) {
+
+            } else if (typeof (selectedTiles[0]) == typeof (selectedTiles[1])) {
                 setSelectedTiles([]);
                 setIsMatchChecked(false);
             } else {
@@ -61,7 +62,7 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
                 if (typeof (selectedTiles[0]) === "object") {
                     addMismatchedKanji(selectedTiles[0]);
                 } else {
-                    addMismatchedKanji(selectedTiles[1] as IKanjiObject);
+                    addMismatchedKanji(selectedTiles[1] as IKanjiMatchBoardKanjiObject);
                 }
                 setIsCorrectMatch(false);
                 setIsMatchChecked(true);
@@ -69,23 +70,30 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
         } else if (selectedTiles.length > 2) {
             setIsMatchChecked(false);
             setSelectedTiles([]);
-            clearTimeout(timeoutIdRef.current);
+            if (timeoutIdRef.current !== null) {
+                window.clearTimeout(timeoutIdRef.current);
+            }
         }
     };
+
 
     //Invokes onTileSelect each time the selectedTiles changes
     //Sets the isMatchChecked to false
     useEffect(() => {
         onTileSelect();
         if (selectedTiles.length >= 2) {
-            timeoutIdRef.current = setTimeout(() => {
+            timeoutIdRef.current = window.setTimeout(() => {
                 setIsMatchChecked(false);
             }, 300);
-
-            return () => clearTimeout(timeoutIdRef.current);
+    
+            return () => {
+                if (timeoutIdRef.current !== null) {
+                    window.clearTimeout(timeoutIdRef.current);
+                }
+            };
         }
     }, [selectedTiles]);
-
+    
     useEffect(() => {
         if (matchedTiles.length === kanjiMeaningPairs.length) {
             setIsGameOver(true);
@@ -94,6 +102,7 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
             setSelectedTiles([]);
         }
     }, [matchedTiles, mismatchedKanjis, isMatchChecked]);
+    
 
     let rowSize = kanjiMeaningPairs.length / 6;
 
@@ -112,7 +121,7 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiObject | string)[]) => {
         setSelectedTiles,
         setIsReady,
     }
-    
+
 }
 
 export default useKanjiMatchGame;

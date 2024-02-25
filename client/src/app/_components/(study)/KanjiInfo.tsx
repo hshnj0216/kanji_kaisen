@@ -4,15 +4,15 @@ import Image from "next/image";
 import sanitizeHtml from 'sanitize-html';
 
 interface IKanjiInfoProps {
-    meaning: string;
-    onyomiKatakana: string;
-    kunyomiHiragana: string;
-    strokeCount: number;
-    grade: number;
-    radicalImageSrc: string;
-    radicalNameHiragana: string;
-    radicalMeaningEnglish: string;
-    meaningHint: string;
+    meaning: string | undefined;
+    onyomiKatakana: string | undefined;
+    kunyomiHiragana: string | undefined;
+    strokeCount: number | undefined;
+    grade: number | undefined;
+    radicalImageSrc: string | undefined;
+    radicalNameHiragana: string | undefined;
+    radicalMeaningEnglish: string | undefined;
+    meaningHint: string | undefined;
 }
 const KanjiInfo:FC<IKanjiInfoProps> = ({
     meaning, 
@@ -26,7 +26,7 @@ const KanjiInfo:FC<IKanjiInfoProps> = ({
     meaningHint,
 }) => {
 
-    const sanitizedMeaningHint = sanitizeHtml(meaningHint, {
+    const sanitizedMeaningHint = sanitizeHtml(meaningHint ? meaningHint : "", {
         allowedTags: [],
         allowedAttributes: {}
       });
@@ -59,7 +59,7 @@ const KanjiInfo:FC<IKanjiInfoProps> = ({
                 <div className="mb-2">
                     <p className="text-lg font-bold">Radical</p>
                     <div className="grid grid-cols-12">
-                        <Image className="col-span-3 max-h-12" src={radicalImageSrc} width={100} height={50} objectFit="contain" alt="radical_img"></Image>
+                        {radicalImageSrc && <Image className="col-span-3 max-h-12" src={radicalImageSrc} width={100} height={50} objectFit="contain" alt="radical_img" />}
                         <div className="col-span-9">
                             <p>{radicalNameHiragana}</p>
                             <p>{radicalMeaningEnglish}</p>

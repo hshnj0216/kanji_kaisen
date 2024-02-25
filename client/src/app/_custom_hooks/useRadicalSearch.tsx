@@ -2,8 +2,14 @@ import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import useLoading from "./useLoading";
 
+interface IMatchingKanji{
+    id: string;
+    kanji: string;
+    rad_search: string;
+}
+
 const useRadicalSearch = () => {
-    const kanjiRadicals = [
+    const kanjiRadicals: Array<[string, string[]]> = [
         ["1", ["一", "丨", "丶", "丿", "乙 ", "亅"]],
         ["2", ["二", "亠", "人 ", "儿", "入 ", "八 ", "冂", "冖", "冫", "几", "凵", "刀 ", "力", "勹", "匕", "匚", "十", "卜 ", "卩 ", "厂", "厶", "又", "亻", "𠆢", "丷", "マ", "九", "ユ", "乃", "刂"]],
         ["3", ["亡 ", "口", "囗", "土", "士", "夂", "夊", "夕", "大", "女", "子", "宀", "寸", "小 ", "尢 ", "尸", "屮", "山", "巛 ", "工", "已 ", "巾", "干", "幺", "广", "廴", "廾", "弋", "弓", "彐 ", "彡", "彳", "艹 ", "⻌ ", "邑 ", "阜 ", "⺌", "川", "彑", "也", "亡", "及", "久", "忄", "扌", "氵", "犭"]],
@@ -23,7 +29,7 @@ const useRadicalSearch = () => {
 
 
     const [selectedRadicals, setSelectedRadicals] = useState<Set<string>>(new Set());
-    const [matchingKanjis, setMatchingKanjis] = useState([]);
+    const [matchingKanjis, setMatchingKanjis] = useState<IMatchingKanji[] | null>([]);
     const {isLoading, setIsLoading} = useLoading();
 
     const onRadicalClick = async (item: string) => {

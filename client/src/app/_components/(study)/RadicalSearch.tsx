@@ -1,8 +1,6 @@
 "use client";
-
 import axios from "axios";
 import { FC, useEffect, useState } from "react";
-import { FaRotateRight } from "react-icons/fa6";
 import useRadicalSearch from "@/app/_custom_hooks/useRadicalSearch";
 import SpinnerLoadingIndicator from "../SpinnerLoadingIndicator";
 
@@ -62,7 +60,7 @@ const RadicalSearch: FC<IRadicalSearchProps> = ({onKanjiSelection}) => {
                     <div key={strokeCount as string} className="flex flex-col">
                         <p className="bg-slate-800 ms-1 mt-3 ps-1 text-slate-50">{strokeCount}</p>
                         <div className="flex flex-wrap w-full box-border">
-                            {radicals.map((radical) => (
+                            {radicals.map((radical: string) => (
                                 <div key={radical as string}
                                     className={`${selectedRadicals.has(radical) ? 'bg-slate-500' : ''}
                                     py-1 px-2 m-1 bg-slate-50 border rounded box-border cursor-pointer`}

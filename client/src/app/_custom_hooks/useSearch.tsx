@@ -1,10 +1,22 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
+interface ISearchSuggestion{
+    id: string;
+    kanji: string;
+    meaning: string;
+}
+
+interface IAxiosError extends Error {
+    response?: {
+        status: number;
+    };
+}
+
 const useSearch = () => {
     const [inputValue, setInputValue] = useState('');
     const [isInputFocused, setIsInputFocused] = useState(false);
-    const [searchSuggestions, setSearchSuggestions] = useState([]);
+    const [searchSuggestions, setSearchSuggestions] = useState<ISearchSuggestion[] | []>([]);
 
 
     //Handles suggestive search
@@ -15,16 +27,16 @@ const useSearch = () => {
                 const serverUrl = `http://127.0.0.1:5000/studyData/kanjis/search/field_search/${inputValue}`;
                 const response = await axios.get(serverUrl);
                 setSearchSuggestions(response.data);
-            } catch (error) {
+            } catch (error: any) { // change this line
                 if (error.response && error.response.status === 404) {
                     setSearchSuggestions([]);
                 }
             }
         }
-
+    
         getMatchingSuggestions();
     }, [inputValue]);
-
+    
     //Handles the selection from list of suggested results
     const handleSuggestionClick = (selectedValue: string) => {
         setInputValue(selectedValue);

@@ -3,21 +3,27 @@
 import { FC, useState } from "react";
 import Link from "next/link";
 import KanjiPopup from "./KanjiPopup";
+import { IKanjiMatchBoardKanjiObject } from "./KanjiMatchBoard";
 
+interface KanjiObject{
+    count: number;
+    kanji:  IKanjiMatchBoardKanjiObject;
+}
 interface IResultsProps {
-    mismatchedKanjis: Map<string, object>;
+    mismatchedKanjis: Map<string, KanjiObject>;
     elapsedTime: number;
-
 }
 
+
+
 const Results: FC<IResultsProps> = ({ mismatchedKanjis, elapsedTime }) => {
-    const [hoveredKanji, setHoveredKanji] = useState(null);
+    const [hoveredKanji, setHoveredKanji] = useState<null | IKanjiMatchBoardKanjiObject>(null);
     let minutes = Math.floor(elapsedTime / 60);
     let seconds = elapsedTime % 60;
     let top5 = Array.from(mismatchedKanjis.entries())
-    .sort((a, b) => b[1].count - a[1].count)
+    .sort((a: [string, KanjiObject], b: [string, KanjiObject]) => b[1].count - a[1].count)
     .slice(0, 5)
-    .map(([kanjiString, kanjiObject]) => kanjiObject);
+    .map(([kanjiString, KanjiObject]) => KanjiObject);
     return (
         <div className="border rounded border-slate-50 p-4 flex flex-col justify-center items-center w-1/2">
             <div className="mb-5">
@@ -36,16 +42,16 @@ const Results: FC<IResultsProps> = ({ mismatchedKanjis, elapsedTime }) => {
                         <div className="flex justify-center">
                             {top5.map((kanji) => (
                                 <div
-                                    key={kanji.kanji.kanji} 
+                                    key={kanji.kanji.character} 
                                     className="border rounded p-3 bg-slate-50 m-3 relative cursor-pointer flex flex-col justify-center items-center"
-                                    onMouseEnter={() => setHoveredKanji(kanji)}
+                                    onMouseEnter={() => setHoveredKanji(kanji.kanji)}
                                     onMouseLeave={() => setHoveredKanji(null)}
                                 >
                                     <div>
-                                        <span className="text-3xl">{kanji.kanji.kanji}</span><span className="ms-1">{kanji.count}</span>
+                                        <span className="text-3xl">{kanji.kanji.character}</span><span className="ms-1">{kanji.count}</span>
                                     </div>
-                                    {hoveredKanji === kanji && (
-                                        <KanjiPopup {...kanji.kanji} />
+                                    {hoveredKanji === kanji.kanji && (
+                                        <KanjiPopup kanji={kanji.kanji} />
                                     )}
                                 </div>
                             ))}

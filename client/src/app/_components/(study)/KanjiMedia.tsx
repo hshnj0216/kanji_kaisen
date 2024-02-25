@@ -2,10 +2,13 @@
 import { FC, useEffect, useState } from "react";
 import { FaPlay, FaPause, FaForwardStep, FaBackwardStep } from "react-icons/fa6";
 
+interface IKanjiVideo{
+    poster: string;
+    mp4: string;
+    webm: string;
+}
 interface IKanjiMediaProps {
-    kanjiVideoSrcs: string[] | undefined;
-    timingIndex: number;
-    imageIndex: number;
+    kanjiVideoSrcs: IKanjiVideo | undefined;
     videoRef: any,
     isPlaying: boolean;
     onPlayPauseButtonClick: () => void;
@@ -27,16 +30,16 @@ const KanjiMedia: FC<IKanjiMediaProps> = ({
     return (
         <div className="col-span-3 min-h-[370px] bg-slate-50 flex flex-col items-center justify-center relative p-3 rounded">
             <video
-                key={kanjiVideoSrcs?.mp4}
+                key={kanjiVideoSrcs && kanjiVideoSrcs.mp4}
                 className="object-contain h-56 w-56"
                 autoPlay={false}
                 ref={videoRef}
                 onTimeUpdate={onTimeUpdate}
             >
-                {kanjiVideoSrcs.mp4 && (
+                {kanjiVideoSrcs && kanjiVideoSrcs.mp4 && (
                     <source src={kanjiVideoSrcs.mp4} type="video/mp4" />
                 )}
-                {kanjiVideoSrcs.webm && (
+                {kanjiVideoSrcs && kanjiVideoSrcs.webm && (
                     <source src={kanjiVideoSrcs.webm} type="video/webm" />
                 )}
             </video>

@@ -33,7 +33,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
                         <h2 className="text-slate-50 text-5xl text-center mb-2">Score: {score}</h2>
                     </div>
                     <div className="w-1/2 mx-auto p-3 border rounded border-slate-50 mb-5">
-                        <p className="text-slate-50 md:text-9xl lg:text-15xl text-center">{quizItem?.ka_utf}</p>
+                        <p className="text-slate-50 md:text-9xl lg:text-15xl text-center">{quizItem ? quizItem.character : ""}</p>
                     </div>
                     <div className="flex flex-col items-center">
                         {options.map(option =>
@@ -42,7 +42,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
                                 className={`p-3 my-3 border rounded w-1/2 text-center cursor-pointer
                             ${selectedOption === option.meaning ? styles['selected-option'] : ""}
                             ${selectedOption === "" ? "bg-slate-50" :
-                                        (option.meaning === quizItem.meaning) ?
+                                        (quizItem && option.meaning === quizItem.meaning) ?
                                             "bg-green-400 text-slate-50" :
                                             "bg-red-400 text-slate-50"}
                             `}

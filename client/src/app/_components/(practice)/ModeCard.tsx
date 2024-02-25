@@ -14,7 +14,11 @@ const ModeCard: FC<IModeCardProp> = ({ title, description, isDisabled, onClick, 
     const variants = shouldAnimate ? {
         hidden: { opacity: 0, y: -50 },
         visible: { opacity: 1, y: 0 }
-    } : {};
+    } : {
+        hidden: { opacity: 1, y: 0 }, 
+        visible: { opacity: 1, y: 0 }  
+    };
+
     return (
         <motion.button
             type="button"

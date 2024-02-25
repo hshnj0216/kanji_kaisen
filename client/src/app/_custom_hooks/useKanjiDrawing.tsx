@@ -2,11 +2,15 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import useLoading from "./useLoading";
 
+interface IKanji{
+    ka_utf: string;
+}
+
 const useKanjiDrawing = () => {
     const [isPlayMode, setIsPlayMode] = useState(false);
     const [kanjis, setKanjis] = useState([]);
     const [score, setScore] = useState(0);
-    const [currentKanji, setCurrentKanji] = useState();
+    const [currentKanji, setCurrentKanji] = useState<IKanji>();
     const {isLoading, setIsLoading} = useLoading();
     const [grade, setGrade] = useState<number>();
     const [hasSelectedGrade, setHasSelectedGrade] = useState<boolean>(false);
@@ -33,22 +37,25 @@ const useKanjiDrawing = () => {
     }
 
     const onDrawingSubmission = async (dataURL: string) => {
-
         // Remove the prefix from the dataURL
         const base64Image = dataURL.replace(/^data:image\/png;base64,/, "");
+        const url = process.env.IMAGE_CLASSIFICATION_URL;
+        if (!url) {
+            throw new Error('IMAGE_CLASSIFICATION_URL is not defined');
+        }
         try {
-            const response = await axios.post(process.env.IMAGE_CLASSIFICATION_URL, { image: base64Image, kanji_utf: currentKanji?.ka_utf});          
+            const response = await axios.post(url, { image: base64Image, kanji_utf: currentKanji?.ka_utf});          
             const result = response.data;
             setHasSubmittedDrawing(true);
             setIsCorrect(response.data);
             if(result) {
                 setScore(prevVal => prevVal + 1);
             }
-
         } catch (error) {
             console.error('Error:', error);
         }
     }
+    
 
     const onNextButtonClick = () => {
         setHasSubmittedDrawing(false);

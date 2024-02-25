@@ -63,7 +63,6 @@ router.get("/kanjiMatchData/:grade/:testSize", async (req, res) => {
 
   let { grade, testSize } = req.params;
 
-
   const kanjiGroup = await getKanjisByGrade(grade);
 
   const randomKanjis = new Set();
@@ -116,12 +115,10 @@ router.get("/drawTheKanjiData/:grade/:testSize", async (req, res) => {
 router.post("/imageClassification", async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   console.log("image classification request received");
-	//Todos:
+	
 	//Convert base64 image string to IFormFile
   const base64Image = req.body.image;
   const imageBuffer = Buffer.from(base64Image, 'base64');
-
-  console.log(typeof(imageBuffer));
 
   let formData = new FormData();
 
@@ -134,20 +131,13 @@ router.post("/imageClassification", async (req, res) => {
 
   //Make request to image classification API
   try {
-      let startTime = performance.now();
       const endpointURL = "http://localhost:8080/api/Classification/ClassifyImage"
       const response = await axios.post(endpointURL, formData, {
       headers: formData.getHeaders()
-    });
-
-    let duration = performance.now() - startTime;
-    console.log(`Operation took ${duration}ms to finish`);
-    console.log(req.body.kanji_utf);
+    });    
 
     let classificationResult = response.data;
 	  let correctAnswer = "U+" + req.body.kanji_utf.charCodeAt(0).toString(16).toUpperCase();
-    console.log(`Classification Result: ${classificationResult}`);
-    console.log(`Correct answer: ${correctAnswer}`);
 
     res.send(classificationResult == correctAnswer);    
   } catch (error) {

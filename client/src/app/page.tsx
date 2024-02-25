@@ -1,4 +1,3 @@
-"use client";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import MainMenu from "@/app/_components/MainMenu";

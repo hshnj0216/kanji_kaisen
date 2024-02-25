@@ -1,11 +1,16 @@
 import {useState, useEffect, useRef} from "react";
 import { IQuizItem } from "../_components/(practice)/(kanji_recognition)/KanjiRecognitionQuiz";
 
+interface IOption{
+    _id: string;
+    meaning: string;
+}
+
 const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
-    const [quizItem, setQuizItem] = useState(null);
-    const [quizItems, setQuizItems] = useState([...fullQuizItems]);
+    const [quizItem, setQuizItem] = useState<IQuizItem | null>(null);
+    const [quizItems, setQuizItems] = useState<IQuizItem[]>([...fullQuizItems]);
     const [score, setScore] = useState(0);
-    const [options, setOptions] = useState([]);
+    const [options, setOptions] = useState<IOption[]>([]);
     const [selectedOption, setSelectedOption] = useState("");
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isQuizOver, setIsQuizOver] = useState(false);
@@ -31,7 +36,7 @@ const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
 
     const onQuizItemComplete = () => {
         if (quizItems.length > 0) {
-            const nextItem = quizItems.pop();
+            const nextItem: IQuizItem = quizItems.pop() as IQuizItem;
             // Store nextItem in a local variable
             const updatedQuizItem = nextItem;
             // Use updatedQuizItem when generating options
@@ -57,10 +62,10 @@ const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
 
 
 
-    const onOptionSelect = (meaning) => {
+    const onOptionSelect = (meaning: string) => {
         setIsOptionSelected(true);
         setSelectedOption(meaning);
-        if (meaning === quizItem.meaning) {
+        if (quizItem && meaning === quizItem.meaning) {
             setScore(score => score + 1);
         }
         setTimeout(() => onQuizItemComplete(), 500);

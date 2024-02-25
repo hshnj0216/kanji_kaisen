@@ -2,7 +2,7 @@ import { MutableRefObject, RefObject, FC, useState } from "react";
 import useDrawing from "../_custom_hooks/useDrawing";
 
 interface ICanvasProps {
-	onDrawingSubmission: (dataURL: string | undefined) => void;
+	onDrawingSubmission: (dataURL: string) => void;
 	clearInferredKanjis?: () => void;
 	isSubmitButtonHidden?: boolean;
 	setIsSubmitButtonHidden?: (state: boolean) => void;
@@ -52,7 +52,7 @@ const Canvas: FC<ICanvasProps> = ({onDrawingSubmission, clearInferredKanjis, set
 						type="button"
 						title="Submit drawing"
 						onClick={() => {
-								onDrawingSubmission(canvasRef?.current?.toDataURL('image/png'));
+								onDrawingSubmission(canvasRef.current ? canvasRef.current.toDataURL('image/png') : "");
 								if(setIsSubmitButtonHidden) {
 									setIsSubmitButtonHidden(true);
 								}

@@ -20,8 +20,7 @@ const Practice:FC = () => {
                         description={"Match kanjis and their meaning"}
                         isDisabled={false}
                         shouldAnimate={true}
-                    >
-                    </ModeCard>
+                    />
                 </Link>
                 <Link href={"practice/kanji_recognition"}>
                     <ModeCard 
@@ -29,8 +28,8 @@ const Practice:FC = () => {
                         description={"Test yourself by recognizing random kanjis"}
                         isDisabled={false}
                         shouldAnimate={true}
-                    >
-                    </ModeCard>
+                    />
+
                 </Link>
                 <Link href={"practice/draw_the_kanji"}>
                     <ModeCard 
@@ -38,8 +37,7 @@ const Practice:FC = () => {
                         description={"Given the meaning, draw the kanji"}
                         isDisabled={false}
                         shouldAnimate={true}
-                    >
-                    </ModeCard>      
+                    />
                 </Link>
             </ul>
         </div>
