@@ -23,7 +23,6 @@ const Examples: FC<IExamplesProps> = ({ examples }) => {
         }
     }
     
-
     return (
         <div className="col-span-4 bg-slate-300 p-4 h-90 rounded">
             <h6 className="mb-3 font-bold">Examples</h6>

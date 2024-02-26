@@ -1,29 +1,29 @@
- 
+
 import { useEffect, useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 
-interface IOnyomi{
+interface IOnyomi {
     romaji: string;
     katakana: string;
 }
 
-interface IKunyomi{
+interface IKunyomi {
     romaji: string;
     hiragana: string;
 }
-interface IStroke{
+interface IStroke {
     count: number;
     timings: number[];
     images: string[];
 }
 
-interface IVideo{
+interface IVideo {
     poster: string;
     webm: string;
     mp4: string;
 }
 
-interface IKanjiDetails{
+interface IKanjiDetails {
     character: string;
     video: IVideo
     strokes: IStroke;
@@ -31,17 +31,17 @@ interface IKanjiDetails{
     kunyomi: IKunyomi;
 }
 
-interface IRadicalName{
+interface IRadicalName {
     hiragana: string;
     romaji: string;
 }
 
-interface IRadical{
+interface IRadical {
     character: string;
     strokes: number;
     image: string;
     name: IRadicalName;
-    meaning: {english: string};
+    meaning: { english: string };
 }
 
 interface IMeaning {
@@ -86,7 +86,6 @@ const useKanji = () => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
 
     //Side effects
-    //Side effects
     useEffect(() => {
         if (kanji) {
             let newMaxIndex = kanji.stroketimes.length - 1;
@@ -100,42 +99,26 @@ const useKanji = () => {
 
     //Update video time when currentIndex changes
     useEffect(() => {
-        if (videoRef.current && kanji) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
+        if (kanji) {
+            let maxIndex = kanji.stroketimes.length - 1;
+            setCurrentIndex(maxIndex);
         }
-    }, [currentIndex, kanji]);
-
-    useEffect(() => {
-        if (currentIndex === 0 && videoRef.current) {
-            console.log("video played");
-            videoRef.current.play();
-        }
-    }, [currentIndex]);
+    }, [kanji]);
 
     useEffect(() => {
         if (videoRef.current && kanji) {
             if (isPlaying) {
-                if (currentIndex == kanji.stroketimes.length - 1) {
+                if (currentIndex === kanji.stroketimes.length - 1) {
                     setCurrentIndex(0);
                 } else {
-                    console.log("video played");
                     videoRef.current.play();
                 }
             } else {
                 videoRef.current.pause();
             }
         }
-    }, [isPlaying, kanji]);
+    }, [isPlaying, kanji, currentIndex]);
 
-
-    useEffect(() => {
-        if (kanji) {
-            let maxIndex = kanji.stroketimes.length - 1;
-            setCurrentIndex(maxIndex);
-            console.log("currentIndex in kanji", currentIndex);
-        }
-    }, [kanji])
 
     useEffect(() => {
         if (videoRef.current) {
@@ -143,7 +126,6 @@ const useKanji = () => {
                 if (currentIndex == kanji.stroketimes.length - 1) {
                     setCurrentIndex(0);
                 } else {
-                    console.log("video played");
                     videoRef.current.play();
                 }
             } else {
@@ -164,61 +146,59 @@ const useKanji = () => {
         }
     }, []);
 
-
-
     const onPlayPauseButtonClick = () => {
         setIsPlaying(!isPlaying);
     }
 
-
     const onPrevButtonClick = () => {
         setCurrentIndex((prevValue) => {
             let newValue = prevValue > 0 ? prevValue - 1 : prevValue;
-            console.log("currentIndex", newValue);
+            if (videoRef.current && kanji) {
+                videoRef.current.currentTime = kanji.stroketimes[newValue];
+            }
             return newValue;
         });
         setIsPlaying(false);
     }
 
     const onNextButtonClick = () => {
-      if(kanji) {
-        setCurrentIndex((prevValue) => {
-            let newValue = prevValue < kanji.stroketimes.length - 1 ? prevValue + 1 : prevValue;
-            console.log("currentIndex", newValue);
-            return newValue;
-        });
-        setIsPlaying(false);
-      }
+        if (kanji) {
+            setCurrentIndex((prevValue) => {
+                let newValue = prevValue < kanji.stroketimes.length - 1 ? prevValue + 1 : prevValue;
+                if (videoRef.current) {
+                    videoRef.current.currentTime = kanji.stroketimes[newValue];
+                }
+                return newValue;
+            });
+            setIsPlaying(false);
+        }
     }
-
-    useEffect(() => {
-        console.log("currentIndex", currentIndex);
-    }, [currentIndex]);
-
-
 
     const onStrokeImageClick = (index: number) => {
-       if(kanji && videoRef.current) {
+        if (kanji && videoRef.current) {
+            let newIndex;
             if (index + 1 <= kanji.stroketimes.length - 1) {
-                setCurrentIndex(index + 1);
+                newIndex = index + 1;
             } else {
-                setCurrentIndex(0);
-            };
+                newIndex = 0;
+            }
+            setCurrentIndex(newIndex);
             setIsPlaying(false);
-            videoRef.current.currentTime = kanji.stroketimes[currentIndex];
-       }
+            videoRef.current.currentTime = kanji.stroketimes[newIndex];
+        }
     }
+
 
     const onTimeUpdate = () => {
         if (kanji && videoRef.current) {
             let stroketimes = kanji.stroketimes;
-            if (videoRef.current.currentTime == stroketimes[stroketimes.length - 1]) {
+            if (videoRef.current.currentTime >= stroketimes[stroketimes.length - 1]) {
                 setIsPlaying(false);
             } else {
                 if (stroketimes) {
                     for (let i = 0; i < stroketimes.length; i++) {
-                        if (videoRef.current.currentTime >= stroketimes[i]) {
-                        } else {
+                        if (videoRef.current.currentTime > stroketimes[i] && videoRef.current.currentTime < stroketimes[i + 1]) {
+                            setCurrentIndex(i);
                             break;
                         }
                     }
@@ -227,13 +207,14 @@ const useKanji = () => {
         }
     }
 
+
     return {
         kanji,
         onKanjiSelection,
         kanjiMediaProps: {
             kanjiImageSrcs: kanji?.kanji?.strokes?.images,
             kanjiVideoSrcs: kanji?.kanji?.video,
-            timings: kanji?.strokes.timings,
+            timings: kanji?.strokes?.timings,
             isPlaying,
             currentIndex,
             videoRef,
@@ -256,7 +237,6 @@ const useKanji = () => {
         kanjiStrokeImagesProps: {
             images: kanji?.kanji?.strokes.images,
             onStrokeImageClick,
-            currentIndex,
         },
         kanjiExamplesProps: {
             examples: kanji?.examples,
