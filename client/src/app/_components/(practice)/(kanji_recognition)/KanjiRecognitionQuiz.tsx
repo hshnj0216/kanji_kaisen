@@ -3,6 +3,7 @@ import { useState, FC, useEffect } from "react";
 import styles from '@/app/styles/practice.module.scss';
 import Link from "next/link";
 import useKanjiQuizGame from "@/app/_custom_hooks/useKanjiQuizGame";
+import QuizResults from "./QuizResults";
 
 export interface IQuizItem {
     character: string;
@@ -14,6 +15,7 @@ interface IKanjiRecognitionQuizProps {
 }
 
 const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, onTakeAnotherTestClick }) => {
+    console.log(fullQuizItems);
     const {
         isQuizOver,
         score,
@@ -56,24 +58,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
                     </div>
                 </div>
             ) : (
-                <div className="w-1/2 border rounded p-3 border-slate-50 flex-col justify-center items-center mt-8">
-                    <div className="mb-5">
-                        <p className="text-7xl text-slate-50 text-center">You scored:</p>
-                        <p className="text-9xl text-slate-50 text-center">{score}/{fullQuizItems.length}</p>
-                    </div>
-                    <div className="flex justify-center">
-                        <Link href="/practice">
-                            <button className="border rounded bg-slate-50 p-3 m-3" type="button">Return to practice menu</button>
-                        </Link>
-                        <button
-                            className="border rounded bg-slate-50 p-3 m-3"
-                            onClick={() => onTakeAnotherTestClick(false)}
-                            type="button"
-                        >
-                            Take Another Test
-                        </button>
-                    </div>
-                </div>
+                <QuizResults score={score} fullQuizItems={fullQuizItems}/>
             )}
         </div>
 

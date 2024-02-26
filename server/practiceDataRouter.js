@@ -54,7 +54,13 @@ router.get("/kanjiRecognitionData/:grade/:testSize", async (req, res) => {
 
   const randomItems = getUniqueSubset(kanjiGroup, testSize);
 
-  res.send(randomItems);
+  const quizItems = [];
+
+  randomItems.forEach(item => {
+    quizItems.push({character: item.ka_utf, meaning: item.meaning});
+  })
+
+  res.send(quizItems);
 });
 
 //Endpoint that provides data for kanji match

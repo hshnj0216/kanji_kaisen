@@ -7,7 +7,7 @@ import Ready from "../Ready";
 import useKanjiMatchGame from "@/app/_custom_hooks/useKanjiMatchGame";
 
 export interface IKanjiMatchBoardKanjiObject {
-    character: string;
+    kanji: string;
     meaning: string;
     onyomi: string;
     kunyomi: string;
@@ -40,11 +40,10 @@ const KanjiMatchBoard: FC<IKanjiMatchBoardProps> = ({ kanjiMeaningPairs }) => {
                 ) : (
                     <div className="w-3/4 flex flex-col items-center justify-center">
                         <Timer onTimeUpdate={setElapsedTime} />
-                        <div className={`border b-box rounded grid grid-cols-6 grid-rows-${rowSize} w-5/6 h-full gap-5 p-4   
-                        `}
-                        >
+                        <div className={`border b-box rounded grid grid-cols-6 grid-rows-${rowSize} w-5/6 h-full gap-5 p-4`} >   
+                       
                             {kanjiMeaningPairs.map((item, index) => typeof (item) === "object" ?
-                                <MatchTile key={index} title={item.character} isMatched={matchedTiles.includes(item)}
+                                <MatchTile key={index} title={item.kanji} isMatched={matchedTiles.includes(item)}
                                     setSelectedTiles={() => setSelectedTiles([...selectedTiles, item])}
                                     isSelected={selectedTiles.includes(item)} isMatchChecked={isMatchChecked}
                                     isCorrectMatch={isCorrectMatch} isKanjiCharacter={true}

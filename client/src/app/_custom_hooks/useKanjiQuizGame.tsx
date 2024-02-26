@@ -1,5 +1,7 @@
 import {useState, useEffect, useRef} from "react";
 import { IQuizItem } from "../_components/(practice)/(kanji_recognition)/KanjiRecognitionQuiz";
+import incorrectChoice from "../sounds/incorrect_choice.mp3";
+import correctChoice from "../sounds/correct_choice.mp3";
 
 interface IOption{
     _id: string;
@@ -14,6 +16,17 @@ const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
     const [selectedOption, setSelectedOption] = useState("");
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isQuizOver, setIsQuizOver] = useState(false);
+    const [inco]
+
+    const playCorrectChoiceSound = () => {
+        const audio = new Audio(correctChoice);
+        audio.play();
+    }
+
+    const playIncorrectChoiceSound = () => {
+        const audio = new Audio(incorrectChoice);
+        audio.play();
+    }
 
     // Shuffle an array using sort() and Math.random()
     function shuffle(array: Array<any>) {
@@ -66,7 +79,10 @@ const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
         setIsOptionSelected(true);
         setSelectedOption(meaning);
         if (quizItem && meaning === quizItem.meaning) {
+            playCorrectChoiceSound();
             setScore(score => score + 1);
+        } else {
+            playIncorrectChoiceSound();
         }
         setTimeout(() => onQuizItemComplete(), 500);
     }

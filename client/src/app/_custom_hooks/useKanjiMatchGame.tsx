@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from "react"
 import { IKanjiMatchBoardKanjiObject } from "../_components/(practice)/(kanji_matching)/KanjiMatchBoard";
-
+import incorrectChoice from "../sounds/incorrect_choice.mp3";
+import correctChoice from "../sounds/correct_choice.mp3";
 
 //This custom hook contains all the game logic and implementation for the Kanji Match game or component
 //The hook is responsible for managing the game states and logic but not the stages or phases
 const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiMatchBoardKanjiObject | string)[]) => {
+    console.log(kanjiMeaningPairs);
     const [isGameOver, setIsGameOver] = useState(false);
     const [elapsedTime, setElapsedTime] = useState(0);
     const [selectedTiles, setSelectedTiles] = useState<(IKanjiMatchBoardKanjiObject | string)[]>([]);
@@ -16,30 +18,46 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiMatchBoardKanjiObject | str
 
     const timeoutIdRef = useRef<number | null>(null);
 
+    const playCorrectChoiceSound = () => {
+        const audio = new Audio(correctChoice);
+        audio.play();
+    }
+
+    const playIncorrectChoiceSound = () => {
+        const audio = new Audio(incorrectChoice);
+        audio.play();
+    }
 
     //Checks if the selected tiles' corresponding values are correct
     const areSelectedTilesCorrect = (tile1: IKanjiMatchBoardKanjiObject | string, tile2: IKanjiMatchBoardKanjiObject | string) => {
         if (typeof (tile1) === "object" && typeof (tile2 !== "object")) {
             //Compare the elements of the selectedTiles array
             if (tile1?.meaning === tile2) {
+                playCorrectChoiceSound();
                 return true;
+            } else {
+                playIncorrectChoiceSound();
+                return false;
             }
-            return false;
+            
         } else if (typeof (tile1) === "string" && typeof (tile2) !== "string") {
             //Likewise, but when the tile is a meaning string
             if (tile1 === tile2?.meaning) {
+                playCorrectChoiceSound();
                 return true;
+            } else {
+                playIncorrectChoiceSound();
+                return false;
             }
-            return false;
         }
     }
 
     const addMismatchedKanji = (kanji: IKanjiMatchBoardKanjiObject) => {
         setMismatchedKanjis((prevCounts) => {
             const newCounts = new Map(prevCounts);
-            const prevValue = newCounts.get(kanji?.character) || { kanji: kanji, count: 0 };
+            const prevValue = newCounts.get(kanji?.kanji) || { kanji: kanji, count: 0 };
             prevValue.count += 1;
-            newCounts.set(kanji?.character, prevValue);
+            newCounts.set(kanji?.kanji, prevValue);
             return newCounts;
         });
     }
@@ -108,7 +126,6 @@ const useKanjiMatchGame = (kanjiMeaningPairs: (IKanjiMatchBoardKanjiObject | str
 
     return {
         rowSize,
-        onTileSelect,
         isReady,
         isGameOver,
         mismatchedKanjis,
