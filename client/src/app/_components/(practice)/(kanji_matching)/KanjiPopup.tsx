@@ -11,7 +11,7 @@ const KanjiPopup: FC<IKanjiPopupProps> = ({kanji}) => {
         <div className="absolute top-full -ml-3 mt-5 bg-slate-50 p-3 z-10 border rounded border-slate-800">
             <div className="flex">
                 <p className="text-9xl text-slate-800 mr-3">
-                    {kanji.character}
+                    {kanji.kanji}
                 </p>
                 <div>
                     <div className="mb-2">

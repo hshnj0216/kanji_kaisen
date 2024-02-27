@@ -8,6 +8,12 @@ interface IOption{
     meaning: string;
 }
 
+export interface IMistake{
+    character: string;
+    answer: string;
+    correctAnswer: string;
+}
+
 const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
     const [quizItem, setQuizItem] = useState<IQuizItem | null>(null);
     const [quizItems, setQuizItems] = useState<IQuizItem[]>([...fullQuizItems]);
@@ -16,7 +22,7 @@ const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
     const [selectedOption, setSelectedOption] = useState("");
     const [isOptionSelected, setIsOptionSelected] = useState(false);
     const [isQuizOver, setIsQuizOver] = useState(false);
-    const [inco]
+    const [mistakes, setMistakes] = useState<IMistake[]>([]);
 
     const playCorrectChoiceSound = () => {
         const audio = new Audio(correctChoice);
@@ -82,7 +88,15 @@ const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
             playCorrectChoiceSound();
             setScore(score => score + 1);
         } else {
-            playIncorrectChoiceSound();
+            if(quizItem) {
+                let mistake = {
+                    character: quizItem?.character,
+                    answer: meaning,
+                    correctAnswer: quizItem?.meaning,
+                }
+                setMistakes([...mistakes, mistake]);
+                playIncorrectChoiceSound();
+            }
         }
         setTimeout(() => onQuizItemComplete(), 500);
     }
@@ -95,6 +109,7 @@ const useKanjiQuizGame = (fullQuizItems: IQuizItem[]) => {
         isOptionSelected,
         isQuizOver,
         quizItem,
+        mistakes,
     }
 }
 

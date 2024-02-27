@@ -59,7 +59,7 @@ const Results: FC<IResultsProps> = ({ mismatchedKanjis, elapsedTime }) => {
                     </div>
                 ) : (
                     <p className="text-slate-50 text-5xl text-center my-3">
-                        Wow! You have no mismatched kanjis. You are amazing at kanji matching. Well done!
+                        You have no mismatched kanjis. You are amazing at kanji matching. Well done!
                     </p>
                 )}
             </div>

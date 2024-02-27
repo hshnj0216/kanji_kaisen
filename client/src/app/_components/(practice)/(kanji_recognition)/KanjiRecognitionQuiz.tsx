@@ -15,7 +15,6 @@ interface IKanjiRecognitionQuizProps {
 }
 
 const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, onTakeAnotherTestClick }) => {
-    console.log(fullQuizItems);
     const {
         isQuizOver,
         score,
@@ -24,6 +23,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
         selectedOption,
         onOptionSelect,
         isOptionSelected,
+        mistakes,
     } = useKanjiQuizGame(fullQuizItems);
 
 
@@ -58,7 +58,7 @@ const KanjiRecognitionQuiz: FC<IKanjiRecognitionQuizProps> = ({ fullQuizItems, o
                     </div>
                 </div>
             ) : (
-                <QuizResults score={score} fullQuizItems={fullQuizItems}/>
+                <QuizResults score={score} fullQuizItems={fullQuizItems} mistakes={mistakes}/>
             )}
         </div>
 
