@@ -4,7 +4,7 @@ import { client } from "./server.js";
 import axios from "axios";
 import FormData from "form-data";
 
-//Retrieve kanji details
+//Retrieve single kanji details
 router.get("/kanjis/:kanji_id", async (req, res) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	try {
@@ -18,7 +18,7 @@ router.get("/kanjis/:kanji_id", async (req, res) => {
 
 //Handles the text input search bar requests
 //Performs full string search on the Redis cloud db
-//Sends kanji object array containing the character and meaning
+//Sends an array of kanji objects containing the properties: meaning, kanji character, and id
 router.get("/kanjis/search/field_search/:query_string", async (req, res) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	try {
@@ -49,6 +49,8 @@ router.get("/kanjis/search/field_search/:query_string", async (req, res) => {
 	}
 });
 
+//Searches the radicals field of the kanji JSON objects in Redis
+//Sends an array of kanji objects that matches the given radicals
 router.get("/kanjis/search/radical_search/:radicals", async (req, res) => {
 	res.setHeader("Access-Control-Allow-Origin", "*");
 	try {
@@ -95,7 +97,9 @@ router.get("/kanjis/search/radical_search/:radicals", async (req, res) => {
 	}
 });
 
-//Handle the drawing inferrence
+//Handles the drawing inferrence
+//Makes a request to the kanji classification web API
+//Sends an array of size 10 of the inferred kanjis with properties: id and character
 router.post("/kanjis/search/infer", async (req, res) => {
 	let imageBase64 = req.body.image;
 	let imageBuffer = Buffer.from(imageBase64, "base64");
@@ -109,8 +113,15 @@ router.post("/kanjis/search/infer", async (req, res) => {
 	});
 
 	try {
-		const endpointURL =
-			"http://localhost:8080/api/Classification/InferTopKanjiClasses";
+		let endpointURL;
+
+		if (process.env.NODE_ENV === "production") {
+			// In production, use the Docker service name
+			endpointURL = process.env.KANJI_INFERRENCE_PRODUCTION;
+		} else {
+			// In development, use localhost
+			endpointURL = process.env.KANJI_INFERRENCE_DEVELOPMENT;
+		}
 		const response = await axios.post(endpointURL, formData, {
 			headers: formData.getHeaders(),
 		});
@@ -123,7 +134,7 @@ router.post("/kanjis/search/infer", async (req, res) => {
 			let character = String.fromCharCode(decimalCode);
 			let item = await client.ft.search(
 				"idx:kanjis",
-				`@kanji: ${character}`
+				`@kanji: {${character}}`
 			);
 			let kanji = item.documents[0];
 			let simplifiedObj = {

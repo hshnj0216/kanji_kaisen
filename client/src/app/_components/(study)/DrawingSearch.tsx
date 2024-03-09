@@ -22,7 +22,7 @@ const DrawingSearch: FC<IDrawingSearchProps> = ({onKanjiSelection}) => {
         const base64Image = dataURL.replace(/^data:image\/png;base64,/, "");
         const endpointURL = process.env.INFER_CLASSES_URL;
         if (!endpointURL) {
-        throw new Error('INFER_CLASSES_URL is not defined');
+            throw new Error('INFER_CLASSES_URL is not defined');
         }
         setIsLoading(true);
         const response = await axios.post(endpointURL, {image: base64Image});
@@ -38,8 +38,8 @@ const DrawingSearch: FC<IDrawingSearchProps> = ({onKanjiSelection}) => {
 
      
     return (
-        <div className="bg-slate-300 p-2 border-b rounded-b absolute top-full z-10 w-full 
-            grid grid-cols-12 grid-rows-6 max-h-80 overflow-scroll overflow-x-hidden">
+        <div className="bg-slate-300 p-2 border-x border-b rounded-b absolute top-full z-10 w-full 
+            grid grid-cols-12 grid-rows-6 max-h-80 overflow-scroll overflow-x-hidden border-slate-50">
                 <div className="col-start-1 col-span-8 row-span-6 flex items-center">
                     <Canvas canvasRef={canvasRef} clearCanvas={clearCanvas} onDrawingSubmission={onDrawingSubmission} 
                         clearInferredKanjis={clearInferredKanjis}/>

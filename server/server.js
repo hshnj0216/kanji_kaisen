@@ -73,7 +73,7 @@ async function loadAllKanjiData() {
 		}
 
 		if (!dataExists) {
-			// Create the index
+			// Create the indexes
 			try {
 				console.log("Indexing...");
 				await client.ft.create(
@@ -129,6 +129,7 @@ async function loadAllKanjiData() {
 	}
 }
 
+//Creates a tree of components for each kanji in the database
 async function updateDatabase() {
 	try {
 		const kcData = await readFile("csv/components-kc.csv", "utf8");
@@ -209,6 +210,8 @@ async function updateDatabase() {
 	}
 }
 
+//Reads the radk and krad CSV
+//Creates the field for radical search in each kanji in the database
 async function createKanjiRadicalSearchField() {
 	const data = await readFile("csv/components-kc.csv", "utf8");
 	const lines = data.split("\n");
@@ -242,17 +245,6 @@ async function createKanjiRadicalSearchField() {
 	await Promise.all(updatePromises);
 	console.log("finished update");
 }
-
-app.get("/", (req, res) => {
-	res.send("Welcome to the server");
-});
-
-app.get("/test", async (req, res) => {
-  res.setHeader("Content-Type", "text/plain; charset=utf-8");
-  console.log("Request made");   
-    
-});
-
 
 app.listen(5000, () => {
 	console.log("app listening on port 5000");

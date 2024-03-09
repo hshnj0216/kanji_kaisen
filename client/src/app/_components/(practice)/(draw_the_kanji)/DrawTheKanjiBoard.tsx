@@ -21,7 +21,7 @@ interface IDrawTheKanjiBoardProps {
 
 const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({ onDrawingSubmission, currentKanji,
     onNextButtonClick, hasSubmittedDrawing, isCorrect, isGameOver, score, testSize, isSubmitButtonHidden, setIsSubmitButtonHidden }) => {
-    const { canvasRef, clearCanvas } = useDrawing();
+    const {canvasRef, clearCanvas} = useDrawing();
     return (
         <div className="h-full w-full flex flex-col items-center justify-center border border-slate-50 rounded">
             {currentKanji ? (
@@ -40,7 +40,7 @@ const DrawTheKanjiBoard: FC<IDrawTheKanjiBoardProps> = ({ onDrawingSubmission, c
                                  initial={{ opacity: 0 }}
                                  animate={{ opacity: 1 }}
                                  transition={{ duration: 0.5 }}
-                                 className="text-slate-50 text-3xl text-center w-full mb-5"
+                                 className="text-slate-50 text-3xl text-center w-full mb-5 mt-3"
                              >
                                  Correct answer
                              </motion.p>

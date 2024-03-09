@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import useLoading from "./useLoading";
+import incorrect from "../sounds/incorrect_choice.mp3";
+import correct from "../sounds/correct_choice.mp3";
 
 interface IKanji{
     ka_utf: string;
@@ -20,7 +22,16 @@ const useKanjiDrawing = () => {
     const [isCorrect, setIsCorrect] = useState<boolean>(false);
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
     const [isSubmitButtonHidden, setIsSubmitButtonHidden] = useState(false);
-   
+
+    const playCorrectSound = () => {
+        const audio = new Audio(correct);
+        audio.play();
+    }
+    
+    const playIncorrectSound = () => {
+        const audio = new Audio(incorrect);
+        audio.play();
+    }
 
     const onGradeSelection = (grade: number) => {
        setGrade(grade);
@@ -49,7 +60,10 @@ const useKanjiDrawing = () => {
             setHasSubmittedDrawing(true);
             setIsCorrect(response.data);
             if(result) {
+                playCorrectSound();
                 setScore(prevVal => prevVal + 1);
+            } else {
+                playIncorrectSound();
             }
         } catch (error) {
             console.error('Error:', error);
